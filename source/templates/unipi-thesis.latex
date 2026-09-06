@@ -1,0 +1,344 @@
+$--
+$-- Università di Pisa — Master di primo livello in Cybersecurity
+$-- Thesis template for pandoc + XeLaTeX (thesis2pdf)
+$--
+\documentclass[a4paper,$if(fontsize)$$fontsize$$else$11pt$endif$,oneside]{report}
+
+%% ---------------------------------------------------------------- fonts ----
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+$if(mainfont)$
+\setmainfont{$mainfont$}
+$endif$
+$if(sansfont)$
+\setsansfont{$sansfont$}
+$endif$
+$if(monofont)$
+\setmonofont[Scale=0.92]{$monofont$}
+$endif$
+
+%% -------------------------------------------------------------- packages ---
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{caption}
+\usepackage{booktabs,longtable,array,calc}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{upquote}
+\usepackage{color}
+\usepackage{fancyvrb}
+\usepackage{framed}
+\usepackage[normalem]{ulem}
+\PassOptionsToPackage{hyphens}{url}
+\usepackage{hyperref}
+\usepackage{bookmark}
+
+%% ---------------------------------------------------------------- brand ----
+\definecolor{unipiBlue}{HTML}{225DD7}
+\definecolor{unipiNavy}{HTML}{1B315C}
+\definecolor{unipiLogo}{HTML}{00366A}
+\definecolor{unipiRule}{HTML}{D9DDE6}
+\definecolor{unipiInk}{HTML}{1A1A1A}
+\definecolor{unipiShade}{HTML}{F4F6FB}
+\color{unipiInk}
+
+%% ---------------------------------------------------------------- page -----
+\geometry{
+  a4paper,
+  left=3.2cm, right=2.6cm,
+  top=3.0cm, bottom=2.8cm,
+  headheight=30pt, headsep=14pt, footskip=24pt
+}
+$if(linespacing)$
+\setstretch{$linespacing$}
+$else$
+\onehalfspacing
+$endif$
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.62\baselineskip}
+\setlist{itemsep=2pt, topsep=4pt, parsep=0pt}
+\raggedbottom
+\clubpenalty=10000
+\widowpenalty=10000
+
+%% ------------------------------------------------------------- headings ----
+\titleformat{\chapter}[display]
+  {\sffamily\color{unipiNavy}}
+  {\bfseries\fontsize{11}{13}\selectfont\color{unipiBlue}\MakeUppercase{\chaptertitlename\ \thechapter}}
+  {6pt}
+  {\bfseries\fontsize{25}{29}\selectfont\raggedright}
+  [\vspace{7pt}{\color{unipiBlue}\rule{\textwidth}{1.2pt}}]
+\titleformat{name=\chapter,numberless}[display]
+  {\sffamily\color{unipiNavy}}{}{0pt}
+  {\bfseries\fontsize{25}{29}\selectfont\raggedright}
+  [\vspace{7pt}{\color{unipiBlue}\rule{\textwidth}{1.2pt}}]
+\titlespacing*{\chapter}{0pt}{-16pt}{30pt}
+
+\titleformat{\section}
+  {\sffamily\bfseries\color{unipiNavy}\fontsize{15}{19}\selectfont}{\color{unipiBlue}\thesection}{10pt}{}
+\titlespacing*{\section}{0pt}{20pt}{6pt}
+
+\titleformat{\subsection}
+  {\sffamily\bfseries\color{unipiNavy}\fontsize{12.5}{16}\selectfont}{\color{unipiBlue}\thesubsection}{9pt}{}
+\titlespacing*{\subsection}{0pt}{16pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\sffamily\bfseries\color{unipiNavy}\fontsize{11}{14}\selectfont}{\color{unipiBlue}\thesubsubsection}{8pt}{}
+\titlespacing*{\subsubsection}{0pt}{14pt}{3pt}
+
+\titleformat{\paragraph}[runin]
+  {\sffamily\bfseries\color{unipiNavy}}{}{0pt}{}[\;\;]
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+%% ------------------------------------------------------- header / footer ---
+\newcommand{\unipiheadlogo}{$if(logo)$\raisebox{-2pt}{\includegraphics[height=7.5mm]{$logo$}}$endif$}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\headrule}{{\color{unipiRule}\hrule height \headrulewidth}}
+\fancyhead[L]{\sffamily\footnotesize\color{unipiNavy}\nouppercase{\leftmark}}
+\fancyhead[R]{\unipiheadlogo}
+\fancyfoot[L]{\sffamily\scriptsize\color{unipiNavy}$if(course)$$course$$endif$}
+\fancyfoot[R]{\sffamily\footnotesize\bfseries\color{unipiBlue}\thepage}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[L]{\sffamily\scriptsize\color{unipiNavy}$if(course)$$course$$endif$}%
+  \fancyfoot[R]{\sffamily\footnotesize\bfseries\color{unipiBlue}\thepage}%
+}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter\ \, — \, #1}{}}
+\renewcommand{\sectionmark}[1]{}
+
+%% ------------------------------------------------------------- captions ----
+\captionsetup{
+  font={small},
+  labelfont={sf,bf,color=unipiBlue},
+  textfont={color=unipiInk},
+  labelsep=period,
+  skip=8pt,
+  justification=centering
+}
+\captionsetup[table]{position=above}
+
+%% ------------------------------------------------------------------ toc ----
+\renewcommand{\cfttoctitlefont}{\sffamily\bfseries\fontsize{25}{29}\selectfont\color{unipiNavy}}
+\renewcommand{\cftloftitlefont}{\sffamily\bfseries\fontsize{25}{29}\selectfont\color{unipiNavy}}
+\renewcommand{\cftlottitlefont}{\sffamily\bfseries\fontsize{25}{29}\selectfont\color{unipiNavy}}
+\renewcommand{\cftchapfont}{\sffamily\bfseries\color{unipiNavy}}
+\renewcommand{\cftchappagefont}{\sffamily\bfseries\color{unipiNavy}}
+\renewcommand{\cftsecfont}{\sffamily\color{unipiInk}}
+\renewcommand{\cftsubsecfont}{\sffamily\small\color{unipiInk}}
+\renewcommand{\cftsecpagefont}{\sffamily\color{unipiInk}}
+\renewcommand{\cftsubsecpagefont}{\sffamily\small\color{unipiInk}}
+\renewcommand{\cftfigfont}{\sffamily\small}
+\renewcommand{\cfttabfont}{\sffamily\small}
+\setlength{\cftbeforechapskip}{8pt}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+
+%% ---------------------------------------------------------------- links ----
+\hypersetup{
+  colorlinks=true,
+  linkcolor=unipiNavy,
+  citecolor=unipiBlue,
+  urlcolor=unipiBlue,
+  filecolor=unipiBlue,
+  breaklinks=true,
+$if(title-meta)$
+  pdftitle={$title-meta$},
+$endif$
+$if(author-meta)$
+  pdfauthor={$author-meta$},
+$endif$
+  pdfsubject={$if(course)$$course$$endif$},
+  bookmarksnumbered=true,
+  pdfstartview=FitH
+}
+
+%% ------------------------------------------------------- pandoc plumbing ---
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\passthrough}[1]{#1}
+$if(highlighting-macros)$
+$highlighting-macros$
+$-- restyle pandoc's code blocks with the brand tint
+\definecolor{shadecolor}{HTML}{F4F6FB}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\small,xleftmargin=6pt,xrightmargin=2pt}
+\renewenvironment{Shaded}{\setstretch{1.03}\begin{snugshade}}{\end{snugshade}}
+$endif$
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{%
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi%
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em}
+
+%% ------------------------------------------------------------ blockquote ---
+\let\oldquote\quote
+\let\endoldquote\endquote
+\renewenvironment{quote}
+  {\begin{oldquote}\color{unipiNavy}\itshape}
+  {\end{oldquote}}
+
+%% ---------------------------------------------------------- bibliography ---
+$if(bibliography)$
+\usepackage[backend=biber,style=numeric-comp,sorting=none,giveninits=true,maxbibnames=8,minbibnames=8,url=true,doi=true,isbn=false,eprint=false]{biblatex}
+\renewcommand*{\bibfont}{\small}
+\setlength\bibitemsep{0.6\baselineskip}
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
+$endif$
+
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+%% ================================================================= body ====
+\begin{document}
+\pagenumbering{roman}
+
+%% ------------------------------------------------------------ title page ---
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\singlespacing
+\vspace*{2mm}
+$if(logo)$
+\includegraphics[width=64mm]{$logo$}\\[11mm]
+$endif$
+$if(university)$
+{\sffamily\fontsize{13}{17}\selectfont\color{unipiNavy}$university$\par}
+\vspace{2mm}
+$endif$
+$if(department)$
+{\sffamily\fontsize{11}{15}\selectfont\color{unipiInk}$department$\par}
+\vspace{6mm}
+$endif$
+$if(course)$
+{\sffamily\bfseries\fontsize{12}{16}\selectfont\color{unipiBlue}\MakeUppercase{$course$}\par}
+$endif$
+\vspace{20mm}
+{\color{unipiRule}\rule{\textwidth}{0.8pt}}
+\vspace{10mm}
+
+{\sffamily\bfseries\fontsize{27}{33}\selectfont\color{unipiNavy}$title$\par}
+$if(subtitle)$
+\vspace{6mm}
+{\sffamily\fontsize{15}{20}\selectfont\color{unipiInk}$subtitle$\par}
+$endif$
+\vspace{10mm}
+{\color{unipiRule}\rule{\textwidth}{0.8pt}}
+
+\vfill
+
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\raggedright
+{\sffamily\bfseries\fontsize{9}{12}\selectfont\color{unipiBlue}\MakeUppercase{$if(supervisor-label)$$supervisor-label$$else$Supervisor$endif$}\par}
+\vspace{2.5mm}
+{\sffamily\fontsize{12.5}{16}\selectfont\color{unipiInk}$supervisor$\par}
+$if(cosupervisor)$
+\vspace{6mm}
+{\sffamily\bfseries\fontsize{9}{12}\selectfont\color{unipiBlue}\MakeUppercase{Co-supervisor}\par}
+\vspace{2.5mm}
+{\sffamily\fontsize{12.5}{16}\selectfont\color{unipiInk}$cosupervisor$\par}
+$endif$
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\raggedleft
+{\sffamily\bfseries\fontsize{9}{12}\selectfont\color{unipiBlue}\MakeUppercase{$if(author-label)$$author-label$$else$Candidate$endif$}\par}
+\vspace{2.5mm}
+$for(author)$
+{\sffamily\fontsize{12.5}{16}\selectfont\color{unipiInk}$author$\par}
+$endfor$
+$if(student-id)$
+\vspace{1.5mm}
+{\sffamily\fontsize{10}{13}\selectfont\color{unipiNavy}$student-id$\par}
+$endif$
+\end{minipage}
+
+\vspace{16mm}
+{\color{unipiBlue}\rule{26mm}{2pt}}\\[6mm]
+$if(academic-year)$
+{\sffamily\bfseries\fontsize{12}{16}\selectfont\color{unipiNavy}Academic Year $academic-year$\par}
+$endif$
+$if(date)$
+{\sffamily\fontsize{10.5}{14}\selectfont\color{unipiInk}$date$\par}
+$endif$
+\vspace*{4mm}
+\end{titlepage}
+
+$if(dedication)$
+\thispagestyle{empty}
+\vspace*{0.32\textheight}
+\begin{flushright}
+{\itshape\fontsize{12}{18}\selectfont $dedication$\par}
+\end{flushright}
+\clearpage
+$endif$
+
+$if(abstract)$
+\chapter*{Abstract}
+\markboth{Abstract}{}
+\addcontentsline{toc}{chapter}{Abstract}
+$abstract$
+$if(keywords)$
+\vspace{6mm}
+\noindent{\sffamily\bfseries\small\color{unipiBlue}Keywords\quad}{\small $for(keywords)$$keywords$$sep$ \,\textbullet\, $endfor$}
+$endif$
+\clearpage
+$endif$
+
+$if(acknowledgements)$
+\chapter*{Acknowledgements}
+\markboth{Acknowledgements}{}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+$acknowledgements$
+\clearpage
+$endif$
+
+$if(toc)$
+{\hypersetup{linkcolor=unipiInk}
+\setcounter{tocdepth}{$if(toc-depth)$$toc-depth$$else$2$endif$}
+\singlespacing
+\tableofcontents}
+\clearpage
+$endif$
+$if(lof)$
+{\singlespacing\listoffigures}
+\addcontentsline{toc}{chapter}{List of Figures}
+\clearpage
+$endif$
+$if(lot)$
+{\singlespacing\listoftables}
+\addcontentsline{toc}{chapter}{List of Tables}
+\clearpage
+$endif$
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+$body$
+
+$if(bibliography)$
+\cleardoublepage
+\printbibliography[heading=bibintoc,title={$if(bibliography-title)$$bibliography-title$$else$References$endif$}]
+$endif$
+
+\end{document}

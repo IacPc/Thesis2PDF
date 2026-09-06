@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thesis2pdf"
+version = "2.0.0"
+description = "Markdown to a Università di Pisa styled thesis PDF (Markdown → HTML/CSS → PDF)"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "Markdown>=3.5",
+  "Pygments>=2.17",
+  "PyYAML>=6.0",
+  "weasyprint>=60",
+]
+
+[project.optional-dependencies]
+wkhtmltopdf = []   # the wkhtmltopdf binary is installed outside pip
+
+[project.scripts]
+thesis2pdf = "thesis2pdf.cli:main"
+
+[tool.setuptools]
+packages = ["thesis2pdf"]
+
+[tool.setuptools.package-data]
+thesis2pdf = [
+  "templates/*.html",
+  "assets/*",
+  "assets/fonts/*",
+  "example/*",
+  "example/**/*",
+]

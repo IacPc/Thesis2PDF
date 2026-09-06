@@ -1,0 +1,339 @@
+/* ============================================================================
+   Università di Pisa — thesis stylesheet (WeasyPrint / paged HTML)
+   Brand: Titillium Web headings · Inter text · blue #225DD7 · navy #1B315C
+   ========================================================================= */
+
+:root {
+  --blue: #225DD7;
+  --navy: #1B315C;
+  --ink: #1A1A1A;
+  --muted: #5A6478;
+  --rule: #D9DDE6;
+  --tint: #F4F6FB;
+  --sans: "Titillium Web", "Titillium", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --text: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", "DejaVu Sans Mono", "Menlo", "Consolas", monospace;
+}
+
+/* ------------------------------------------------------------------ page -- */
+@page {
+  size: A4;
+  margin: 3.0cm 2.6cm 2.8cm 3.2cm;
+
+  @top-left {
+    content: string(chapter);
+    font-family: var(--sans);
+    font-size: 8.5pt;
+    color: var(--navy);
+    vertical-align: bottom;
+    padding-bottom: 5pt;
+    border-bottom: 0.6pt solid var(--rule);
+  }
+  @top-center {
+    content: "";
+    border-bottom: 0.6pt solid var(--rule);
+    padding-bottom: 5pt;
+  }
+  @top-right {
+    content: element(runninglogo);
+    vertical-align: bottom;
+    padding-bottom: 3pt;
+    border-bottom: 0.6pt solid var(--rule);
+  }
+  @bottom-left {
+    content: "";
+    font-family: var(--sans);
+    font-size: 7.5pt;
+    color: var(--muted);
+    vertical-align: top;
+    padding-top: 8pt;
+  }
+  @bottom-right {
+    content: "";
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 9pt;
+    color: var(--blue);
+    vertical-align: top;
+    padding-top: 8pt;
+  }
+}
+
+@page cover {
+  margin: 2.2cm 2.4cm;
+  @top-left { content: none; border: none; }
+  @top-center { content: none; border: none; }
+  @top-right { content: none; border: none; }
+  @bottom-left { content: none; }
+  @bottom-right { content: none; }
+}
+
+/* Two independent page counters, so neither has to reset the built-in one:
+   fpage — front matter, lower-roman (i, ii, iii …)
+   bpage — body and references, decimal (1, 2, 3 …)
+   Each is incremented once per page in its own page context. */
+@page frontmatter {
+  counter-increment: fpage;
+  @bottom-right { content: counter(fpage, lower-roman); }
+}
+
+@page body {
+  counter-increment: bpage;
+  @bottom-right { content: counter(bpage); }
+}
+
+@page plain {
+  @top-left { content: none; border: none; }
+  @top-center { content: none; border: none; }
+  @top-right { content: none; border: none; }
+  @bottom-left { content: none; }
+  @bottom-right { content: none; }
+}
+
+/* ------------------------------------------------------------------ base -- */
+html { font-family: var(--text); font-size: 10.5pt; color: var(--ink); }
+body { margin: 0; line-height: 1.5; text-align: justify; hyphens: auto; }
+p { margin: 0 0 0.62em; text-wrap: pretty; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { color: var(--navy); }
+strong { font-weight: 600; }
+em { font-style: italic; }
+sup, sub { line-height: 0; }
+
+#runninglogo { position: running(runninglogo); text-align: right; }
+#runninglogo img { height: 22pt; }
+
+/* ----------------------------------------------------------- structure --- */
+.cover { page: cover; }
+.frontmatter { page: frontmatter; break-before: page; }
+.body { page: body; break-before: page;  }
+.references { page: body; }
+
+.frontmatter > section { break-after: page; }
+.frontmatter > section:last-child { break-after: page; }
+
+/* ---------------------------------------------------------------- cover --- */
+.cover {
+  display: flex;
+  flex-direction: column;
+  height: 24.5cm;
+  text-align: center;
+  string-set: chapter "";
+}
+.cover .logo { margin: 0.4cm 0 1.1cm; }
+.cover .logo img { height: 2.6cm; }
+.cover .university {
+  font-family: var(--sans); font-size: 15pt; color: var(--navy); margin-bottom: 3pt;
+}
+.cover .department { font-size: 10.5pt; color: var(--ink); margin-bottom: 10pt; }
+.cover .course {
+  font-family: var(--sans); font-weight: 700; font-size: 11.5pt; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--blue);
+}
+.cover .spacer { flex: 1; }
+.cover hr { border: none; border-top: 0.8pt solid var(--rule); margin: 0; width: 100%; }
+.cover .title-block { padding: 1.05cm 0; }
+.cover h1.title {
+  font-family: var(--sans); font-weight: 700; font-size: 26pt; line-height: 1.18;
+  color: var(--navy); margin: 0; text-align: center; hyphens: none;
+}
+.cover .subtitle {
+  font-family: var(--sans); font-size: 13.5pt; color: var(--ink);
+  margin: 6mm 0 0; text-align: center;
+}
+.cover .people {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  text-align: left; margin-top: 1.2cm;
+}
+.cover .people .right { text-align: right; }
+.cover .role {
+  font-family: var(--sans); font-weight: 700; font-size: 8pt; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--blue); margin: 0 0 2mm;
+}
+.cover .person { font-family: var(--sans); font-size: 12pt; color: var(--ink); margin: 0; }
+.cover .person + .role { margin-top: 6mm; }
+.cover .student-id { font-size: 9.5pt; color: var(--navy); margin-top: 1.5mm; }
+.cover .accent { width: 26mm; height: 2pt; background: var(--blue); margin: 1.1cm auto 6mm; }
+.cover .year {
+  font-family: var(--sans); font-weight: 700; font-size: 12pt; color: var(--navy); margin: 0;
+}
+.cover .date { font-size: 10pt; color: var(--muted); margin: 2mm 0 0; }
+
+/* -------------------------------------------------------------- headings -- */
+h1, h2, h3, h4 { font-family: var(--sans); color: var(--navy); text-align: left; hyphens: none; }
+h1 {
+  font-size: 23pt; font-weight: 700; line-height: 1.14; margin: 0 0 6pt;
+  padding-bottom: 9pt; border-bottom: 1.4pt solid var(--blue);
+  string-set: chapter attr(data-header);
+  break-after: avoid;
+}
+.body h1, .references h1 { break-before: page; }
+.body > *:first-child, .body > .kicker:first-child + h1 { break-before: auto; }
+.kicker {
+  font-family: var(--sans); font-weight: 700; font-size: 9.5pt; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--blue); margin: 0 0 6pt;
+  break-after: avoid; break-before: page;
+}
+.body > .kicker:first-child { break-before: auto; }
+.kicker + h1 { break-before: avoid; }
+h1 .num { display: none; }
+h2 { font-size: 14pt; font-weight: 700; margin: 20pt 0 5pt; break-after: avoid; }
+h3 { font-size: 11.8pt; font-weight: 700; margin: 15pt 0 4pt; break-after: avoid; }
+h4 { font-size: 10.5pt; font-weight: 700; margin: 12pt 0 3pt; break-after: avoid; }
+h2 .num, h3 .num, h4 .num { color: var(--blue); margin-right: 6pt; }
+h1 + p, h2 + p, h3 + p { margin-top: 0; }
+
+/* ----------------------------------------------------------------- lists -- */
+ul, ol { margin: 0 0 0.62em; padding-left: 1.35em; }
+li { margin: 0 0 0.22em; }
+li > ul, li > ol { margin-top: 0.22em; }
+dl { margin: 0 0 0.62em; }
+dt { font-family: var(--sans); font-weight: 600; color: var(--navy); }
+dd { margin: 0 0 0.4em 1.2em; }
+
+blockquote {
+  margin: 12pt 0; padding: 2pt 0 2pt 14pt; border-left: 2.4pt solid var(--rule);
+  color: var(--navy); font-style: italic;
+  font-size: 8.4pt;   /* quoted material */
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+hr { border: none; border-top: 0.6pt solid var(--rule); margin: 16pt 0; }
+
+/* ---------------------------------------------------------------- tables -- */
+figure.table { margin: 14pt 0; break-inside: avoid; }
+figure.table figcaption { margin-bottom: 5pt; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+  line-height: 1.35;
+  border-top: 1.2pt solid var(--navy);
+  border-bottom: 1.2pt solid var(--navy);
+}
+thead { display: table-header-group; }
+thead th {
+  font-family: var(--sans); font-weight: 700; font-size: 8.5pt; color: var(--navy);
+  text-align: left; vertical-align: bottom;
+  padding: 7pt 8pt; border-bottom: 0.8pt solid var(--navy);
+  hyphens: none;
+}
+tbody td {
+  padding: 5.5pt 8pt; vertical-align: top; text-align: left;
+  border-bottom: 0.4pt solid var(--rule);
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) { background: #FAFBFE; }
+td.num-cell, th[align="right"], td[align="right"] { text-align: right; }
+th[align="center"], td[align="center"] { text-align: center; }
+table code { font-size: 8.2pt; background: none; padding: 0; }
+
+/* --------------------------------------------------------------- figures -- */
+figure { margin: 16pt 0; text-align: center; break-inside: avoid; }
+figure img { max-width: 100%; }
+figcaption {
+  font-size: 6pt; color: var(--ink); text-align: center; line-height: 1.35;
+  margin-top: 5pt; hyphens: none;
+}
+figcaption .lbl { font-family: var(--sans); font-weight: 700; color: var(--blue); }
+p > img { max-width: 100%; }
+
+/* ------------------------------------------------------------------ code -- */
+code, kbd, samp {
+  font-family: var(--mono); font-size: 0.88em;
+  background: var(--tint); padding: 0.5pt 2.5pt; border-radius: 2px;
+}
+pre {
+  font-family: var(--mono); font-size: 7.6pt; line-height: 1.4;
+  background: var(--tint); border-left: 2.4pt solid var(--blue);
+  padding: 9pt 11pt; margin: 12pt 0; overflow-wrap: break-word;
+  white-space: pre-wrap; text-align: left; hyphens: none;
+  break-inside: avoid;
+}
+pre code { background: none; padding: 0; font-size: inherit; }
+.codehilite { margin: 12pt 0; }
+.codehilite pre { margin: 0; }
+
+/* ------------------------------------------------------------ diff blocks -- */
+/* GitHub-style colouring for ```diff fences. These selectors carry an extra
+   element (pre) so they outrank the Pygments "friendly" defaults, which the
+   template injects after this stylesheet. Colours are GitHub's light-theme
+   diff tints, with darkened text so the distinction survives greyscale print. */
+.codehilite pre .gd { color: #82071E; background-color: #FFEBE9; }  /* deleted   */
+.codehilite pre .gi { color: #0A5620; background-color: #E6FFEC; }  /* inserted  */
+.codehilite pre .gh { color: var(--muted); background: none;        /* file hdr  */
+                      font-weight: 600; }
+.codehilite pre .gu { color: #6639BA; background-color: #F3EDFB;    /* @@ hunk   */
+                      font-weight: 600; }
+
+/* -------------------------------------------------------------- callouts -- */
+.admonition, .note, .tip, .warning {
+  margin: 12pt 0; padding: 9pt 12pt; background: var(--tint);
+  border-left: 2.4pt solid var(--blue); font-size: 9.6pt; break-inside: avoid;
+}
+.admonition-title, .callout-title {
+  font-family: var(--sans); font-weight: 700; font-size: 8.5pt; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--blue); margin: 0 0 3pt;
+}
+.warning { border-left-color: #B3261E; background: #FDF4F3; }
+.warning .admonition-title, .warning .callout-title { color: #B3261E; }
+
+/* ------------------------------------------------------------- footnotes -- */
+.footnote {
+  float: footnote;
+  font-size: 8.4pt;
+  line-height: 1.3;
+  text-align: left;
+}
+::footnote-call { font-size: 0.7em; vertical-align: super; line-height: 0; color: var(--blue); }
+::footnote-marker { color: var(--blue); font-weight: 600; }
+@page { @footnote { border-top: 0.5pt solid var(--rule); padding-top: 4pt; margin-top: 8pt; } }
+
+/* ------------------------------------------------------------- citations -- */
+a.cite { color: var(--blue); font-variant-numeric: tabular-nums; }
+.references ol { list-style: none; margin: 0; padding: 0; font-size: 9.4pt; }
+.references li { display: flex; gap: 8pt; margin-bottom: 7pt; text-align: left; }
+.references .refnum { font-family: var(--sans); color: var(--blue); font-weight: 600; min-width: 22pt; }
+.references .refbody { flex: 1; }
+
+/* -------------------------------------------- abstract / front matter ----- */
+.frontmatter h1 { break-before: auto; }
+.abstract p:first-of-type { margin-top: 0; }
+.keywords {
+  margin-top: 14pt; font-size: 9.4pt; padding-top: 8pt; border-top: 0.6pt solid var(--rule);
+}
+.keywords .lbl {
+  font-family: var(--sans); font-weight: 700; color: var(--blue);
+  text-transform: uppercase; font-size: 8.5pt; letter-spacing: 0.08em; margin-right: 6pt;
+}
+.dedication {
+  page: plain; height: 22cm; display: flex; align-items: center; justify-content: flex-end;
+  font-style: italic; color: var(--navy); text-align: right; break-after: page;
+}
+
+/* -------------------------------------------------------- toc / lof / lot - */
+.contents a {
+  display: flex; align-items: baseline; color: var(--ink); text-decoration: none;
+  margin: 2.5pt 0; font-size: 10pt; break-inside: avoid;
+}
+.contents a::after {
+  content: target-counter(attr(href), bpage);
+  font-family: var(--sans); font-size: 9pt; color: var(--navy); margin-left: 6pt;
+}
+/* front-matter targets (abstract, acknowledgements) are paginated in roman */
+.contents a.front::after { content: target-counter(attr(href), fpage, lower-roman); }
+.contents .dots {
+  flex: 1; margin: 0 4pt; border-bottom: 0.5pt dotted #B9C0CE; transform: translateY(-2.5pt);
+}
+.contents .lvl1 {
+  font-family: var(--sans); font-weight: 700; color: var(--navy);
+  font-size: 10.5pt; margin-top: 9pt;
+}
+.contents .lvl1::after { color: var(--navy); font-weight: 700; }
+.contents .lvl2 { padding-left: 12pt; }
+.contents .lvl3 { padding-left: 26pt; font-size: 9.4pt; color: var(--muted); }
+.contents .label { font-variant-numeric: tabular-nums; margin-right: 7pt; min-width: 26pt; }
+.contents .lvl3 .label { min-width: 34pt; }
+
+div.page_break{page-break-after: always;}
