@@ -1,0 +1,144 @@
+<svg width="100%" viewBox="0 0 720 812" role="img" aria-label="A flow diagram of the four steps performed by _aead_recvmsg() on the AEAD decryption path, with byte offsets marked on every buffer. Three lengths are computed first: used is every transmit byte the caller has sent, outlen is used minus the authentication size, and processed is the number of transmit bytes the request consumes, so that processed minus the authentication size equals outlen. Step one builds the receive scatterlist from the caller's iovecs, pinning the caller's own pages and reserving one spare table entry. Step two copies the first outlen bytes, the associated data and the ciphertext, from the transmit list into those pages through the null cipher. Step three releases the copied transmit entries and reassigns the remaining tag entries, covering the byte range from processed minus the authentication size to processed, into a per-request array, moving the page pointers rather than copying the pages. Step four clears the terminator on the receive list and chains it to that array, so the tag entries sit at destination offset outlen. The request is then submitted with the same list as both source and destination." xmlns="http://www.w3.org/2000/svg" xmlns:c2pa="http://c2pa.org/manifest">
+<metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTo2ZjRiOGY1ZC1kNGNkLTQ2NWUtYmVhYS1mM2UxMDMxYjUwNjkAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaFGHZVJTXwQdtpQqSKOhNpMAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDpmMTViZWU1Ni1kOTRkLTRjYTktYjEzOC05YTYwNTQwZTUxNWFscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoonTw8ogndK8MX8klo8VJMAAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggcqDtRvKcR7DrcOhMjor7z7ancsLP7d7fZl/qDf0ZaAGkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaLBWkRzsT626JCe4PVO45GoAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRMAAAAAAAAAAAAAAAAZGhhc2hYICmxsxU1PtuVyYm4sUmZpUK4XCRcP1m6daULOCTI+oN/ZG5hbWVuanVtYmYgbWFuaWZlc3RqZXhjbHVzaW9uc4GiZXN0YXJ0GQUYZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjZmNGI4ZjVkLWQ0Y2QtNDY1ZS1iZWFhLWYzZTEwMzFiNTA2OS9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOmQyMjU0OWE4LTgyZTktNDM0Yi04MzQxLThhNmVmMDA4ZDY5MnJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCByoO1G8pxHsOtw6EyOivvPtqdyws/t3t9mX+oN/RloAaJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFgg+nuDK6LnfuWrCDSTajgPuayHYBtddOCjsC9PzyL86oyiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFgg11K29oZsNa0kSOcn8zoiOdSiL+tdsXaw8sVXzW+ni1F0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQHa4ko7MAd+4VRw0B+N87SxfvlTK+8x0CLMFlRcr1tRSNzaiz0ZCTQQZLuegfDGPRcDYDzbZapZuMvXCfL9QJwk=</c2pa:manifest></metadata>
+<title>The four steps of _aead_recvmsg() on the decrypt path</title>
+<desc>A vertical flow of four numbered steps, each paired with a buffer diagram carrying byte offsets. The lengths used, outlen and processed are defined first, with the identity processed minus authsize equals outlen. Step one pins the caller's receive pages and reserves a spare scatterlist entry for a later link. Step two copies associated data and ciphertext into those pages through the null cipher. Step three moves the tag entries out of the shared transmit list into a per-request array without copying the pages. Step four chains that array onto the end of the receive list, placing page-cache memory at destination offset outlen. A closing panel shows the submitted request, whose source and destination arguments name the same list.</desc>
+
+
+
+<defs>
+  <marker id="aV" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0.5 1 L9 5 L0.5 9 Z" fill="rgb(83,74,183)"></path>
+  </marker>
+  <marker id="aR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0.5 1 L9 5 L0.5 9 Z" fill="rgb(163,45,45)"></path>
+  </marker>
+</defs>
+
+<g class="f" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+
+  <text class="cap" x="12" y="16" font-size="12px" font-weight="600" letter-spacing="0.06em" fill="rgb(120,118,112)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">THE FOUR STEPS OF _aead_recvmsg() ON THE DECRYPT PATH</text>
+
+  
+  <rect class="box" x="12" y="28" width="696" height="66" rx="6" fill="rgb(252,251,248)" stroke="rgb(178,176,169)" stroke-width="1"></rect>
+  <text class="cap" x="26" y="45" font-size="12px" font-weight="600" letter-spacing="0.06em" fill="rgb(120,118,112)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">FIRST, THREE LENGTHS — NO MEMORY IS TOUCHED YET</text>
+  <text class="val mono" x="26" y="60" font-size="10.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">used      = ctx-&gt;used</text>
+  <text class="cd" x="210" y="60" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">every TX byte the caller has sent:  AAD ‖ CT ‖ Tag</text>
+  <text class="val mono" x="26" y="74" font-size="10.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">outlen    = used - as</text>
+  <text class="cd" x="210" y="74" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">the output region the caller receives:  AAD ‖ PT</text>
+  <text class="val mono" x="26" y="88" font-size="10.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">processed = ctx-&gt;used</text>
+  <text class="cdr" x="210" y="88" font-size="10px" fill="rgb(143,40,40)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">the TX bytes this request consumes — so  processed - as  ==  outlen</text>
+
+  
+  <circle class="bdg" cx="24" cy="118" r="10" fill="rgb(83,74,183)"></circle>
+  <text class="num" x="24" y="122" text-anchor="middle" font-size="12px" font-weight="700" fill="rgb(255,255,255)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">1</text>
+  <text class="stp mono" x="44" y="122" font-size="12.5px" font-weight="600" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">af_alg_get_rsgl()</text>
+  <text class="cd" x="215" y="122" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">— turn the caller's recvmsg(2) iovecs into the RX SGL</text>
+  <text class="cd" x="44" y="139" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">af_alg_make_sg() pins the caller's own userspace pages; the sg table gets one entry more than the page count.</text>
+
+  <text class="lab mono" x="12" y="169" font-size="11.5px" font-weight="600" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">RX SGL</text>
+  <rect class="ct" x="150" y="150" width="118" height="30" rx="3" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="ct" x="272" y="150" width="118" height="30" rx="3" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="ct" x="394" y="150" width="118" height="30" rx="3" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="spare" x="516" y="150" width="90" height="30" rx="3" fill="rgb(255,255,255)" stroke="rgb(178,176,169)" stroke-width="1" stroke-dasharray="4 3"></rect>
+  <text class="cd mono" x="209" y="169" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">page 0</text>
+  <text class="cd mono" x="331" y="169" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">page 1</text>
+  <text class="cd mono" x="453" y="169" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">page 2</text>
+  <text class="cd" x="561" y="169" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">spare</text>
+  <text class="cd" x="708" y="162" text-anchor="end" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">the caller's pages</text>
+  <text class="cd mono" x="708" y="176" text-anchor="end" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">= [0, outlen)</text>
+  <path class="rule" d="M 516 188 V 196 H 606 V 188" fill="none" stroke="rgb(178,176,169)" stroke-width="1"></path>
+  <text class="cd" x="561" y="208" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">“Add one extra for linking” — reserved for step 4</text>
+
+  
+  <circle class="bdg" cx="24" cy="234" r="10" fill="rgb(83,74,183)"></circle>
+  <text class="num" x="24" y="238" text-anchor="middle" font-size="12px" font-weight="700" fill="rgb(255,255,255)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">2</text>
+  <text class="stp mono" x="44" y="238" font-size="12.5px" font-weight="600" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">crypto_aead_copy_sgl(null_tfm, tsgl_src, rsgl, outlen)</text>
+  <text class="cd" x="44" y="255" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Copies the first outlen bytes — AAD ‖ CT — into the RX pages, driven through the ecb(cipher_null) transformation.</text>
+
+  <text class="lab mono" x="12" y="285" font-size="11.5px" font-weight="600" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">TX SGL</text>
+  <rect class="aad" x="150" y="266" width="110" height="30" rx="3" fill="rgb(241,239,232)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="ct" x="260" y="266" width="360" height="30" rx="3" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="tag" x="620" y="266" width="80" height="30" rx="3" fill="rgb(252,235,235)" stroke="rgb(163,45,45)" stroke-width="0.75"></rect>
+  <text class="val mono" x="205" y="285" text-anchor="middle" font-size="10.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">AAD</text>
+  <text class="val" x="440" y="285" text-anchor="middle" font-size="10.5px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">ciphertext</text>
+  <text class="val mono" x="660" y="285" text-anchor="middle" fill="rgb(121,31,31)" font-size="10.5px" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">tag</text>
+
+  <path class="rule" d="M 150 304 H 700" fill="none" stroke="rgb(178,176,169)" stroke-width="1"></path>
+  <path class="rule" d="M 150 300 V 308" fill="none" stroke="rgb(178,176,169)" stroke-width="1"></path>
+  <path class="rule" d="M 260 300 V 308" fill="none" stroke="rgb(178,176,169)" stroke-width="1"></path>
+  <path class="seam" d="M 620 298 V 310" fill="none" stroke="rgb(163,45,45)" stroke-width="1.5" stroke-dasharray="4 3"></path>
+  <path class="rule" d="M 700 300 V 308" fill="none" stroke="rgb(178,176,169)" stroke-width="1"></path>
+  <text class="off mono" x="150" y="320" text-anchor="middle" font-size="9.5px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">0</text>
+  <text class="off mono" x="260" y="320" text-anchor="middle" font-size="9.5px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">assoclen</text>
+  <text class="offr mono" x="620" y="320" text-anchor="middle" font-size="9.5px" fill="rgb(143,40,40)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">processed - as</text>
+  <text class="offr mono" x="620" y="334" text-anchor="middle" font-size="9.5px" fill="rgb(143,40,40)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">= outlen</text>
+  <text class="off mono" x="708" y="334" text-anchor="end" font-size="9.5px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">processed</text>
+
+  <path class="conn" d="M 385 340 V 362" marker-end="url(#aV)" fill="none" stroke="rgb(83,74,183)" stroke-width="1.5"></path>
+  <text class="cd mono" x="398" y="356" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">copy [0, outlen)</text>
+
+  <text class="lab mono" x="12" y="389" font-size="11.5px" font-weight="600" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">RX SGL</text>
+  <rect class="aad" x="150" y="370" width="110" height="30" rx="3" fill="rgb(241,239,232)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="ct" x="260" y="370" width="360" height="30" rx="3" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="val mono" x="205" y="389" text-anchor="middle" font-size="10.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">AAD</text>
+  <text class="val" x="440" y="389" text-anchor="middle" font-size="10.5px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">ciphertext → plaintext</text>
+  <text class="off mono" x="150" y="416" text-anchor="middle" font-size="9.5px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">0</text>
+  <text class="offr mono" x="620" y="416" text-anchor="middle" font-size="9.5px" fill="rgb(143,40,40)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">outlen</text>
+
+  
+  <circle class="bdg" cx="24" cy="442" r="10" fill="rgb(83,74,183)"></circle>
+  <text class="num" x="24" y="446" text-anchor="middle" font-size="12px" font-weight="700" fill="rgb(255,255,255)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">3</text>
+  <text class="stp mono" x="44" y="446" font-size="12.5px" font-weight="600" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">af_alg_pull_tsgl(sk, processed, areq-&gt;tsgl, processed - as)</text>
+  <text class="cd" x="44" y="463" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Releases the TX entries already copied and reassigns the rest — the tag, at [processed - as, processed) — into a</text>
+  <text class="cd" x="44" y="478" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">per-request array. The pages are not copied: the same struct page pointers move, with offset and length adjusted.</text>
+
+  <text class="lab mono" x="12" y="509" font-size="11.5px" font-weight="600" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">TX SGL</text>
+  <rect class="rel" x="150" y="490" width="470" height="30" rx="3" fill="rgb(249,248,245)" stroke="rgb(190,188,182)" stroke-width="1" stroke-dasharray="3 3"></rect>
+  <rect class="tag" x="620" y="490" width="80" height="30" rx="3" fill="rgb(252,235,235)" stroke="rgb(163,45,45)" stroke-width="0.75"></rect>
+  <text class="cd" x="385" y="509" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">released — [0, processed - as)</text>
+  <text class="val mono" x="660" y="509" text-anchor="middle" fill="rgb(121,31,31)" font-size="10.5px" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">tag</text>
+
+  <path class="fail" d="M 660 526 V 548" marker-end="url(#aR)" fill="none" stroke="rgb(163,45,45)" stroke-width="1.5"></path>
+  <text class="cdr" x="646" y="541" text-anchor="end" font-size="10px" fill="rgb(143,40,40)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">moved, not copied</text>
+
+  <text class="lab mono" x="12" y="575" font-size="11.5px" font-weight="600" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">areq-&gt;tsgl</text>
+  <rect class="tag" x="620" y="556" width="80" height="30" rx="3" fill="rgb(252,235,235)" stroke="rgb(163,45,45)" stroke-width="0.75"></rect>
+  <text class="val mono" x="660" y="575" text-anchor="middle" fill="rgb(121,31,31)" font-size="10.5px" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">tag</text>
+  <text class="cdr" x="608" y="568" text-anchor="end" font-size="10px" fill="rgb(143,40,40)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">the page-cache pages that <tspan class="mono" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">splice(2)</tspan> put on the source side,</text>
+  <text class="cdr" x="608" y="582" text-anchor="end" font-size="10px" fill="rgb(143,40,40)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">now held in a per-request array of their own</text>
+
+  
+  <circle class="bdg" cx="24" cy="614" r="10" fill="rgb(83,74,183)"></circle>
+  <text class="num" x="24" y="618" text-anchor="middle" font-size="12px" font-weight="700" fill="rgb(255,255,255)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">4</text>
+  <text class="stp mono" x="44" y="618" font-size="12.5px" font-weight="600" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">sg_unmark_end()  +  sg_chain()</text>
+  <text class="cd" x="44" y="635" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Clears the terminator on the last RX entry and writes the link into the spare slot reserved in step 1, so a walk of</text>
+  <text class="cd" x="44" y="650" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">the RX list runs off its own end and continues into areq-&gt;tsgl.</text>
+
+  <text class="lab mono" x="12" y="676" font-size="11.5px" font-weight="600" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">req-&gt;dst</text>
+  <text class="lab mono" x="12" y="690" font-size="11.5px" font-weight="600" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">= req-&gt;src</text>
+  <rect class="aad" x="150" y="662" width="110" height="30" rx="3" fill="rgb(241,239,232)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="ct" x="260" y="662" width="360" height="30" rx="3" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="tagd" x="620" y="662" width="80" height="30" rx="3" fill="rgb(252,235,235)" stroke="rgb(163,45,45)" stroke-width="1" stroke-dasharray="4 3"></rect>
+  <text class="val mono" x="205" y="681" text-anchor="middle" font-size="10.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">AAD</text>
+  <text class="val" x="440" y="681" text-anchor="middle" font-size="10.5px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">plaintext</text>
+  <text class="val mono" x="660" y="681" text-anchor="middle" fill="rgb(121,31,31)" font-size="10.5px" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">tag</text>
+
+  <path class="rule" d="M 150 700 H 700" fill="none" stroke="rgb(178,176,169)" stroke-width="1"></path>
+  <path class="rule" d="M 150 696 V 704" fill="none" stroke="rgb(178,176,169)" stroke-width="1"></path>
+  <path class="seam" d="M 620 694 V 706" fill="none" stroke="rgb(163,45,45)" stroke-width="1.5" stroke-dasharray="4 3"></path>
+  <path class="rule" d="M 700 696 V 704" fill="none" stroke="rgb(178,176,169)" stroke-width="1"></path>
+  <text class="off mono" x="150" y="716" text-anchor="middle" font-size="9.5px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">0</text>
+  <text class="offr mono" x="620" y="716" text-anchor="middle" font-size="9.5px" fill="rgb(143,40,40)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">outlen</text>
+  <text class="off mono" x="708" y="716" text-anchor="end" font-size="9.5px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">processed</text>
+
+  <text class="cd" x="385" y="734" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">the caller's own pages</text>
+  <text class="cdr" x="660" y="734" text-anchor="middle" font-size="10px" fill="rgb(143,40,40)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">page cache</text>
+
+  
+  <rect class="box" x="12" y="748" width="696" height="52" rx="6" fill="rgb(252,251,248)" stroke="rgb(178,176,169)" stroke-width="1"></rect>
+  <text class="cap" x="26" y="765" font-size="12px" font-weight="600" letter-spacing="0.06em" fill="rgb(120,118,112)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">AND THEN SUBMITTED</text>
+  <text class="val mono" x="26" y="782" font-size="10.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">aead_request_set_crypt(&amp;areq-&gt;cra_u.aead_req, rsgl_src, areq-&gt;first_rsgl.sgl.sg, used, ctx-&gt;iv);</text>
+  <text class="cdr" x="26" y="795" font-size="10px" fill="rgb(143,40,40)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Both the source and the destination argument name this one list — everything from offset outlen onward is page-cache memory.</text>
+
+</g>
+</svg>

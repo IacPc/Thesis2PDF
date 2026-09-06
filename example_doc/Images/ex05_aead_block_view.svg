@@ -1,0 +1,98 @@
+<svg width="100%" viewBox="0 0 600 344" role="img" aria-label="A block view of an AEAD transformation. On encryption the source buffer holds the associated data, the plaintext and space reserved for the tag; the transform emits the associated data unchanged, the ciphertext, and the authentication tag. On decryption the source holds the associated data, the ciphertext and the tag, which is now an input; the transform verifies the tag first and writes the associated data and plaintext only if it matches, returning EBADMSG and releasing nothing if it does not." xmlns="http://www.w3.org/2000/svg" xmlns:c2pa="http://c2pa.org/manifest">
+<metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTplZGVmNjAxNS1hY2Q1LTQ0ZDgtYjVkZC02ZjkwOGYyZmZlODcAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaOPnWZvx6JkutjgtguCu+UIAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDo2YTM3Nzk5MC1hMGJlLTRmMTUtYjk3Ni1mMTc4YjYxY2ZiOWZscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNomCUB3wGxaXaLB3X1fKaxAQAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFgg/9cbrh6SrHEvkRjJfk3l3j8LMZGNz0HkW6DIHrrdN4ykZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaCdKRvxnWbjrrXvrZu2JTLgAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRMAAAAAAAAAAAAAAAAZGhhc2hYIM0Fkb80884A9Nq09hDxSJEBWO5EtKWet9a6e5XHUIZTZG5hbWVuanVtYmYgbWFuaWZlc3RqZXhjbHVzaW9uc4GiZXN0YXJ0GQKYZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOmVkZWY2MDE1LWFjZDUtNDRkOC1iNWRkLTZmOTA4ZjJmZmU4Ny9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOmQ3OWVhMDhlLWIyMTAtNGNiMi04NjU0LWM5OGE1YmM2ZDQwZHJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCD/1xuuHpKscS+RGMl+TeXePwsxkY3PQeRboMgeut03jKJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggcFoK5X0SusuvMGo5QEl9FDg7xQEmempaykLYhMRjA/yiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggd37a4NEnBuFO3OVSZdw+wG+SLAMafwxVLu9n3qpTAet0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQIbey1Pv6nSby2l2VV8blf18m9HV3OyU8jOhMFWgpvgcxCiJ0Veit8DaiTn7gc4PPKpbHiEKrz75MA3tbyKNOMU=</c2pa:manifest></metadata>
+<title>An AEAD transformation in outline</title>
+<desc>Two bands. The upper band shows encryption: a segmented source buffer of associated data, plaintext and reserved tag space feeds an AEAD transform block, which is also given the key and the initialisation vector, and produces a destination buffer of associated data, ciphertext and the authentication tag. The lower band shows decryption: a source buffer of associated data, ciphertext and tag feeds the transform, which verifies the tag before releasing anything; on success it writes associated data and plaintext to the destination, and on failure it returns EBADMSG and writes no plaintext at all. The associated data passes through both directions unchanged.</desc>
+
+
+
+<defs>
+  <marker id="arwA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0.5 1 L9 5 L0.5 9 Z" fill="rgb(137,135,129)"></path>
+  </marker>
+  <marker id="arwR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0.5 1 L9 5 L0.5 9 Z" fill="rgb(163,45,45)"></path>
+  </marker>
+</defs>
+
+<g class="f" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+
+  <text class="cap" x="12" y="13" font-size="8px" font-weight="600" letter-spacing="0.06em" fill="rgb(120,118,112)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">AN AEAD TRANSFORMATION IN OUTLINE — SOURCE, TRANSFORM, DESTINATION</text>
+
+  
+  <text class="cap" x="12" y="33" font-size="8px" font-weight="600" letter-spacing="0.06em" fill="rgb(120,118,112)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">ENCRYPT</text>
+
+  <rect class="neu" x="266" y="38" width="76" height="20" rx="6" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="blk mono" x="304" y="52" text-anchor="middle" font-size="8.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">key, IV</text>
+  <path class="conn" d="M 304 60 V 66" marker-end="url(#arwA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+
+  
+  <rect class="neu" x="12" y="74" width="48" height="36" rx="4" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="gry" x="60" y="74" width="100" height="36" rx="4" fill="rgb(241,239,232)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="rsv" x="160" y="74" width="52" height="36" rx="4" fill="rgb(252,251,248)" stroke="rgb(178,176,169)" stroke-width="1" stroke-dasharray="4 3"></rect>
+  <text class="blk mono" x="36" y="95" text-anchor="middle" font-size="8.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">AAD</text>
+  <text class="blk" x="110" y="95" text-anchor="middle" font-size="8.5px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">plaintext</text>
+  <text class="cd" x="186" y="95" text-anchor="middle" font-size="7.5px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">tag space</text>
+  <text class="cd" x="112" y="124" text-anchor="middle" font-size="7.5px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">source — <tspan class="mono" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">req-&gt;src</tspan></text>
+
+  <path class="conn" d="M 216 92 H 240" marker-end="url(#arwA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+
+  
+  <rect class="tfm" x="246" y="70" width="116" height="44" rx="8" fill="rgb(238,237,254)" stroke="rgb(83,74,183)" stroke-width="1"></rect>
+  <text class="blk" x="304" y="89" text-anchor="middle" fill="rgb(60,52,137)" font-size="8.5px" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">AEAD transform</text>
+  <text class="cd" x="304" y="103" text-anchor="middle" fill="rgb(74,66,160)" font-size="7.5px" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">encrypt, then authenticate</text>
+
+  <path class="conn" d="M 366 92 H 388" marker-end="url(#arwA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+
+  
+  <rect class="neu" x="392" y="74" width="46" height="36" rx="4" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="gry" x="438" y="74" width="98" height="36" rx="4" fill="rgb(241,239,232)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="tagr" x="536" y="74" width="52" height="36" rx="4" fill="rgb(252,235,235)" stroke="rgb(163,45,45)" stroke-width="0.75"></rect>
+  <text class="blk mono" x="415" y="95" text-anchor="middle" font-size="8.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">AAD</text>
+  <text class="blk" x="487" y="95" text-anchor="middle" font-size="8.5px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">ciphertext</text>
+  <text class="blk" x="562" y="95" text-anchor="middle" fill="rgb(121,31,31)" font-size="8.5px" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">tag</text>
+  <text class="cd" x="490" y="124" text-anchor="middle" font-size="7.5px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">destination — <tspan class="mono" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">req-&gt;dst</tspan></text>
+
+  <text class="note" x="12" y="144" font-size="8px" fill="rgb(95,94,90)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">The AAD is carried through unchanged: authenticated, never encrypted. The tag, <tspan class="mono" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">authsize</tspan> bytes, is computed</text>
+  <text class="note" x="12" y="156" font-size="8px" fill="rgb(95,94,90)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">over AAD ‖ payload and written into the space the caller reserved for it.</text>
+
+  
+  <text class="cap" x="12" y="177" font-size="8px" font-weight="600" letter-spacing="0.06em" fill="rgb(120,118,112)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">DECRYPT</text>
+
+  <rect class="neu" x="266" y="182" width="76" height="20" rx="6" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="blk mono" x="304" y="196" text-anchor="middle" font-size="8.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">key, IV</text>
+  <path class="conn" d="M 304 204 V 210" marker-end="url(#arwA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+
+  
+  <rect class="neu" x="12" y="218" width="48" height="36" rx="4" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="gry" x="60" y="218" width="100" height="36" rx="4" fill="rgb(241,239,232)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="tagr" x="160" y="218" width="52" height="36" rx="4" fill="rgb(252,235,235)" stroke="rgb(163,45,45)" stroke-width="0.75"></rect>
+  <text class="blk mono" x="36" y="239" text-anchor="middle" font-size="8.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">AAD</text>
+  <text class="blk" x="110" y="239" text-anchor="middle" font-size="8.5px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">ciphertext</text>
+  <text class="blk" x="186" y="239" text-anchor="middle" fill="rgb(121,31,31)" font-size="8.5px" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">tag</text>
+  <text class="cd" x="186" y="268" text-anchor="middle" fill="rgb(143,40,40)" font-size="7.5px" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">now an input</text>
+
+  <path class="conn" d="M 216 236 H 240" marker-end="url(#arwA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+
+  
+  <rect class="tfm" x="246" y="214" width="116" height="44" rx="8" fill="rgb(238,237,254)" stroke="rgb(83,74,183)" stroke-width="1"></rect>
+  <text class="blk" x="304" y="233" text-anchor="middle" fill="rgb(60,52,137)" font-size="8.5px" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">AEAD transform</text>
+  <text class="cd" x="304" y="247" text-anchor="middle" fill="rgb(74,66,160)" font-size="7.5px" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">verify, then decrypt</text>
+
+  <path class="conn" d="M 366 230 H 388" marker-end="url(#arwA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+  <path class="fail" d="M 366 250 C 378 250, 378 277, 388 277" marker-end="url(#arwR)" fill="none" stroke="rgb(163,45,45)" stroke-width="1.5"></path>
+
+  
+  <rect class="neu" x="392" y="214" width="52" height="36" rx="4" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <rect class="gry" x="444" y="214" width="144" height="36" rx="4" fill="rgb(241,239,232)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="blk mono" x="418" y="235" text-anchor="middle" font-size="8.5px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">AAD</text>
+  <text class="blk" x="516" y="235" text-anchor="middle" font-size="8.5px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">plaintext</text>
+
+  <rect class="tagr" x="392" y="264" width="196" height="26" rx="6" fill="rgb(252,235,235)" stroke="rgb(163,45,45)" stroke-width="0.75"></rect>
+  <text class="blk mono" x="490" y="281" text-anchor="middle" fill="rgb(121,31,31)" font-size="8.5px" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">EBADMSG — nothing released</text>
+
+  <text class="note" x="12" y="310" font-size="8px" fill="rgb(95,94,90)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">On decryption the tag is an input, occupying the last <tspan class="mono" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">authsize</tspan> bytes of the source, and it is verified before</text>
+  <text class="note" x="12" y="322" font-size="8px" fill="rgb(95,94,90)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">any plaintext is released. Source and destination therefore differ in length and in internal layout, and arranging</text>
+  <text class="note" x="12" y="334" font-size="8px" fill="rgb(95,94,90)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">the pieces to line up is the transform's own work — which is where, for <tspan class="mono" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">authencesn</tspan>, the defect lies.</text>
+
+</g>
+</svg>

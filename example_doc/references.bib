@@ -1,0 +1,363 @@
+% References for "Breaking Out: A Practical Study of Container Escape Techniques"
+% Cite in the text with square brackets around an at-sign and the key, e.g.
+% mitre-attack-containers or cve-2019-5736.
+% Multiple keys are separated by a semicolon, e.g. rice2020; kerrisk2010
+% NOTE: do not write a literal at-sign in these comments. BibTeX does not treat
+% "%" as a comment character; it scans for at-signs and will try to parse each
+% one as the start of a new entry.
+
+@misc{mitre-attack-containers,
+  author       = {{MITRE}},
+  title        = {{ATT\&CK} for Containers Matrix},
+  howpublished = {Online},
+  url          = {https://attack.mitre.org/matrices/enterprise/containers/}
+}
+
+@misc{securelist2026containers,
+  author = {{Kaspersky Securelist}},
+  title  = {Containers on Fire: From Container Escapes to Supply Chain Attacks},
+  year   = {2026},
+  url    = {https://securelist.com/container-attack-vectors/120010/}
+}
+
+@techreport{redhat2024kubesec,
+  author      = {{Red Hat}},
+  title       = {The State of Kubernetes Security Report 2024},
+  institution = {Red Hat},
+  year        = {2024},
+  note        = {Kubernetes-scoped; verify the misconfiguration figure against the primary report},
+  url         = {https://www.redhat.com/en/resources/state-kubernetes-security-report-2024}
+}
+
+@misc{wiz-container-escape,
+  author = {{Wiz}},
+  title  = {What Is Container Escape: Detection and Prevention},
+  url    = {https://www.wiz.io/academy/container-security/container-escape}
+}
+
+@misc{cve-2019-5736,
+  author = {{National Vulnerability Database}},
+  title  = {{CVE-2019-5736}},
+  url    = {https://nvd.nist.gov/vuln/detail/CVE-2019-5736}
+}
+
+@misc{avrahami2019runc,
+  author = {Avrahami, Yuval},
+  title  = {Breaking Docker via {runC}: Explaining {CVE-2019-5736}},
+  year   = {2019},
+  note   = {Palo Alto Networks, Unit 42},
+  url    = {https://unit42.paloaltonetworks.com/breaking-docker-via-runc-explaining-cve-2019-5736/}
+}
+
+@misc{oci-runc-advisories,
+  author = {{Open Container Initiative}},
+  title  = {{runc} Security Advisories: {CVE-2019-5736}, Host {runc} Binary Overwrite via /proc/self/exe},
+  url    = {https://github.com/opencontainers/runc/security/advisories}
+}
+
+@misc{snyk2024leakyvessels,
+  author = {{Snyk}},
+  title  = {Leaky Vessels: {Docker} and {runc} Container Breakout Vulnerabilities ({CVE-2024-21626})},
+  year   = {2024},
+  url    = {https://snyk.io/blog/leaky-vessels-docker-runc-container-breakout-vulnerabilities/}
+}
+
+@misc{cve-2024-21626,
+  author = {{National Vulnerability Database}},
+  title  = {{CVE-2024-21626}},
+  url    = {https://nvd.nist.gov/vuln/detail/CVE-2024-21626}
+}
+
+@misc{unit42-cve-2022-0492,
+  author = {Avrahami, Yuval},
+  title  = {New {Linux} Vulnerability {CVE-2022-0492} Affecting Cgroups: Can Containers Escape?},
+  year   = {2022},
+  note   = {Palo Alto Networks, Unit 42. Published 3 March 2022},
+  url    = {https://unit42.paloaltonetworks.com/cve-2022-0492-cgroups/}
+}
+
+@misc{cve-2022-0492,
+  author = {{National Vulnerability Database}},
+  title  = {{CVE-2022-0492}},
+  url    = {https://nvd.nist.gov/vuln/detail/CVE-2022-0492}
+}
+
+@misc{cve-2026-31431,
+  author = {{National Vulnerability Database}},
+  title  = {{CVE-2026-31431} (``Copy Fail'')},
+  url    = {https://nvd.nist.gov/vuln/detail/CVE-2026-31431}
+}
+
+@misc{cisa-kev,
+  author = {{Cybersecurity and Infrastructure Security Agency}},
+  title  = {Known Exploited Vulnerabilities Catalog},
+  url    = {https://www.cisa.gov/known-exploited-vulnerabilities-catalog}
+}
+
+@book{kerrisk2010,
+  author    = {Kerrisk, Michael},
+  title     = {The Linux Programming Interface},
+  publisher = {No Starch Press},
+  year      = {2010},
+  isbn      = {9781593272203}
+}
+
+@misc{oci-runtime-spec,
+  author = {{Open Container Initiative}},
+  title  = {Runtime Specification},
+  url    = {https://github.com/opencontainers/runtime-spec}
+}
+
+@book{rice2020,
+  author    = {Rice, Liz},
+  title     = {Container Security: Fundamental Technology Concepts that Protect Containerized Applications},
+  publisher = {O'Reilly Media},
+  year      = {2020},
+  isbn      = {9781492056706}
+}
+
+@misc{man7-linux,
+  author = {Kerrisk, Michael},
+  title  = {Linux Manual Pages: namespaces(7), pid\_namespaces(7), user\_namespaces(7), cgroups(7), capabilities(7), seccomp(2)},
+  url    = {https://man7.org/linux/man-pages/}
+}
+
+@misc{rawkode2026cgroups,
+  author = {{Rawkode Academy}},
+  title  = {Cgroups: From Chaos to Control},
+  year   = {2026},
+  note   = {Accessed 2 August 2026},
+  url    = {https://rawkode.academy/read/cgroups-from-chaos-to-control}
+}
+
+@misc{docker-seccomp,
+  author = {{Docker Inc.}},
+  title  = {Seccomp Security Profiles for {Docker}},
+  year   = {2026},
+  note   = {Docker Documentation. Accessed 9 August 2026},
+  url    = {https://docs.docker.com/engine/security/seccomp/}
+}
+
+@misc{docker-apparmor,
+  author = {{Docker Inc.}},
+  title  = {{AppArmor} Security Profiles for {Docker}},
+  year   = {2026},
+  note   = {Docker Documentation. Accessed 9 August 2026},
+  url    = {https://docs.docker.com/engine/security/apparmor/}
+}
+
+@misc{docker-run-reference,
+  author = {{Docker Inc.}},
+  title  = {{Docker} {CLI} Reference: Runtime Privilege and {Linux} Capabilities},
+  year   = {2026},
+  note   = {Reference for the {docker container run} command. Accessed 9 August 2026},
+  url    = {https://docs.docker.com/reference/cli/docker/container/run/}
+}
+
+@misc{docker-rootless,
+  author = {{Docker Inc.}},
+  title  = {Run the {Docker} Daemon as a Non-Root User (Rootless Mode)},
+  year   = {2026},
+  note   = {Docker Documentation. Accessed 9 August 2026},
+  url    = {https://docs.docker.com/engine/security/rootless/}
+}
+
+@misc{docker-socket-proxy,
+  author = {{Tecnativa}},
+  title  = {{Docker} Socket Proxy},
+  year   = {2026},
+  note   = {Source repository. Accessed 9 August 2026},
+  url    = {https://github.com/Tecnativa/docker-socket-proxy}
+}
+
+@misc{podman-rootless,
+  author = {{Containers Project}},
+  title  = {Basic Setup and Use of {Podman} in a Rootless Environment},
+  year   = {2026},
+  note   = {Podman documentation. Accessed 9 August 2026},
+  url    = {https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md}
+}
+
+@misc{falco-rules,
+  author = {{The Falco Project}},
+  title  = {Falco Default Rules},
+  year   = {2026},
+  note   = {Falco Documentation, Cloud Native Computing Foundation. Accessed 9 August 2026},
+  url    = {https://falco.org/docs/reference/rules/default-rules/}
+}
+
+@misc{vagrant-docs,
+  author = {{HashiCorp}},
+  title  = {{Vagrant} Documentation},
+  year   = {2026},
+  note   = {Accessed 9 August 2026},
+  url    = {https://developer.hashicorp.com/vagrant/docs}
+}
+
+@misc{linux-cgroup-release-agent-fix,
+  author = {Biederman, Eric W.},
+  title  = {{cgroup-v1}: Require Capabilities to Set {release\_agent}},
+  year   = {2022},
+  note   = {Linux kernel commit 24f6008564183aa120d07c03d9289519c2fe02af in kernel/cgroup/cgroup-v1.c; the upstream fix for {CVE-2022-0492}},
+  url    = {https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=24f6008564183aa120d07c03d9289519c2fe02af}
+}
+
+@misc{xint-copyfail,
+  author = {Im, Juno},
+  title  = {Copy Fail: 732 Bytes to Root on {Linux}},
+  year   = {2026},
+  note   = {Xint Code / Theori. Disclosure write-up for {CVE-2026-31431}, published 29 April 2026. Accessed 13 August 2026},
+  url    = {https://xint.io/blog/copy-fail-linux-distributions}
+}
+
+@misc{xint-copyfail-pod-to-host,
+  author = {{Xint Code}},
+  title  = {Copy Fail: From Pod to Host},
+  year   = {2026},
+  note   = {Container- and Kubernetes-specific analysis of {CVE-2026-31431}. Accessed 13 August 2026},
+  url    = {https://xint.io/blog/copy-fail-pod-to-host}
+}
+
+@misc{unit42-copyfail,
+  author = {{Palo Alto Networks, Unit 42}},
+  title  = {Copy Fail: What You Need to Know About the Most Severe {Linux} Threat in Years},
+  year   = {2026},
+  note   = {Analysis of {CVE-2026-31431}. Accessed 13 August 2026},
+  url    = {https://unit42.paloaltonetworks.com/cve-2026-31431-copy-fail/}
+}
+
+@misc{sysdig-copyfail,
+  author = {{Sysdig}},
+  title  = {{CVE-2026-31431}: ``Copy Fail'' {Linux} Kernel Flaw Lets Local Users Gain Root in Seconds},
+  year   = {2026},
+  note   = {Includes runtime-detection guidance for containerised environments. Accessed 13 August 2026},
+  url    = {https://www.sysdig.com/blog/cve-2026-31431-copy-fail-linux-kernel-flaw-lets-local-users-gain-root-in-seconds}
+}
+
+@misc{retr0-copyfail,
+  author = {{retr0.zip}},
+  title  = {{CVE-2026-31431}: Copy Fail},
+  year   = {2026},
+  note   = {Technical analysis of the scratch write, the page-cache primitive, and why sanitisers do not detect it. Accessed 13 August 2026},
+  url    = {https://retr0.zip/blog/cve-2026-31431-copy-fail.html}
+}
+
+@misc{cert-eu-copyfail,
+  author = {{CERT-EU}},
+  title  = {High Vulnerability in the {Linux} Kernel (``Copy Fail''), Security Advisory 2026-005},
+  year   = {2026},
+  note   = {Accessed 13 August 2026},
+  url    = {https://cert.europa.eu/publications/security-advisories/2026-005/}
+}
+
+@misc{docker-copyfail-mitigation,
+  author = {{Docker Inc.}},
+  title  = {Mitigating {CVE-2026-31431} (``Copy Fail'') in {Docker} Engine},
+  year   = {2026},
+  note   = {Default seccomp, {AppArmor} and {SELinux} profile changes shipped in {Docker} Engine 29.4.2 and 29.4.3. Accessed 13 August 2026},
+  url    = {https://www.docker.com/blog/mitigating-cve-2026-31431-copy-fail-in-docker-engine/}
+}
+
+@misc{juliet-copyfail-k8s,
+  author = {{Juliet}},
+  title  = {Copy Fail in {Kubernetes}: {RuntimeDefault} Did Not Block {AF\_ALG}},
+  year   = {2026},
+  note   = {Empirical testing of {CVE-2026-31431} against Pod Security Standards ``restricted'' and the {RuntimeDefault} seccomp profile. Accessed 13 August 2026},
+  url    = {https://juliet.sh/blog/we-tested-copy-fail-in-kubernetes-pss-restricted-runtime-default-af-alg}
+}
+
+@misc{linux-algif-aead-inplace,
+  author = {Mueller, Stephan},
+  title  = {crypto: {algif\_aead} --- Copy {AAD} from src to dst},
+  year   = {2017},
+  note   = {Linux kernel commit 72548b093ee38a6d4f2a19e6ef1948ae05c181f7 in crypto/algif\_aead.c, authored 30 July 2017 and released in Linux 4.14; the in-place optimisation in which {CVE-2026-31431} originates},
+  url    = {https://github.com/torvalds/linux/commit/72548b093ee3}
+}
+
+@misc{linux-algif-aead-revert,
+  author = {Xu, Herbert},
+  title  = {crypto: {algif\_aead} --- Revert to Operating Out-of-Place},
+  year   = {2026},
+  note   = {Linux kernel commit a664bf3d603dc3bdcf9ae47cc21e0daec706d7a5, committed 1 April 2026; the upstream fix for {CVE-2026-31431}, reported by Taeyang Lee},
+  url    = {https://github.com/torvalds/linux/commit/a664bf3d603dc3bdcf9ae47cc21e0daec706d7a5}
+}
+
+@misc{linux-aead-header,
+  author = {{The Linux Kernel}},
+  title  = {Linux Kernel Source: {include/crypto/aead.h}},
+  year   = {2019},
+  note   = {Definition of {\tt struct aead\_request}, the descriptor through which a single AEAD transformation is submitted to the kernel crypto API. Accessed 14 August 2026},
+  url    = {https://elixir.bootlin.com/linux/v5.4/source/include/crypto/aead.h}
+}
+
+@misc{linux-scatterlist-header,
+  author = {{The Linux Kernel}},
+  title  = {Linux Kernel Source: {include/linux/scatterlist.h}},
+  year   = {2019},
+  note   = {Definition of {\tt struct scatterlist}, the {SG\_CHAIN} and {SG\_END} flag bits, and {\tt sg\_chain()}, as of Linux 5.4. Accessed 14 August 2026},
+  url    = {https://elixir.bootlin.com/linux/v5.4/source/include/linux/scatterlist.h}
+}
+
+@misc{man7-af-alg,
+  author = {Kerrisk, Michael},
+  title  = {Linux Manual Pages: {af\_alg}(7), {splice}(2), {pipe}(7)},
+  note   = {Accessed 13 August 2026},
+  url    = {https://man7.org/linux/man-pages/man7/af_alg.7.html}
+}
+
+@book{love2010,
+  author    = {Love, Robert},
+  title     = {Linux Kernel Development},
+  edition   = {3},
+  publisher = {Addison-Wesley},
+  year      = {2010},
+  isbn      = {9780672329463}
+}
+
+@misc{runc-ghsa-leaky-vessels,
+  author = {{Open Container Initiative}},
+  title  = {Several Container Breakouts Due to Internally Leaked File Descriptors ({GHSA-xr7r-f8xq-vfvv}, {CVE-2024-21626})},
+  year   = {2024},
+  note   = {runc security advisory; affects runc 1.0.0-rc93 through 1.1.11, fixed in 1.1.12},
+  url    = {https://github.com/opencontainers/runc/security/advisories/GHSA-xr7r-f8xq-vfvv}
+}
+
+@misc{linux-authencesn,
+  author = {{The Linux Kernel}},
+  title  = {Linux Kernel Source: {crypto/authencesn.c}},
+  year   = {2019},
+  note   = {Implementation of the {\tt authencesn} template: {\tt crypto\_authenc\_esn\_decrypt()} and {\tt crypto\_authenc\_esn\_decrypt\_tail()}, and the three {\tt scatterwalk\_map\_and\_copy()} calls that perform the extended-sequence-number rearrangement. Accessed 14 August 2026},
+  url    = {https://elixir.bootlin.com/linux/v5.4/source/crypto/authencesn.c}
+}
+
+@misc{linux-algif-aead-source,
+  author = {{The Linux Kernel}},
+  title  = {Linux Kernel Source: {crypto/algif\_aead.c}},
+  year   = {2019},
+  note   = {Implementation of {\tt \_aead\_recvmsg()}: the construction of the TX and RX scatterlists, the {\tt crypto\_aead\_copy\_sgl()} copy through the null cipher, and the {\tt sg\_chain()} that appends the tag entries to the RX list. Accessed 14 August 2026},
+  url    = {https://elixir.bootlin.com/linux/v5.4/source/crypto/algif_aead.c}
+}
+
+@misc{rfc4303,
+  author = {Kent, Stephen},
+  title  = {{RFC 4303}: {IP} Encapsulating Security Payload ({ESP})},
+  year   = {2005},
+  note   = {Internet Engineering Task Force. Section 2.2.1 specifies extended sequence numbers and the order in which the integrity check value is computed over them. Accessed 14 August 2026},
+  url    = {https://www.rfc-editor.org/rfc/rfc4303}
+}
+
+@misc{linux-testmgr,
+  author = {{The Linux Kernel}},
+  title  = {Linux Kernel Source: {crypto/testmgr.c}},
+  year   = {2019},
+  note   = {The kernel's algorithm test manager. {\tt struct testvec\_config} carries an in-place flag and a set of scatterlist divisions, and the shipped configurations include one named ``misaligned splits crossing pages, inplace'', so every registered transformation is exercised in the {\tt src == dst} geometry over buffers the test manager itself allocates. Accessed 30 August 2026},
+  url    = {https://elixir.bootlin.com/linux/v5.4/source/crypto/testmgr.c}
+}
+
+@misc{syzkaller-alg,
+  author = {{The syzkaller Project}},
+  title  = {{AF\_ALG} System-Call Descriptions: {\tt sys/linux/socket\_alg.txt} and {\tt sys/linux/init\_alg.go}},
+  year   = {2017},
+  note   = {syzkaller's model of the {AF\_ALG} interface, carried since 2017: {\tt socket\$alg}, {\tt bind\$alg}, {\tt ALG\_SET\_KEY}, {\tt ALG\_SET\_AEAD\_AUTHSIZE}, {\tt accept\$alg}, {\tt sendmsg\$alg} and {\tt read\$alg}. {\tt init\_alg.go} enumerates the templates bound during fuzzing, {\tt authencesn} among them; the descriptors specify no {\tt splice(2)} path into an operation socket. Accessed 30 August 2026},
+  url    = {https://github.com/google/syzkaller/blob/master/sys/linux/socket_alg.txt}
+}

@@ -1,0 +1,136 @@
+<svg width="100%" viewBox="0 0 720 600" role="img" aria-label="How an executable is cached and the kernel structures that describe it. Processes in two containers and on the host all execute the same binary by different paths; each path resolves to one inode, whose address_space holds one set of struct page entries in RAM, read in once from disk. Below, struct inode links by i_mapping to struct address_space, whose i_pages xarray maps a file offset to a struct page holding flags, a mapping pointer back to the address_space, and an index. Neither structure records who may write the page: permission is checked at the syscall boundary against the path the file was opened by, so a kernel subsystem handed the page pointer directly is checked by nothing. A closing strip traces the consequence: splice places such a page on the source side of a request, sg_chain carries it to the destination side, authencesn writes four bytes into it, and the cached code changes while the file on disk does not." xmlns="http://www.w3.org/2000/svg" xmlns:c2pa="http://c2pa.org/manifest">
+<metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTpjOGFlNmZlZi1iMDhhLTQ5NTktYWMyMC1hMGUyNDg5NGVjMDkAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaJRqt/tn6vAZt1Oh7WxamfIAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDo4NzdkZWFmNi0zMTY0LTQ0ODUtOTI3Zi0wYmY3YzRiNDJjOWRscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoS1xtjrL1JCcPigbMEy+HMQAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggD4H8yQcbjQs+RVh/X8I/M2DUwxMhL+vhFeCE6i7CkiakZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaISpgIKZwbiBbkWjor/BpUYAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRMAAAAAAAAAAAAAAAAZGhhc2hYIO+PKFrFtbW11g6tyw7utGPbCOvdHHCXwiyD5p2+H8bAZG5hbWVuanVtYmYgbWFuaWZlc3RqZXhjbHVzaW9uc4GiZXN0YXJ0GQROZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOmM4YWU2ZmVmLWIwOGEtNDk1OS1hYzIwLWEwZTI0ODk0ZWMwOS9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjA2NmFiMjZkLWJjYjctNDYwMi1hYjU3LTUzNTMzOTFiZTA1ZXJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCAPgfzJBxuNCz5FWH9fwj8zYNTDEyEv6+EV4ITqLsKSJqJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggmOZmkXkd/bHQr+oFH9JaXup3yqSR/lIstcCDFD4lmx+iY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggmuiNbRDveYUcbqJ2FMU+F7LOnbh/N6n5RtSlD45pz9B0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQNa5kh8GsdE+VmyvwQkBcYLdA/jqEku5CaIDrch7NIx0SSn+9IQBz+oA5W3ge5rpckcC9KFn8f/4UU0zX5Ca9GQ=</c2pa:manifest></metadata>
+<title>The page cache, its structures, and their role in the vulnerability</title>
+<desc>Three bands. The upper band shows one cached executable shared by processes in two containers and on the host, reached by three different paths but resolving to a single inode and a single set of cached pages, read in once from the host filesystem. The middle band opens the two structures that describe that cache: struct inode, linked by i_mapping to struct address_space, whose i_pages xarray maps each file offset to a struct page recording flags, a mapping pointer back to the address_space, and an index — and neither structure records write permission, which is checked instead at the syscall boundary against the path used to open the file. The lower band names the four steps by which that omission is reached in Section 9.4: splice, sg_chain, the authencesn scratch write, and the resulting change to cached code that never touches disk.</desc>
+
+
+
+<defs>
+  <marker id="mA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0.5 1 L9 5 L0.5 9 Z" fill="rgb(137,135,129)"></path>
+  </marker>
+  <marker id="mV" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0.5 1 L9 5 L0.5 9 Z" fill="rgb(83,74,183)"></path>
+  </marker>
+</defs>
+
+<g class="f" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+
+  
+  <text class="cap" x="12" y="18" font-size="12px" font-weight="600" letter-spacing="0.06em" fill="rgb(120,118,112)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">HOW AN EXECUTABLE IS CACHED</text>
+
+  <rect class="chip" x="12" y="42" width="178" height="40" rx="5" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="hdr" x="26" y="60" font-size="13px" font-weight="600" fill="rgb(52,52,50)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">process in container A</text>
+  <text class="cd mono" x="26" y="75" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">execve(&#34;/bin/su&#34;)</text>
+
+  <rect class="chip" x="12" y="90" width="178" height="40" rx="5" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="hdr" x="26" y="108" font-size="13px" font-weight="600" fill="rgb(52,52,50)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">process in container B</text>
+  <text class="cd mono" x="26" y="123" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">execve(&#34;/bin/su&#34;)</text>
+
+  <rect class="chip" x="12" y="138" width="178" height="40" rx="5" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="hdr" x="26" y="156" font-size="13px" font-weight="600" fill="rgb(52,52,50)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">process on the host</text>
+  <text class="cd mono" x="26" y="171" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">execve(&#34;/usr/bin/su&#34;)</text>
+
+  <path class="grey" d="M 194 62  H 244" marker-end="url(#mA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+  <path class="grey" d="M 194 110 H 244" marker-end="url(#mA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+  <path class="grey" d="M 194 158 H 244" marker-end="url(#mA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+
+  
+  <rect class="band" x="250" y="32" width="230" height="176" rx="8" fill="rgb(252,251,248)" stroke="rgb(178,176,169)" stroke-width="1" stroke-dasharray="5 4"></rect>
+  <text class="cap" x="262" y="50" font-size="12px" font-weight="600" letter-spacing="0.06em" fill="rgb(120,118,112)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">PAGE CACHE — RAM</text>
+  <text class="cd mono" x="262" y="66" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">address_space of inode 12934</text>
+
+  <rect class="pg" x="262" y="76" width="206" height="32" rx="4" fill="rgb(241,239,232)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="cd mono" x="274" y="96" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">page 0</text>
+  <text class="val" x="330" y="96" font-size="10px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">ELF header</text>
+
+  <rect class="pg" x="262" y="114" width="206" height="32" rx="4" fill="rgb(241,239,232)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="cd mono" x="274" y="134" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">page 1</text>
+  <text class="val mono" x="330" y="134" font-size="10px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">.text</text>
+  <text class="cd" x="378" y="134" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">— code that runs</text>
+
+  <rect class="pg" x="262" y="152" width="206" height="32" rx="4" fill="rgb(241,239,232)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="cd mono" x="274" y="172" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">page 2</text>
+  <text class="val mono" x="330" y="172" font-size="10px" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">.data</text>
+
+  <text class="cd" x="365" y="200" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">one struct page per 4 KiB of the file</text>
+
+  
+  <text class="cd" x="520" y="110" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">read in once</text>
+  <path class="grey" d="M 556 124 H 484" marker-end="url(#mA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+
+  <rect class="chip" x="560" y="98" width="148" height="52" rx="5" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="hdr" x="634" y="118" text-anchor="middle" font-size="13px" font-weight="600" fill="rgb(52,52,50)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">host filesystem</text>
+  <text class="cd mono" x="634" y="134" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">inode 12934, on disk</text>
+
+  <text class="note" x="12" y="230" font-size="11px" font-weight="400" fill="rgb(95,94,90)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Different paths, different mount namespaces, different containers — the kernel resolves each to the same inode,</text>
+  <text class="note" x="12" y="246" font-size="11px" font-weight="400" fill="rgb(95,94,90)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">and serves every read, mmap and execve from these same pages. There is no per-container page cache: a namespace</text>
+  <text class="note" x="12" y="262" font-size="11px" font-weight="400" fill="rgb(95,94,90)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">virtualises the names by which objects are reached, and the page cache is not addressed by name.</text>
+
+  
+  <text class="cap" x="12" y="294" font-size="12px" font-weight="600" letter-spacing="0.06em" fill="rgb(120,118,112)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">THE TWO STRUCTURES THAT DESCRIBE IT</text>
+
+  <rect class="chip" x="12" y="316" width="140" height="60" rx="5" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="hdr mono" x="26" y="338" font-size="13px" font-weight="600" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">struct inode</text>
+  <text class="cd" x="26" y="358" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">the file, once, on</text>
+  <text class="cd" x="26" y="371" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">this filesystem</text>
+
+  <text class="cd mono" x="184" y="340" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">i_mapping</text>
+  <path class="conn" d="M 156 348 H 212" marker-end="url(#mV)" fill="none" stroke="rgb(83,74,183)" stroke-width="1.5"></path>
+
+  <rect class="chip" x="216" y="302" width="212" height="96" rx="5" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="hdr mono" x="228" y="322" font-size="13px" font-weight="600" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">struct address_space</text>
+  <text class="fld mono" x="228" y="344" font-size="10px" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">host</text>
+  <text class="val" x="290" y="344" font-size="10px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">the inode above</text>
+  <text class="fld mono" x="228" y="362" font-size="10px" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">i_pages</text>
+  <text class="val" x="290" y="362" font-size="10px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">xarray: index → page</text>
+  <text class="fld mono" x="228" y="380" font-size="10px" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">nrpages</text>
+  <text class="val" x="290" y="380" font-size="10px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">3</text>
+  <text class="cd" x="322" y="414" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">the page-cache index for one file</text>
+
+  <text class="cd mono" x="460" y="340" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">i_pages[n]</text>
+  <path class="conn" d="M 432 348 H 488" marker-end="url(#mV)" fill="none" stroke="rgb(83,74,183)" stroke-width="1.5"></path>
+
+  <rect class="chip" x="492" y="302" width="216" height="96" rx="5" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="hdr mono" x="504" y="322" font-size="13px" font-weight="600" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">struct page</text>
+  <text class="fld mono" x="504" y="344" font-size="10px" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">flags</text>
+  <text class="val" x="566" y="344" font-size="10px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">PG_uptodate, …</text>
+  <text class="fld mono" x="504" y="362" font-size="10px" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">mapping</text>
+  <text class="val" x="566" y="362" font-size="10px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">→ the address_space</text>
+  <text class="fld mono" x="504" y="380" font-size="10px" fill="rgb(95,94,90)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">index</text>
+  <text class="val" x="566" y="380" font-size="10px" fill="rgb(52,52,50)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">n — offset in the file</text>
+  <text class="cd" x="600" y="414" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">one physical 4 KiB frame of file data</text>
+
+  <rect class="warn" x="12" y="430" width="696" height="44" rx="6" fill="rgb(252,235,235)" stroke="rgb(163,45,45)" stroke-width="1"></rect>
+  <text x="26" y="450"><tspan class="lead" style="fill:rgb(121,31,31)" font-size="12.5px" font-weight="600" fill="rgb(60,52,137)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">Neither structure records who may write the page.</tspan><tspan class="note" xml:space="preserve" font-size="11px" font-weight="400" fill="rgb(95,94,90)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">  Permission is checked once, at the syscall boundary,</tspan></text>
+  <text class="note" x="26" y="466" font-size="11px" font-weight="400" fill="rgb(95,94,90)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">against the path by which the file was opened. A subsystem handed the page pointer directly is checked by nothing.</text>
+
+  
+  <text class="cap" x="12" y="504" font-size="12px" font-weight="600" letter-spacing="0.06em" fill="rgb(120,118,112)" font-family="'Titillium Web', 'Inter', -apple-system, 'Segoe UI', sans-serif">AND THEREFORE, IN SECTION 9.4</text>
+
+  <rect class="chip" x="12" y="516" width="156" height="48" rx="5" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="hdr mono" x="90" y="536" text-anchor="middle" font-size="13px" font-weight="600" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">splice(2)</text>
+  <text class="cd" x="90" y="552" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">page → source side</text>
+
+  <path class="grey" d="M 172 540 H 188" marker-end="url(#mA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+
+  <rect class="chip" x="192" y="516" width="156" height="48" rx="5" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="hdr mono" x="270" y="536" text-anchor="middle" font-size="13px" font-weight="600" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">sg_chain()</text>
+  <text class="cd" x="270" y="552" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">source → destination</text>
+
+  <path class="grey" d="M 352 540 H 368" marker-end="url(#mA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+
+  <rect class="chip" x="372" y="516" width="156" height="48" rx="5" fill="rgb(255,255,255)" stroke="rgb(137,135,129)" stroke-width="0.75"></rect>
+  <text class="hdr mono" x="450" y="536" text-anchor="middle" font-size="13px" font-weight="600" fill="rgb(52,52,50)" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">authencesn</text>
+  <text class="cd" x="450" y="552" text-anchor="middle" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">writes 4 bytes in</text>
+
+  <path class="grey" d="M 532 540 H 548" marker-end="url(#mA)" fill="none" stroke="rgb(137,135,129)" stroke-width="1.5"></path>
+
+  <rect class="warn" x="552" y="516" width="156" height="48" rx="5" fill="rgb(252,235,235)" stroke="rgb(163,45,45)" stroke-width="1"></rect>
+  <text class="hdr mono" x="630" y="536" text-anchor="middle" fill="rgb(121,31,31)" font-size="13px" font-weight="600" font-family="ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">.text changed</text>
+  <text class="cd" x="630" y="552" text-anchor="middle" fill="rgb(143,40,40)" font-size="10px" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">disk untouched</text>
+
+  <text class="cd" x="12" y="586" font-size="10px" fill="rgb(120,118,112)" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Section 9.4 traces that path in full; what matters here is only that its final step lands in the pages drawn above.</text>
+
+</g>
+</svg>
