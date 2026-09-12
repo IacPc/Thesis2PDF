@@ -25,6 +25,8 @@ PKG = Path(__file__).resolve().parent
 TEMPLATE = PKG / "templates" / "document.html"
 CSS = PKG / "assets" / "thesis.css"
 LOGO = PKG / "assets" / "unipi-logo.png"
+IIT_LOGO = PKG / "assets" / "IIT-logo.png"
+MASTER_LOGO = PKG / "assets" / "master-logo.png"
 FONT_DIR = PKG / "assets" / "fonts"
 EXAMPLE = PKG / "example"
 
@@ -208,8 +210,9 @@ class ThesisBuilder:
         if meta.get("dedication"):
             parts.append(f'<section class="dedication"><div>{self._md(meta["dedication"])}</div></section>')
         if front_sections:
-            parts.append('<div class="frontmatter">' + "".join(front_sections) + "</div>")
-        parts.append(f'<main class="body">{rendered.body}</main>')
+            parts.append('<div class="frontmatter" id="__frontmatter_start">'
+                         + "".join(front_sections) + "</div>")
+        parts.append(f'<main class="body" id="__body_start">{rendered.body}</main>')
         parts.append(bib.html(meta["bibliography-title"]))
 
         extra = [f'@page {{ @bottom-left {{ content: "{_css_string(meta.get("course", ""))}"; }} }}']
@@ -248,7 +251,11 @@ class ThesisBuilder:
                      f'<p class="person">{self._inline(meta["cosupervisor"])}</p>')
 
         return f"""<section class="cover">
-  <div class="logo"><img src="{self._logo_src(meta)}" alt=""></div>
+  <div class="logos">
+    <img class="logo-iit" src="{self._logo_src(meta, 'logo-iit', IIT_LOGO)}" alt="">
+    <img class="logo-master" src="{self._logo_src(meta, 'logo-master', MASTER_LOGO)}" alt="">
+    <img class="logo-unipi" src="{self._logo_src(meta)}" alt="">
+  </div>
   {line(meta.get('university'), 'university')}
   {line(meta.get('department'), 'department')}
   {line(meta.get('course'), 'course')}
@@ -294,9 +301,9 @@ class ThesisBuilder:
             level = e.level if not plain_labels else 2
             front = " front" if e.front else ""
             rows.append(
-                f'<a class="lvl{min(level, 3)}{front}" href="#{e.id}">{label}'
-                f'<span class="text">{_html.escape(_html.unescape(e.text))}</span>'
-                f'<span class="dots"></span></a>'
+                f'<a class="lvl{min(level, 3)}{front}" href="#{e.id}" '
+                f'data-front="{1 if e.front else 0}" data-page="">{label}'
+                f'<span class="text">{_html.escape(_html.unescape(e.text))}</span></a>'
             )
         return (f'<section class="contents" id="{kind}">'
                 f'<h1 class="unnumbered" data-header="{_html.escape(title)}">{_html.escape(title)}</h1>'
@@ -314,8 +321,8 @@ class ThesisBuilder:
         m = re.fullmatch(r"<p>(.*)</p>", html, re.S)
         return m.group(1) if m else html
 
-    def _logo_src(self, meta: dict) -> str:
-        path = Path(str(meta["logo"])) if meta.get("logo") else LOGO
+    def _logo_src(self, meta: dict, key: str = "logo", default: Path = LOGO) -> str:
+        path = Path(str(meta[key])) if meta.get(key) else default
         if not path.is_absolute():
             path = (self.source.resolve().parent / path)
         if not path.exists():
@@ -369,6 +376,45 @@ class ThesisBuilder:
         import logging
         logging.getLogger("weasyprint").setLevel(
             logging.INFO if self.verbose else logging.ERROR)
+
+        # WeasyPrint's CSS target-counter() cannot resolve counters that are
+        # only incremented on @page rules (our per-section "fpage"/"bpage"
+        # page-number counters), so it always renders 0 for TOC/LOF/LOT page
+        # numbers. Instead: render once to find which physical page each
+        # heading lands on, compute the real page label ourselves (mirroring
+        # the roman/arabic front-matter vs body numbering), patch the numbers
+        # into the HTML as plain text, then render the final PDF.
+        first_pass = HTML(filename=str(html_path), base_url=str(workdir)).render()
+        anchor_page = {}
+        for index, page in enumerate(first_pass.pages):
+            for anchor in page.anchors:
+                anchor_page.setdefault(anchor, index)
+
+        frontmatter_start = anchor_page.get("__frontmatter_start")
+        body_start = anchor_page.get("__body_start")
+        html_text = html_path.read_text(encoding="utf-8")
+
+        def resolve_pagenum(match: "re.Match") -> str:
+            target, front = match["target"], match["front"] == "1"
+            page_index = anchor_page.get(target)
+            if page_index is None:
+                self._log(f"! TOC target not found on any page: {target}")
+                label = ""
+            elif front and frontmatter_start is not None:
+                label = _to_roman(page_index - frontmatter_start + 1)
+            elif body_start is not None:
+                label = str(page_index - body_start + 1)
+            else:
+                label = ""
+            return (f'<a class="{match["cls"]}" href="#{target}" '
+                    f'data-front="{match["front"]}" data-page="{label}">')
+
+        html_text = re.sub(
+            r'<a class="(?P<cls>[^"]*)" href="#(?P<target>[^"]+)" '
+            r'data-front="(?P<front>[01])" data-page="">',
+            resolve_pagenum, html_text)
+        html_path.write_text(html_text, encoding="utf-8")
+
         HTML(filename=str(html_path), base_url=str(workdir)).write_pdf(str(out_path))
 
     def _wkhtmltopdf(self, html_path: Path, out_path: Path) -> None:
@@ -413,6 +459,22 @@ def _truthy(value) -> bool:
     if isinstance(value, str):
         return value.strip().lower() not in ("", "false", "no", "0", "off")
     return bool(value)
+
+
+_ROMAN_VALUES = [
+    (1000, "m"), (900, "cm"), (500, "d"), (400, "cd"), (100, "c"), (90, "xc"),
+    (50, "l"), (40, "xl"), (10, "x"), (9, "ix"), (5, "v"), (4, "iv"), (1, "i"),
+]
+
+
+def _to_roman(n: int) -> str:
+    if n <= 0:
+        return str(n)
+    parts = []
+    for value, symbol in _ROMAN_VALUES:
+        count, n = divmod(n, value)
+        parts.append(symbol * count)
+    return "".join(parts)
 
 
 def _plain(text: str) -> str:

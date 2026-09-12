@@ -120,8 +120,13 @@ sup, sub { line-height: 0; }
   text-align: center;
   string-set: chapter "";
 }
-.cover .logo { margin: 0.4cm 0 1.1cm; }
-.cover .logo img { height: 2.6cm; }
+.cover .logos {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1cm; margin: 0.4cm 0 1.1cm;
+}
+.cover .logos img.logo-iit { height: 1.3cm; }
+.cover .logos img.logo-master { height: 1.5cm; }
+.cover .logos img.logo-unipi { height: 1.6cm; }
 .cover .university {
   font-family: var(--sans); font-size: 15pt; color: var(--navy); margin-bottom: 3pt;
 }
@@ -314,17 +319,17 @@ a.cite { color: var(--blue); font-variant-numeric: tabular-nums; }
 
 /* -------------------------------------------------------- toc / lof / lot - */
 .contents a {
-  display: flex; align-items: baseline; color: var(--ink); text-decoration: none;
+  display: block; color: var(--ink); text-decoration: none;
   margin: 2.5pt 0; font-size: 10pt; break-inside: avoid;
 }
-.contents a::after {
-  content: target-counter(attr(href), bpage);
-  font-family: var(--sans); font-size: 9pt; color: var(--navy); margin-left: 6pt;
+.contents .text::after {
+  content: leader(dotted);
+  color: #D9DDE6;
+  font-size: 5pt;
 }
-/* front-matter targets (abstract, acknowledgements) are paginated in roman */
-.contents a.front::after { content: target-counter(attr(href), fpage, lower-roman); }
-.contents .dots {
-  flex: 1; margin: 0 4pt; border-bottom: 0.5pt dotted #B9C0CE; transform: translateY(-2.5pt);
+.contents a::after {
+  content: attr(data-page);
+  font-family: var(--sans); font-size: 9pt; color: var(--navy); margin-left: 6pt;
 }
 .contents .lvl1 {
   font-family: var(--sans); font-weight: 700; color: var(--navy);

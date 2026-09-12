@@ -10,7 +10,7 @@ from pathlib import Path
 # as well as via the installed `thesis2pdf` entry point or `python -m thesis2pdf`.
 if __package__ in (None, ""):  # pragma: no cover
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-    __package__ = "thesis2pdf"
+    __package__ = "source"
 
 from . import __version__
 from . import fonts as _fonts
