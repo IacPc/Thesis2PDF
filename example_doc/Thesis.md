@@ -26,38 +26,36 @@ lof: true
 lot: true
 ---
 
-
 # Introduction and Threat Model
 
 ## Motivation
 
-Container technology has become the default unit of deployment for modern software, and with that adoption has come a widespread, and not always warranted, assumption that a container is a security boundary in the same sense as a virtual machine. This thesis takes that assumption as its object of study and interrogates it systematically: it delves into container security specifically through the lens of the mechanisms that isolate a container from its host, and the ways those mechanisms fail. Rather than surveying container security broadly, the work is deliberately narrowed to the phenomenon of the container *escape*the point at which a process confined by a container boundary regains the ability to act on the hostbecause this is the point at which the gap between the assumed and the actual security guarantee becomes concrete, measurable, and reproducible under controlled conditions.
+Container technology has become the default unit of deployment for modern software, and with that adoption has come a widespread, and not always warranted, assumption that a container is a security boundary in the same sense as a virtual machine. This thesis takes that assumption as its object of study and interrogates it systematically: it delves into container security specifically through the lens of the mechanisms that isolate a container from its host, and the ways those mechanisms fail. Rather than surveying container security broadly, the work is deliberately narrowed to the phenomenon of the container *escape* (the point at which a process confined by a container boundary regains the ability to act on the host), because this is the point at which the gap between the assumed and the actual security guarantee becomes concrete, measurable, and reproducible under controlled conditions.
 
 The approach taken is empirical rather than purely descriptive: each mechanism discussed in Chapter 2 is paired, in Chapters 5 to 9, with a reproduced case study demonstrating its failure, evaluated against a version-pinned laboratory environment (Chapter 4) rather than against secondary literature alone. This pairing of primitive and reproduction is the thesis's central methodological commitment.
 
 ##  Scope
 
-This thesis restricts its attention to the Docker and Open Container Initiative (OCI) ecosystem, and within that ecosystem, principally to `runc` as the reference OCI-compliant runtime [@oci-runtime-spec]. This scope is deliberate rather than a simplification of convenience: Docker and `runc` remain the most widely deployed container tooling, the isolation primitives they rely on (Chapter 2) are the same primitives underlying the broader OCI runtime landscape, and restricting scope to a single, well-documented runtime keeps the practical work reproducible within the time available for the project. Orchestration platforms such as Kubernetes are outside this scope: they introduce cluster-level attack surface (the API server, etcd, network policy) that is a legitimate but distinct research area, whereas this thesis is concerned with the boundary around a single container on a single host.
+This thesis restricts its attention to the Docker and Open Container Initiative (OCI) ecosystem, and within that ecosystem, principally to `runc` as the reference OCI-compliant runtime [@oci-runtime-spec]. This scope is deliberate rather than a simplification of convenience: Docker and `runc` remain the most widely deployed container tooling, the isolation primitives they rely on (Chapter 2) are the same primitives underlying the broader OCI runtime landscape, and restricting scope to a single, well-documented runtime keeps the practical work reproducible within the time available for the project. Orchestration platforms such as Kubernetes are outside this scope: they introduce cluster-level attack surface (the API server, etcd, network policy) that is a distinct research area, whereas this thesis is concerned with the boundary around a single container on a single host.
 
-
-Reproducibility is treated as a scope-defining requirement rather than an implementation detail. All practical work is carried out within a version-controlled, Vagrant-provisioned virtual machine laboratory (detailed fully in Chapter 4), so that every case study can be rebuilt from a single command rather than from an ad hoc, hand-configured environment. This choice keeps the empirical component of the thesis auditable: a reader, or an instructor reusing the accompanying exercises, can reconstruct the exact vulnerable conditions under which each result was obtained.
+Reproducibility is treated as a scope-defining requirement rather than an implementation detail. All practical work is carried out within a version-controlled, Vagrant-provisioned virtual machine laboratory (detailed fully in Chapter 4), so that every case study can be rebuilt from a single command rather than from an hand-configured environment. A reader, or an instructor reusing the accompanying exercises, can reconstruct the exact vulnerable conditions under which each result was obtained.
 
 ##  Research Questions
 
 The thesis is organised around two research questions:
 
-**RQ1.** How do container escape techniques differ in mechanism and severity across the categories of the Linux isolation modelmisconfiguration, runtime-level defects, and kernel-level defects?
+**RQ1.** How do container escape techniques differ in mechanism and severity across the categories of the Linux isolation model: misconfiguration, runtime-level defects, and kernel-level defects?
 
 **RQ2.** To what extent does layered isolation (namespaces, cgroups, capabilities, seccomp, and Linux Security Modules) contain or mitigate an escape once it occurs, and at what point does this containment structurally break down?
 
-RQ1 motivates the taxonomy developed in Chapter 3 and the selection of case studies in Chapters 5 to 9, each chosen to be representative of one category rather than an arbitrary CVE. RQ2 motivates the isolation-layer analysis in Chapter 2 and is answered directly by the capstone case study, which demonstrates the specific circumstancea kernel-level defectunder which every layer of containment is bypassed simultaneously regardless of configuration.
+RQ1 motivates the taxonomy developed in Chapter 3 and the selection of case studies in Chapters 5 to 9, each chosen to be representative of one category rather than an arbitrary CVE. RQ2 motivates the isolation-layer analysis in Chapter 2 and is answered directly by the capstone case study, which demonstrates the specific circumstance (a kernel-level defect) under which every layer of containment is bypassed simultaneously regardless of configuration.
 <div class="page_break"></div>
 
 ##  Progression of the Case Studies
 
-The five case studies examined in Chapters 5 to 9 are not an arbitrary CVE selection; they are ordered deliberately to trace a single argument from its simplest instance to its most severe. The sequence begins with an exposed Docker socket and a `--privileged` containerconfiguration errors that require no software defect at allproceeds through two `runc` vulnerabilities (CVE-2019-5736, CVE-2024-21626) [@cve-2019-5736; @cve-2024-21626] that defeat the container *runtime* rather than its configuration, and continues through a cgroups vulnerability (CVE-2022-0492) [@cve-2022-0492] that reaches the kernel via a namespace-mediated path. It closes with CVE-2026-31431 ("Copy Fail"), disclosed in April 2026 and, at the time of writing, still under active exploitationa defect in the kernel itself, reachable independently of any container-specific misconfiguration [@cve-2026-31431; @cisa-kev].
+The five case studies examined in Chapters 5 to 9 are not an arbitrary CVE selection; they are ordered deliberately to trace a single argument from its simplest instance to its most severe. The sequence begins with an exposed Docker socket and a `--privileged` container configuration errors that require no software defect at all, it proceeds through two `runc` vulnerabilities (CVE-2019-5736, CVE-2024-21626) [@cve-2019-5736; @cve-2024-21626] that defeat the container *runtime* rather than its configuration, and continues through a cgroups vulnerability (CVE-2022-0492) [@cve-2022-0492] that reaches the kernel via a namespace-mediated path. It closes with CVE-2026-31431 ("Copy Fail"), disclosed in April 2026 and, at the time of writing, still under active exploitation: a defect in the kernel itself, reachable independently of any container-specific misconfiguration [@cve-2026-31431; @cisa-kev].
 
-The common thread across this progression is the research question it is designed to answer: each case study defeats a different layer of the isolation model described in Chapter 2, and the sequence as a whole is ordered by *how much of the isolation stack must be intact for the technique to still work*. The Docker-socket escape requires every layer to be exactly as configuredit is a failure of policy, not of any mechanism. The `runc` vulnerabilities require the mechanisms to be present but exploit a defect in the software implementing them. The capstone requires none of the layers to be defective at all, because it operates one level below all of them, in the kernel every layer depends on. Read in order, the five case studies are less a list of independent vulnerabilities than a single demonstration, run to completion, of where container isolation holds and where it structurally cannot.
+The common thread across this progression is the research question it is designed to answer: each case study defeats a different layer of the isolation model described in Chapter 2, and the sequence as a whole is ordered by *how much of the isolation stack must be intact for the technique to still work*. The Docker-socket escape requires every layer to be exactly as configured, given that it is a failure of policy, not of any mechanism. The `runc` vulnerabilities require the mechanisms to be present but exploit a defect in the software implementing them. The capstone requires none of the layers to be defective at all, because it operates one level below all of them, in the kernel every layer depends on. Read in order, the five case studies are less a list of independent vulnerabilities than a single demonstration, run to completion, of where container isolation holds and where it structurally cannot.
 
 The decision to include a vulnerability disclosed within the same calendar year as this thesis is deliberate: it demonstrates that the argument developed in Chapter 2 is not a historical observation about now-patched software but a standing structural property of container isolation, observable in current, actively exploited defects. Handling of this case study is correspondingly more conservative than for the others, as detailed in Chapter 4's laboratory-hygiene requirements.
 <div class="page_break"></div>
@@ -67,22 +65,16 @@ The decision to include a vulnerability disclosed within the same calendar year 
 
 The threat model assumed throughout this thesis is as follows.
 
-**Attacker starting position.** The attacker has already obtained arbitrary code execution inside a container, at whatever privilege level the container process runs. This is treated as a precondition rather than a research question in itself: how that initial execution is obtaineda compromised application dependency, a malicious image, an exposed serviceis outside scope, and the thesis assumes it has already occurred.
+**Attacker starting position.** The attacker has already obtained arbitrary code execution inside a container, at whatever privilege level the container process runs. This is treated as a precondition rather than a research question in itself. Regardless how that initial execution is obtained, either through a compromised application dependency, rather than a malicious image, or an exposed service is outside scope. The thesis assumes it has already occurred.
 
-**Attacker objective.** The attacker seeks to escalate from container-confined code execution to code execution on the host, either directly (a shell on the host) or indirectly (read or write access to host resourcesthe filesystem, other containers, the kernelthat the container's configuration was intended to withhold).
-
+**Attacker objective.** The attacker seeks to escalate from container-confined code execution to code execution on the host, either directly (a shell on the host) or indirectly (read or write access to host resources, the filesystem, other containers, the kernel that the container's configuration was intended to withhold).
 
 **Assets at risk.** The host operating system; co-located containers belonging to other workloads or tenants, where the escape additionally crosses a multi-tenancy boundary; and, in the case of the kernel-level capstone, the integrity of the host kernel itself.
 
 **Explicitly out of scope.** Network-based initial access and lateral movement following a successful escape; supply-chain attacks against container images or build pipelines; and denial-of-service outcomes that do not involve a boundary crossing. These are legitimate concerns in container security broadly but are not escapes in the sense this thesis studies.
 
-This threat model is intentionally narrow. It isolates the single question that the isolation layers described in Chapter 2 are meant to answer*given that an attacker is already running code inside the container, what stops them reaching the host*since that is the question every technique examined in Chapters 5 to 9 answers differently.
+This threat model is intentionally narrow. It isolates the single question that the isolation layers described in Chapter 2 are meant to answer, *given that an attacker is already running code inside the container, what stops them reaching the host*, since that is the question every technique examined in Chapters 5 to 9 answers differently.
 
-<div class="page_break"></div>
-
-##  Contributions
-
-This thesis contributes: a taxonomy of container escape techniques organised by the isolation layer each defeats, rather than by CVE chronology or vendor (Chapter 3); a reproducible, version-pinned, Vagrant-provisioned laboratory environment covering representative techniques from every category in the taxonomy, released as an accompanying repository (Chapter 4); and a set of five CTF-style exercises, spanning misconfiguration through to a currently-exploited kernel vulnerability, each pairing a working reproduction with root-cause analysis and remediation guidance, intended for direct reuse in an offensive-security curriculum (Chapters 5 to 9).
 
 ## Thesis Structure
 
@@ -97,7 +89,7 @@ A container is not a security boundary enforced by the kernel as a single object
 
 ## The Five Isolation Layers
 
-Each layer constrains a distinct dimension of process behaviour. Table 2.1 summarises the five layers, the kernel primitive underlying each, and the property each one isolates. The remainder of this section discusses each layer in turn; Section 2.8 then argues that all five ultimately rest on a single point of trustthe host kernelwhich motivates the inclusion of a kernel-level vulnerability as the capstone case study.
+Each layer constrains a distinct dimension of process behaviour. Table 2.1 summarises the five layers, the kernel primitive underlying each, and the property each one isolates. The remainder of this section discusses each layer in turn; Section 2.8 then argues that all five ultimately rest on a single point of trust (the host kernel), which motivates the inclusion of a kernel-level vulnerability as the capstone case study.
 <figure class="table">
 <table>
   <thead>
@@ -165,7 +157,7 @@ Where namespaces govern visibility, cgroups govern resource consumption accounti
 
 ### The mechanism in practice
 
-Cgroups expose no dedicated system call. Every operationcreating a group, imposing a limit, admitting a process to itis an ordinary filesystem operation on a pseudo-filesystem mounted at `/sys/fs/cgroup`, in which each cgroup is a directory and each tunable is a file. The sequence below, performed as root on any cgroup v2 host, constructs a group bounded to 50 MiB of memory and observes the kernel enforcing that bound [@rawkode2026cgroups].
+Cgroups expose no dedicated system call. Every operation (creating a group, imposing a limit, admitting a process to it) is an ordinary filesystem operation on a pseudo-filesystem mounted at `/sys/fs/cgroup`, in which each cgroup is a directory and each tunable is a file. The sequence below, performed as root on any cgroup v2 host, constructs a group bounded to 50 MiB of memory and observes the kernel enforcing that bound [@rawkode2026cgroups].
 
 ```bash
 # In cgroup v2 a controller must be delegated by the parent before a child may
@@ -196,7 +188,7 @@ cat /sys/fs/cgroup/demo/memory.events
 sudo rmdir /sys/fs/cgroup/demo
 ```
 
-The string `survived` is never printed: the allocation drives the group past `memory.max`, reclaim cannot satisfy it because swap has been denied, and the kernel's out-of-memory killer terminates the process, which the incremented `oom_kill` counter in `memory.events` records. The demonstration isolates precisely the distinction drawn above. No namespace is involved, and the process's view of the system is unaltered`/proc/meminfo` continues to report the host's full physical memory. What has changed is not what the process can see but how much of what it sees it may consume, which is the entirety of what a cgroup governs.
+The string `survived` is never printed: the allocation drives the group past `memory.max`, reclaim cannot satisfy it because swap has been denied, and the kernel's out-of-memory killer terminates the process, which the incremented `oom_kill` counter in `memory.events` records. The demonstration isolates precisely the distinction drawn above. No namespace is involved, and the process's view of the system is unaltered`/proc/meminfo` continues to report the host's full physical memory. 
 
 Two properties of this interface bear directly on the offensive material that follows. First, because policy is expressed exclusively as files, authority over a cgroup reduces to filesystem access to its directory: any process able to write to a cgroup hierarchy can rewrite the resource policy encoded there, and the kernel's protection of a tunable is only as strong as the mount and permission state governing the file that exposes it. Second, the same interface that admits a process to a group and destroys the group when it empties is, in cgroup v1, the interface that arms `release_agent`. Section 8.3.1 develops both points in the detail required by CVE-2022-0492.
 
@@ -204,11 +196,10 @@ Two properties of this interface bear directly on the offensive material that fo
 
 POSIX capabilities decompose the traditionally monolithic privileges of UID 0 into approximately forty independently grantable units (`CAP_SYS_ADMIN`, `CAP_NET_ADMIN`, `CAP_SYS_MODULE`, and others) [@man7-linux; @kerrisk2010]. Container runtimes drop the majority of these by default, which is the primary reason a container's root user is materially less privileged than the host's root user even when the two share the same UID. `CAP_SYS_ADMIN` is of particular interest to this thesis, as it alone authorises mount operations and much of the namespace-manipulation surface exploited by misconfiguration-class escapes.
 
-<div class="page_break"></div>
 
 ## Seccomp
 
-Secure computing mode (seccomp), in its modern BPF-based form, attaches a filter program to a process's syscall entry path [@man7-linux]. For every syscall attempted, the filter returns one of several dispositionspermit, deny with an error code, terminate the process, or log the event. Two properties make seccomp an effective boundary: the filter is inherited across `fork` and `exec`, and it cannot subsequently be removed by the confined process. A further limitation bears on the offensive material in Chapters 5 to 9: seccomp filters evaluate the syscall number and register-resident arguments, not memory referenced by pointer arguments, making it well suited to denying a syscall outright but poorly suited to validating the content of its arguments. Container runtimes ship a default profile permitting approximately three hundred syscalls while denying roughly forty considered dangerous or rarely legitimateamong them `mount`, `pivot_root`, `kexec_load`, `init_module`, and `bpf`which is precisely the set an attacker typically requires to escalate [@docker-seccomp].
+Secure computing mode (seccomp), in its modern BPF-based form, attaches a filter program to a process's syscall entry path [@man7-linux]. For every syscall attempted, the filter returns one of several dispositions: permit, deny with an error code, terminate the process, or log the event. Two properties make seccomp an effective boundary: the filter is inherited across `fork` and `exec`, and it cannot subsequently be removed by the confined process. A further limitation bears on the offensive material in Chapters 5 to 9: seccomp filters evaluate the syscall number and register-resident arguments, not memory referenced by pointer arguments, making it well suited to denying a syscall outright but poorly suited to validating the content of its arguments. Container runtimes ship a default profile permitting approximately three hundred syscalls while denying roughly forty considered dangerous or rarely legitimate (among them `mount`, `pivot_root`, `kexec_load`, `init_module`, and `bpf`), which is precisely the set an attacker typically requires to escalate [@docker-seccomp].
 
 ##  Linux Security Modules
 
@@ -234,13 +225,13 @@ A container process typically presents as both "PID 1" and "root," and the two o
 
 ### Namespaces Versus Cgroups
 
-The two mechanisms operate on orthogonal axes: namespaces determine what a process can observe, while cgroups determine what quantity of a resource it may consume. A process may occupy freshly created mount, PID, and network namespacesand therefore have a fully private view of the systemwhile remaining entirely unconstrained with respect to CPU or memory consumption, or the converse. Treating the two as interchangeable obscures the distinct escape classes each gives rise to.
+The two mechanisms operate on orthogonal axes: namespaces determine what a process can observe, while cgroups determine what quantity of a resource it may consume. A process may occupy freshly created mount, PID, and network namespaces (and therefore have a fully private view of the system) while remaining entirely unconstrained with respect to CPU or memory consumption, or the converse. Treating the two as interchangeable obscures the distinct escape classes each gives rise to.
 
  <div class="page_break"></div>
 
 ## User Namespaces and UID Remapping
 
-The user namespace (`CLONE_NEWUSER`) installs a mapping between UID and GID values inside the namespace and a corresponding range on the host [@man7-linux]. The two configurations encountered in practice are as follows. In both cases the process presents identically from inside the containeras UID 0and the two configurations are indistinguishable to the confined process itself; the difference is visible only from the host side of the mapping.
+The user namespace (`CLONE_NEWUSER`) installs a mapping between UID and GID values inside the namespace and a corresponding range on the host [@man7-linux]. The two configurations encountered in practice are as follows. In both cases the process presents identically from inside the container (as UID 0), and the two configurations are indistinguishable to the confined process itself; the difference is visible only from the host side of the mapping.
 <figure>
 <img src="./Images/user_namespace_uid_mapping.svg" />
 <figcaption><span class="lbl">Figure.2.2</span>Effect of a user namespace on the severity of a successful escape. Absent a user namespace, container UID 0 is host UID 0 by identity; with a user namespace, container UID 0 is remapped to an unprivileged host UID.</figcaption>
@@ -250,7 +241,7 @@ The user namespace (`CLONE_NEWUSER`) installs a mapping between UID and GID valu
 
 **With a user namespace:** the container's UID range (conventionally 0–65535) is offset to an unprivileged host range (for example, 100000–165535). A successful escape lands the attacker as an unprivileged host user.
 
-The practical consequence for the exercises in Chapters 5 to 9 is that user namespaces do not, in general, prevent a given escape technique from executing; rather, they determine the severity of its outcomehost root in the former configuration, an unprivileged host account in the latter. This distinction is reflected in the remediation guidance accompanying every exercise in this thesis.
+The practical consequence for the exercises in Chapters 5 to 9 is that user namespaces do not, in general, prevent a given escape technique from executing; rather, they determine the severity of its outcome: host root in the former configuration, an unprivileged host account in the latter. This distinction is reflected in the remediation guidance accompanying every exercise in this thesis.
 
 It should be noted, as a caveat relevant to Chapter 3's taxonomy, that the user namespace is itself an attack surface rather than a purely defensive mechanism: several documented vulnerabilities, including CVE-2022-0492 examined in Chapter 8 [@unit42-cve-2022-0492], arise precisely because an unprivileged user obtaining `CAP_SYS_ADMIN` within a user namespace can reach kernel code paths that had implicitly assumed only genuine host root could invoke them.
 
@@ -303,13 +294,13 @@ The `--privileged` flag is frequently described informally as disabling "contain
   <figcaption><span class="lbl">Table.2.2</span>Layers affected by the <code>--privileged</code> runtime flag.</figcaption>
 </figure>
 
-Because capabilities are restored, seccomp filtering is disabled, and host devices are exposed concurrently, a privileged container's UID 0 becomes, for practical purposes, equivalent to host root. This combination explains why misconfiguration-class escapesexploitation of `--privileged` and of an exposed container-runtime socketremain the most frequently observed escape vector in production incidents, and motivates their treatment as the introductory case studies in Chapters 5 and 6: they establish the layer-disabling principle before runtime- and kernel-level vulnerabilities are introduced.
+Because capabilities are restored, seccomp filtering is disabled, and host devices are exposed concurrently, a privileged container's UID 0 becomes, for practical purposes, equivalent to host root. This combination explains why misconfiguration-class escapes (exploitation of `--privileged` and of an exposed container-runtime socket) remain the most frequently observed escape vector in production incidents, and motivates their treatment as the introductory case studies in Chapters 5 and 6: they establish the layer-disabling principle before runtime- and kernel-level vulnerabilities are introduced.
 
 # A Taxonomy of Container Escape Techniques
 
 ## Rationale for a Layer-Oriented Taxonomy
 
-Container escape techniques are most commonly catalogued in one of three ways: chronologically, as a list of CVEs; by vendor or component, as in a runtime's security advisories [@oci-runc-advisories]; or by attacker action, as in the container-relevant entries of the MITRE ATT&CK matrix [@mitre-attack-containers]. Each of these organising principles answers a useful questionrespectively, *when* a defect was disclosed, *which* component carried it, and *what* an attacker didbut none answers the question posed by RQ1: *why* the isolation failed, and how that failure differs from one technique to the next. A chronological list treats a socket misconfiguration and a kernel memory-safety defect as equivalent entries; a vendor-oriented list separates two mechanistically identical bugs merely because they were fixed in different releases.
+Container escape techniques are most commonly catalogued in one of three ways: chronologically, as a list of CVEs; by vendor or component, as in a runtime's security advisories [@oci-runc-advisories]; or by attacker action, as in the container-relevant entries of the MITRE ATT&CK matrix [@mitre-attack-containers]. Each of these organising principles answers a useful question (respectively, *when* a defect was disclosed, *which* component carried it, and *what* an attacker did), but none answers the question posed by RQ1: *why* the isolation failed, and how that failure differs from one technique to the next. A chronological list treats a socket misconfiguration and a kernel memory-safety defect as equivalent entries; a vendor-oriented list separates two mechanistically identical bugs merely because they were fixed in different releases.
 
 This chapter therefore organises escape techniques by the element of the isolation model (Chapter 2) whose failure the technique exploits. The organising axis is not the vulnerability but the *layer at which the failure originates*. This choice follows directly from the thesis's central argument (Section 2.8): because container isolation is the composition of several independent kernel mechanisms rather than a single boundary, a meaningful taxonomy of its failures must be indexed by mechanism. The taxonomy developed here is the primary conceptual contribution of the thesis, and it is the framework against which the case studies of Chapters 5 to 9 are selected and interpreted.
 
@@ -317,11 +308,11 @@ This chapter therefore organises escape techniques by the element of the isolati
 
 ## The Three Categories
 
-Escape techniques are divided into three categories according to the level at which the failure originates. The distinguishing test for each is not the severity of the outcomeseveral techniques across all three categories yield host rootbut the nature of what has gone wrong.
+Escape techniques are divided into three categories according to the level at which the failure originates. The distinguishing test for each is not the severity of the outcome (several techniques across all three categories yield host root) but the nature of what has gone wrong.
 
 **Misconfiguration.** No software defect is present. Every isolation mechanism functions exactly as designed, but the container has been configured such that the host's own facilities grant the confined process more authority than intended. The failure is one of policy, not of implementation. A correctly patched, fully up-to-date host remains vulnerable, because there is nothing to patch: the exposure is the configuration itself.
 
-**Runtime-level defect.** The isolation mechanisms are correctly configured, but the container *runtime*the userspace software responsible for constructing and managing the container, principally `runc` within the scope of this thesiscontains an implementation flaw that an attacker can exploit to cross the boundary the runtime was meant to enforce. The failure is in the software that builds the container, not in the kernel primitives it relies on nor in the configuration supplied to it.
+**Runtime-level defect.** The isolation mechanisms are correctly configured, but the container *runtime* (the userspace software responsible for constructing and managing the container, principally `runc` within the scope of this thesis) contains an implementation flaw that an attacker can exploit to cross the boundary the runtime was meant to enforce. The failure is in the software that builds the container, not in the kernel primitives it relies on nor in the configuration supplied to it.
 
 **Kernel-level defect.** The failure originates in the shared host kernel itself. Because every isolation mechanism is implemented as kernel code (Section 2.8), a defect at this level is not confined to any single mechanism; it operates beneath all of them. This category is distinguished by the property that no container-specific misconfiguration or runtime flaw need be present for the technique to succeed.
 
@@ -331,9 +322,9 @@ Escape techniques are divided into three categories according to the level at wh
 
 Within each category, an individual technique is characterised along four further dimensions, which together answer the "mechanism and severity" clause of RQ1 and the "containment" clause of RQ2:
 
-- **Isolation layer(s) defeated**which of the five layers of Section 2.2 the technique nullifies or circumvents.
-- **Precondition**the configuration or environmental state that must hold for the technique to be applicable, which determines how frequently the technique is exploitable in practice.
-- **Outcome and severity**the privilege the attacker obtains on success, and the blast radius of that privilege.
+- **Isolation layer(s) defeated**: which of the five layers of Section 2.2 the technique nullifies or circumvents.
+- **Precondition**: the configuration or environmental state that must hold for the technique to be applicable, which determines how frequently the technique is exploitable in practice.
+- **Outcome and severity**: the privilege the attacker obtains on success, and the blast radius of that privilege.
 - **Containment under a user namespace**whether the presence of a user namespace (Section 2.10) reduces the severity of a successful escape. This dimension is the taxonomy's direct instrument for answering RQ2, as it identifies precisely where layered isolation continues to constrain an attacker and where it ceases to.
 
 <div class="page_break"></div>
@@ -405,24 +396,24 @@ Table 3.1 classifies the escape techniques examined in this thesis according to 
 
 ### Misconfiguration
 
-The two misconfiguration techniques are the most frequently observed escape vector in production environments precisely because they require no vulnerability and therefore survive patching [@securelist2026containers], [@redhat2024kubesec]. The exposed Docker socket grants host authority by delegation: because the socket is the root-privileged daemon's control interface, access to it is equivalent to control of the host, and no isolation layer is defeated because none is engaged in the attack [@wiz-container-escape]. The `--privileged` container, by contrast, does defeat layersbut by configuration rather than exploitation, disabling seccomp, restoring the capability set, and unconfining the LSM profile simultaneously (Section 2.11) [@wiz-container-escape]. The two together establish the taxonomy's baseline: they demonstrate that the isolation model can be nullified entirely without any software defect, which is the necessary point of comparison for the defect-based categories that follow.
+The two misconfiguration techniques are the most frequently observed escape vector in production environments, precisely because they require no vulnerability and therefore survive patching [@securelist2026containers], [@redhat2024kubesec]. The exposed Docker socket grants host authority by delegation: because the socket is the root-privileged daemon's control interface, access to it is equivalent to control of the host, and no isolation layer is defeated because none is engaged in the attack [@wiz-container-escape]. The `--privileged` container, by contrast, does defeat layers but by configuration rather than exploitation, disabling seccomp, restoring the capability set, and unconfining the LSM profile simultaneously (Section 2.11) [@wiz-container-escape]. The two together establish the taxonomy's baseline: they demonstrate that the isolation model can be nullified entirely without any software defect, which is the necessary point of comparison for the defect-based categories that follow.
 
 ### Runtime-Level Defects
 
-The two `runc` vulnerabilities occupy the middle of the taxonomy because they require the isolation mechanisms to be present and correctly configured, yet defeat them by corrupting the software that constructs and mediates the container. CVE-2019-5736 achieves this by overwriting the `runc` binary on the host through a reference obtained via `/proc/self/exe`, converting a subsequent invocation of the runtime into attacker-controlled execution as root [@avrahami2019runc; @cve-2019-5736]. CVE-2024-21626 achieves a comparable result through a different mechanisma leaked file descriptor referencing the host filesystem, which a crafted working-directory setting turns into a path out of the mount namespace [@snyk2024leakyvessels; @runc-ghsa-leaky-vessels]. That two distinct implementation defects in the same runtime yield the same class of outcome is itself an argument of the taxonomy: the runtime is a single, load-bearing component whose integrity the entire isolation model presupposes, and its category of failure is therefore distinct from both the configuration above it and the kernel below it.
+The two `runc` vulnerabilities occupy the middle of the taxonomy because they require the isolation mechanisms to be present and correctly configured, yet defeat them by corrupting the software that constructs and mediates the container. CVE-2019-5736 achieves this by overwriting the `runc` binary on the host through a reference obtained via `/proc/self/exe`, converting a subsequent invocation of the runtime into attacker-controlled execution as root [@avrahami2019runc; @cve-2019-5736]. CVE-2024-21626 achieves a comparable result through a different mechanism: a leaked file descriptor referencing the host filesystem, which a crafted working-directory setting turns into a path out of the mount namespace [@snyk2024leakyvessels; @runc-ghsa-leaky-vessels]. That two distinct implementation defects in the same runtime yield the same class of outcome is itself an argument of the taxonomy: the runtime is a single, load-bearing component whose integrity the entire isolation model presupposes, and its category of failure is therefore distinct from both the configuration above it and the kernel below it.
 
  <div class="page_break"></div>
 
 ### Kernel-Level Defects
 
-The two kernel-level techniques share the property that they operate beneath the isolation layers rather than through them, but they differ instructively in how they are reached. CVE-2022-0492 is a kernel logic flawa missing capability check in the cgroup v1 `release_agent` paththat is nonetheless reached entirely through the container's own legitimate primitives: an attacker acquires `CAP_SYS_ADMIN` within a user namespace and uses it to trigger execution in the host's initial namespace [@unit42-cve-2022-0492]. It therefore sits at the boundary of the runtime and kernel categories, and it illustrates the caveat raised in Section 2.10 that the user namespace is an attack surface as well as a defence. CVE-2026-31431, the capstone, represents the category in its pure form: a defect in the kernel's cryptographic subsystem, reachable through ordinary syscalls, that is independent of any container-specific state [@cve-2026-31431]. Because it compromises the kernel that implements every isolation layer, no configuration of those layers constrains it, and a user namespace does not contain it. It is included specifically to demonstrate the terminal case of the taxonomy, in which the concept of container isolation ceases to apply.
+The two kernel-level techniques share the property that they operate beneath the isolation layers rather than through them, but they differ instructively in how they are reached. CVE-2022-0492 is a kernel logic flaw (a missing capability check in the cgroup v1 `release_agent` path) that is nonetheless reached entirely through the container's own legitimate primitives: an attacker acquires `CAP_SYS_ADMIN` within a user namespace and uses it to trigger execution in the host's initial namespace [@unit42-cve-2022-0492]. It therefore sits at the boundary of the runtime and kernel categories, and it illustrates the caveat raised in Section 2.10 that the user namespace is an attack surface as well as a defence. CVE-2026-31431, the capstone, represents the category in its pure form: a defect in the kernel's cryptographic subsystem, reachable through ordinary syscalls, that is independent of any container-specific state [@cve-2026-31431]. Because it compromises the kernel that implements every isolation layer, no configuration of those layers constrains it, and a user namespace does not contain it. It is included specifically to demonstrate the terminal case of the taxonomy, in which the concept of container isolation ceases to apply.
 
 
 ## The Ordering Principle: Intactness of the Isolation Stack
 
-The three categories admit a natural ordering, which is the ordering followed by both Table 3.1 and the case studies of Chapters 5 to 9. The categories can be arranged by the degree to which the isolation stack must remain intact for a technique within them to succeed. A misconfiguration technique requires the stack to be entirely intact and correctly functioningit is a failure of the policy governing the stack, not of the stack itself. A runtime-level technique requires the kernel primitives to be intact but exploits a defect in the software assembling them. A kernel-level technique requires nothing of the stack at all, because it operates on the foundation the stack is built upon.
+The three categories admit a natural ordering, which is the ordering followed by both Table 3.1 and the case studies of Chapters 5 to 9. The categories can be arranged by the degree to which the isolation stack must remain intact for a technique within them to succeed. A misconfiguration technique requires the stack to be entirely intact and correctly functioning; it is a failure of the policy governing the stack, not of the stack itself. A runtime-level technique requires the kernel primitives to be intact but exploits a defect in the software assembling them. A kernel-level technique requires nothing of the stack at all, because it operates on the foundation the stack is built upon.
 
-This ordering is not merely expository. It is the taxonomy's answer to RQ2: it identifies the point at which layered isolation structurally ceases to contain an attacker. Reading the categories in order, containment weakens monotonicallyfrom a misconfiguration whose remedy is purely a matter of policy, through a runtime defect remediable by patching a single userspace component, to a kernel defect against which the layered model offers, by construction, no defence. The final category is where the containment described throughout Chapter 2 breaks down completely, and its existence is the reason the thesis argues that container isolation, however carefully configured, is bounded above by the integrity of a single shared kernel.
+This ordering is not merely expository. It is the taxonomy's answer to RQ2: it identifies the point at which layered isolation structurally ceases to contain an attacker. Reading the categories in order, containment weakens monotonically: from a misconfiguration whose remedy is purely a matter of policy, through a runtime defect remediable by patching a single userspace component, to a kernel defect against which the layered model offers, by construction, no defence. The final category is where the containment described throughout Chapter 2 breaks down completely, and its existence is the reason the thesis argues that container isolation, however carefully configured, is bounded above by the integrity of a single shared kernel.
 
 
 # Laboratory Environment and Operational Hygiene
@@ -442,7 +433,7 @@ The study is conducted by a single researcher, and its validity rests on the ver
  
 The techniques studied in Chapters 5 to 9 are not selected for novelty or notoriety but according to four explicit criteria, so that the set as a whole is representative of the taxonomy rather than of any single class of defect.
  
-- **Category coverage.** At least one technique is selected from each category of the taxonomy of Chapter 3—misconfiguration, runtime-level defect, and kernel-level defect—so that the case studies collectively span the full isolation model rather than clustering in a single category.
+- **Category coverage.** At least one technique is selected from each category of the taxonomy of Chapter 3 (misconfiguration, runtime-level defect, and kernel-level defect), so that the case studies collectively span the full isolation model rather than clustering in a single category.
 - **Ordering by stack intactness.** Within that coverage, techniques are chosen and ordered to trace the progression established in Section 1.4, from those requiring the isolation stack to be entirely intact (misconfiguration) to those requiring none of it (kernel-level defect). This ordering is a deliberate methodological device: it allows the containment question of RQ2 to be examined as a controlled progression rather than as a set of unrelated observations.
 - **Scope conformance.** Every technique lies within the Docker/OCI and `runc` scope defined in Section 1.2. Techniques whose reproduction would require orchestration-layer infrastructure, a second host, or tooling outside this ecosystem are excluded, regardless of their significance in the broader literature.
 - **Currency of the terminal case.** The kernel-level capstone is selected to be a recent, currently relevant vulnerability rather than a historical one, so that the structural argument of the thesis is demonstrated against a present-day defect rather than a patched artefact. This criterion is applied only to the capstone; the remaining case studies are chosen for their clarity and documentation rather than their recency.
@@ -452,11 +443,11 @@ The techniques studied in Chapters 5 to 9 are not selected for novelty or notori
  
 Every case study is constructed to a fixed internal structure. This uniformity serves two purposes simultaneously: it makes the reproductions comparable to one another, and it renders each case study directly reusable as a self-contained teaching exercise, which is the secondary contribution stated in Section 1.6. Each exercise comprises six components:
  
-- **Objective**the concrete goal of the exercise, expressed as a capability to be obtained (for example, a root shell on the host, or read access to a host file), which fixes an unambiguous success condition.
-- **Threat scenario and environment setup**the misconfiguration or vulnerable configuration under study, together with the exact, version-pinned steps that provision it.
-- **Exploitation walkthrough**the sequence of actions that achieves the objective, presented so that it can be followed and reproduced.
-- **Root-cause analysis**an account of *why* the technique succeeds, identifying the specific isolation layer or software defect responsible, and mapping the technique to its cell in the taxonomy of Chapter 3.
-- **Detection guidance**the observable indicators by which the technique could be identified in a monitored environment.
+- **Objective** the concrete goal of the exercise, expressed as a capability to be obtained (for example, a root shell on the host, or read access to a host file), which fixes an unambiguous success condition.
+- **Threat scenario and environment setup** the misconfiguration or vulnerable configuration under study, together with the exact, version-pinned steps that provision it.
+- **Exploitation walkthrough** the sequence of actions that achieves the objective, presented so that it can be followed and reproduced.
+- **Root-cause analysis** an account of *why* the technique succeeds, identifying the specific isolation layer or software defect responsible, and mapping the technique to its cell in the taxonomy of Chapter 3.
+- **Detection guidance** the observable indicators by which the technique could be identified in a monitored environment.
 
 The root-cause analysis is the methodologically load-bearing component, because it is the point at which a reproduction is connected to the mechanism it is claimed to demonstrate, and it is therefore the component against which the validity criterion of Section 4.6 is applied.
 
@@ -474,26 +465,36 @@ The laboratory consists of one Ubuntu LTS virtual machine template, built by a p
  
 Three snapshots are taken from the base template, rather than one snapshot per exercise, which keeps the laboratory simple while remaining sufficient for all the vulnerabilities studied in Chapters 5 to 9:
  
-- **Clean baseline**an unmodified snapshot of the base template, used as the roll-back point between exercise runs.
-- **Runtime target**the base template with a specific, version-pinned Docker and `runc` installation. This snapshot serves the misconfiguration exercises and the two `runc`-level CVEs (CVE-2019-5736, CVE-2024-21626), since the property under study in each case is a userspace runtime defect or misconfiguration rather than a kernel defect.
-- **Kernel target**the base template with a specific, version-pinned vulnerable kernel package installed and booted. This snapshot serves the cgroup-`release_agent` exercise (CVE-2022-0492) and the capstone (CVE-2026-31431), since a container cannot substitute the host kernel it shares, and the vulnerable kernel version must therefore be a property of the virtual machine itself rather than of an individual container.
+- **Clean baseline** an unmodified snapshot of the base template, used as the roll-back point between exercise runs.
+- **Runtime target** the base template with a specific, version-pinned Docker and `runc` installation. This snapshot serves the misconfiguration exercises and the two `runc`-level CVEs (CVE-2019-5736, CVE-2024-21626), since the property under study in each case is a userspace runtime defect or misconfiguration rather than a kernel defect.
+- **Kernel target** the base template with a specific, version-pinned vulnerable kernel package installed and booted. This snapshot serves the cgroup-`release_agent` exercise (CVE-2022-0492) and the capstone (CVE-2026-31431), since a container cannot substitute the host kernel it shares, and the vulnerable kernel version must therefore be a property of the virtual machine itself rather than of an individual container.
 Version pinning is recorded in each exercise's metadata and is the detail that makes the vulnerable state of the laboratory reproducible: without a pinned Docker, `runc`, or kernel version, a rebuilt environment would not reliably reproduce the defect under study.
- <div class="page_break"></div>
+
+<div class="page_break"></div>
+
 ### Repository Layout
  
 The laboratory is maintained as a single Git repository, included as an appendix to this thesis, structured as follows:
  
-```
-container-escape-lab/
-|-- Vagrantfile              # or provision.shbuilds the base VM
-|-- README.md                # one-command bring-up and reset instructions
-|-- exercises/
-    |-- 01-docker-socket/
-    |-- 02-privileged/
-    |-- 03-runc-cve-2019-5736/
-    |-- 04-cgroups-cve-2022-0492/
-    |-- 05-capstone-cve-2026-31431/
-```
+<div class="filetree">
+<ul>
+<li><span class="dir">container-escape-lab/</span>
+  <ul>
+    <li><span class="file">Vagrantfile</span> <span class="comment"># or provision.sh -- builds the base VM</span></li>
+    <li><span class="file">README.md</span> <span class="comment"># one-command bring-up and reset instructions</span></li>
+    <li><span class="dir">exercises/</span>
+      <ul>
+        <li><span class="dir">01-docker-socket/</span></li>
+        <li><span class="dir">02-privileged/</span></li>
+        <li><span class="dir">03-runc-cve-2019-5736/</span></li>
+        <li><span class="dir">04-cgroups-cve-2022-0492/</span></li>
+        <li><span class="dir">05-capstone-cve-2026-31431/</span></li>
+      </ul>
+    </li>
+  </ul>
+</li>
+</ul>
+</div>
  
 Each exercise directory is self-contained and holds the Dockerfile or compose file defining the vulnerable target, a `setup` script that provisions it, a `teardown` script that returns the environment to the clean baseline, and a short README recording the pinned software versions the exercise depends on. This layout allows an exercise to be reproduced, or reset, independently of the others.
 
@@ -504,15 +505,13 @@ The following are explicitly excluded from the laboratory, to keep its construct
 
 # Exercise I: Docker Socket Escape
 
-**Class:** Misconfiguration · **CVE:** nonean operator misconfiguration rather than a software defect · **Difficulty:** introductory
-
 ## Objective
 
 Given a container in which the host's Docker socket has been bind-mounted, obtain a root shell on the host and retrieve a marker file located at `/root/flag.txt`.
 
 ## Threat Scenario and Environment Setup
 
-Bind-mounting `/var/run/docker.sock` into a container is a common, and consequential, operational shortcutobserved in continuous-integration runners, monitoring agents, and "Docker-in-Docker" configurations [@wiz-container-escape]. The vulnerable target is provisioned as follows.
+Bind-mounting `/var/run/docker.sock` into a container is a common, and consequential, operational shortcut, observed in continuous-integration runners, monitoring agents, and "Docker-in-Docker" configurations [@wiz-container-escape]. The vulnerable target is provisioned as follows.
 
 ``` bash
 echo "FLAG{socket_equals_host_root}" | sudo tee /root/flag.txt
@@ -523,7 +522,7 @@ docker run -it --rm \
 
 ## Exploitation Walkthrough
 
-The Docker socket exposes the daemon's API. Because the daemon executes with root privilege on the host, any process able to reach the socket can instruct it to create a new container with an arbitrary host bind-mountincluding the host root filesystemwhich is functionally equivalent to obtaining root access on the host.
+The Docker socket exposes the daemon's API. Because the daemon executes with root privilege on the host, any process able to reach the socket can instruct it to create a new container with an arbitrary host bind-mount (including the host root filesystem), which is functionally equivalent to obtaining root access on the host.
 
 ``` bash
 # Confirm the socket is reachable from inside the container
@@ -558,15 +557,14 @@ No isolation layer described in Chapter 2 is defeated in this exercise; rather, 
 
 # Exercise II: Privileged Container Escape
 
-**Class:** Misconfiguration · **CVE:** nonean operator misconfiguration rather than a software defect · **Difficulty:** introductory
 
 ## Objective
 
-Given a container launched with the `--privileged` flag, obtain a root shell on the hostrather than merely within the containerand retrieve a marker file located at `/root/flag.txt` on the host filesystem.
+Given a container launched with the `--privileged` flag, obtain a root shell on the host (rather than merely within the container) and retrieve a marker file located at `/root/flag.txt` on the host filesystem.
 
 ## Threat Scenario and Environment Setup
 
-The `--privileged` flag is frequently applied as an expedientto permit a container to manage hardware, access devices, or run a nested container runtimewithout full appreciation of its scope. As established in Section 2.11, the flag does not relax a single control but several concurrently: it restores the full capability set, disables the default seccomp profile, runs the Linux Security Module profile unconfined, and removes the device-cgroup restriction that would otherwise conceal the host's block devices [@docker-run-reference]. The vulnerable target is provisioned as follows.
+The `--privileged` flag is frequently applied as an expedient (to permit a container to manage hardware, access devices, or run a nested container runtime) without full appreciation of its scope. As established in Section 2.11, the flag does not relax a single control but several concurrently: it restores the full capability set, disables the default seccomp profile, runs the Linux Security Module profile unconfined, and removes the device-cgroup restriction that would otherwise conceal the host's block devices [@docker-run-reference]. The vulnerable target is provisioned as follows.
 
 ```bash
 echo "FLAG{privileged_equals_host_devices}" | sudo tee /root/flag.txt
@@ -574,7 +572,7 @@ echo "FLAG{privileged_equals_host_devices}" | sudo tee /root/flag.txt
 docker run --privileged -it --rm ubuntu:22.04 bash
 ```
 
-This exercise is the second of the misconfiguration category and is included as a deliberate counterpart to Exercise I. Where the exposed Docker socket of Exercise I grants host authority by *delegation*the confined process issues instructions to a root-privileged daemon that performs the privileged action on its behalfthe present exercise grants it by *direct device access*, in which the confined process itself mounts the host filesystem. The two share a taxonomy cell (Section 3.2) yet exploit distinct mechanisms, which demonstrates that the misconfiguration category is not a single technique but a family of them.
+This exercise is the second of the misconfiguration category and is included as a deliberate counterpart to Exercise I. Where the exposed Docker socket of Exercise I grants host authority by *delegation* (the confined process issues instructions to a root-privileged daemon that performs the privileged action on its behalf), the present exercise grants it by *direct device access*, in which the confined process itself mounts the host filesystem. The two share a taxonomy cell (Section 3.2) yet exploit distinct mechanisms, which demonstrates that the misconfiguration category is not a single technique but a family of them.
 
  <div class="page_break"></div>
 
@@ -607,7 +605,7 @@ This exercise is the clearest instance of the misconfiguration category defined 
 ## Remediation
 
 - Avoid the `--privileged` flag; it rarely represents the minimal privilege a workload requires.
-- Where a container requires access to a specific device or capability, grant it narrowlyusing a device passthrough for the specific device, and adding only the specific capability required while dropping the remainderso that a blanket grant is replaced by an auditable, least-privilege one.
+- Where a container requires access to a specific device or capability, grant it narrowly (using a device passthrough for the specific device, and adding only the specific capability required while dropping the remainder) so that a blanket grant is replaced by an auditable, least-privilege one.
 - Retain the default seccomp and LSM profiles; narrow capability grants should not be combined with an unconfined seccomp or AppArmor profile, which would reintroduce the exposure incrementally.
 - Enable user-namespace remapping (rootless operation), which, consistent with Section 2.10, does not prevent the technique but reduces its outcome to that of an unprivileged host account rather than host root.
 - Enforce rejection of privileged containers at admission through a runtime policy engine, so that the misconfiguration cannot reach a production environment.
@@ -619,8 +617,6 @@ This exercise is the clearest instance of the misconfiguration category defined 
 - Apply runtime policy instrumentation (for example, Falco [@falco-rules]), whose built-in rules for privileged-container launch and for sensitive mount operations cover this technique directly.
 
 # Exercise III: CVE-2019-5736 (`runc` `/proc/self/exe` Overwrite)
-
-**Class:** Runtime-level defect · **CVE:** CVE-2019-5736 · **Difficulty:** intermediate
 
 ## Objective
 
@@ -635,7 +631,7 @@ transition from the misconfiguration category to the defect-based categories of
 the taxonomy (Section 3.2). In contrast to Exercises I and II, the container in
 this exercise is not misconfigured in any way: it is unprivileged, holds no
 additional capabilities, and mounts no host paths. The defect under study is in
-the container runtime`runc`rather than in the configuration supplied to it.
+the container runtime (`runc`) rather than in the configuration supplied to it.
 
 The exercise assumes the precondition stated in the threat model (Section 1.5):
 the attacker already holds code execution inside the container. It assumes,
@@ -657,8 +653,8 @@ docker run -d --name ex03-foothold ubuntu:18.04 sleep infinity
 ## Attack Surface and Root Cause
 
 `runc` is the low-level runtime that creates and enters containers on behalf of
-Docker. When an administrator enters a running containerfor example through
-`docker exec``runc` executes and joins the container's namespaces in order to
+Docker. When an administrator enters a running container (for example through
+`docker exec`), `runc` executes and joins the container's namespaces in order to
 start the requested process. At that moment the host's `runc` binary is running
 in a context the container's occupant can influence.
 
@@ -671,7 +667,7 @@ reference to it at the correct moment can cause the host binary to be replaced
 with attacker-controlled content. The host then executes that content, as root,
 on the next invocation of the runtime. The escape therefore does not defeat any
 namespace directly; it defeats the **integrity of the runtime**, and through that
-integrity failure it obtains execution in the host's contextwhich is why the
+integrity failure it obtains execution in the host's context, which is why the
 taxonomy (Section 3.4) records the layer defeated as runtime integrity, and
 thereby the mount namespace.
 
@@ -693,15 +689,15 @@ Unit 42 [@avrahami2019runc].
 
 ### The runtime makes itself addressable through `/proc/self/exe`.
 
-When anadministrator enters a running container with `docker exec`, the daemon invokes
+When an administrator enters a running container with `docker exec`, the daemon invokes
 the host `runc` binary, which forks a short-lived *init* child. That child joins
-the container's namespaces with `setns`including its PID namespace, so that
-the child is visible in the container's own process tableand then re-executes
+the container's namespaces with `setns`, including its PID namespace, so that
+the child is visible in the container's own process table, and then re-executes
 itself by way of `/proc/self/exe` before handing control to the requested
 program with `execve`. Consequently, for a brief interval a process is executing
 *inside the container's mount namespace* whose own on-disk executable image is
 nonetheless the host's `runc`. The kernel exposes that image through the magic
-symbolic link `/proc/<pid>/exe`, andcriticallythat link does not obey
+symbolic link `/proc/<pid>/exe`, and, critically, that link does not obey
 ordinary path-resolution semantics: opening it does not re-traverse the
 filesystem the container controls, but hands the caller the kernel's open-file
 entry for the underlying host inode directly. The container's authority over its
@@ -739,7 +735,7 @@ the image bakes it in only so that the exercise is self-contained. When the
 (simulated) administrator runs `docker exec -it ex03-foothold bash`, `runc`'s
 init child ultimately calls `execve("/bin/bash", …)`. The kernel's script
 handler reads the shebang and, finding `/proc/self/exe` named as the
-interpreter, executes *that* insteadthe host `runc`with the decoy's path
+interpreter, executes *that* instead (the host `runc`) with the decoy's path
 supplied as its argument. A process thus comes into being, within the container,
 whose executable image is the host runtime and which is addressable from inside
 the container as `/proc/<pid>/exe`.
@@ -753,8 +749,8 @@ of the requested program.</figcaption>
  <div class="page_break"></div>
 
 ### Catching the runtime: a read-only descriptor and `ETXTBSY`
-A second attacker-controlled processrunning under the relocated real shell, its own
-shebang being `#!/bin/bash_original`watches for the runtime to appear and then
+A second attacker-controlled process (running under the relocated real shell, its own
+shebang being `#!/bin/bash_original`) watches for the runtime to appear and then
 acts. The controller `replace.sh` busy-waits for the tell-tale process, which is
 identifiable because its command line is literally `/proc/self/exe`, captures its
 process identifier, and passes the corresponding `/proc/<pid>/exe` to the
@@ -798,9 +794,9 @@ for (;;) {
 ```
 
 While the runtime process remains alive the call continues to fail with
-`ETXTBSY`; the moment that process exitswhich it does shortly after, having
+`ETXTBSY`; the moment that process exits (which it does shortly after, having
 been re-executed with an argument it does not recognise as a valid runtime
-commandthe image is no longer busy and the identical call succeeds. Because
+command), the image is no longer busy and the identical call succeeds. Because
 `procfs` is generated on demand, the transition requires no rescan or cache
 flush on the attacker's part: the same `open` flips from failure to success as a
 direct consequence of the runtime's exit. The tool then truncates the host
@@ -814,7 +810,7 @@ already held; and `procfs` is live.
 Unit 42 [@avrahami2019runc] also documents a more robust variant that avoids the exit race
 altogether, injecting the payload through a shared library that `runc` loads (for
 example `libseccomp`) by means of a GCC constructor, so that attacker code runs
-during dynamic linkingbefore `execve` completes and while the descriptor can
+during dynamic linking, before `execve` completes and while the descriptor can
 still be taken. The laboratory uses the simpler binary-overwrite race in the
 interest of legibility.
 
@@ -826,8 +822,8 @@ The payload is simply the file that now stands in for `runc`. In the laboratory 
 daemon always invokes `runc` as root, the next container operation of any kind
 runs the payload with host-root authority. The escape is confirmed by an
 ordinary `docker run`: the substituted runtime executes on the host, reads the
-marker fileowned by `root` with mode `600`, and therefore unreadable by any
-unprivileged process inside the containerand prints its contents.
+marker file (owned by `root` with mode `600`, and therefore unreadable by any
+unprivileged process inside the container) and prints its contents.
 
 <figure>
 <img src="./Images/ex03_root_access.png" />
@@ -843,7 +839,7 @@ No namespace is broken at any point in this sequence: the mount namespace holds
 throughout, and the container never acquires a capability it did not begin with.
 What fails is the *integrity of the runtime binary*, and because that binary
 executes as root on the host, its corruption is equivalent to host code
-executionthe sense in which the taxonomy (Section 3.4) records the defeated
+execution: the sense in which the taxonomy (Section 3.4) records the defeated
 layer as runtime integrity, and thereby the mount namespace. A corollary noted
 in the exercise's operational guidance follows directly: a successful run
 overwrites the host `runc`, so the runtime cannot be trusted afterwards, and a
@@ -885,13 +881,12 @@ From an ordinary, unprivileged container running on a vulnerable kernel, obtain 
 
 ## Threat Scenario and Environment Setup
 
-This exercise marks the transition from the runtime category of the taxonomy to the kernel category (Section 3.2). Neither the container's configuration nor the container runtime carries the defect under study: the runtime is current, and no property of the container's definition is itself a vulnerability. The defect is a logic flaw in the host kernel's cgroup v1 subsystem, and the container is merely the position from which it is reached.
+This exercise marks the transition from the runtime category of the taxonomy to the kernel category (Section 3.2). Neither the container's configuration nor the container runtime carries the defect under study: defect is a logic flaw in the host kernel's cgroup v1 subsystem, and the container is merely the position from which it is reached.
 
 The target is provisioned on the kernel-target snapshot (Section 4.4.2), which pins a kernel predating the fix, forces the cgroup v1 hierarchy, and enables unprivileged user namespaces. The container itself is defined by `exercises/04-cgroups-cve-2022-0492/docker-compose.yml`, and three properties of that definition require comment, because each is a deliberate choice rather than an oversight:
 
-- **The default seccomp and AppArmor profiles are removed** (`seccomp=unconfined`, `apparmor:unconfined`). This is a common operational shortcut in continuous-integration and build environments, and it is the realistic precondition of the technique: the default seccomp profile denies `unshare(2)`, and the default AppArmor profile denies the `mount` operation, so a container running under either would be unable to reach the vulnerable code path at all. Section 8.7 treats the restoration of both profiles as available mitigations.
-<div class="page_break"></div>
-- **`CAP_SYS_ADMIN` is granted** (`cap_add: SYS_ADMIN`). This is not a requirement of the vulnerability — it is, on the contrary, the alternative to it. As Section 8.5 develops, the whole technique reduces to a single write that a container may be permitted to make in either of two ways: because it was *granted* the governing capability, which is a misconfiguration of the kind already examined in Exercise II; or because it *manufactured* the capability inside a user namespace of its own creation and the vulnerable kernel failed to notice the difference, which is CVE-2022-0492. The laboratory target is configured so that the same artefacts exercise both routes against the same host, making the distinction between them the object of study rather than an incidental detail of the setup.
+- **The default seccomp and AppArmor profiles are removed** (`seccomp=unconfined`, `apparmor:unconfined`). This is a common operational shortcut in continuous-integration and build environments, and it is the realistic precondition of the technique: the default seccomp profile denies `unshare(2)`, and the default AppArmor profile denies the `mount` operation, so a container running under either would be unable to reach the vulnerable code path at all.
+- **`CAP_SYS_ADMIN` is granted** (`cap_add: SYS_ADMIN`). This is not a requirement of the vulnerability; it is, on the contrary, the alternative to it. As Section 8.5 develops, the whole technique reduces to a single write that a container may be permitted to make in either of two ways: because it was *granted* the governing capability, or because it *manufactured* the capability inside a user namespace of its own creation and the vulnerable kernel failed to notice the difference, which is CVE-2022-0492.
 - **A single bind mount is present** (`./shared` to `/shared`). It exists so that helper scripts can be moved between the VM and the container foothold without repeated `docker cp` invocations. It is an ordinary bind mount conferring no privilege the technique requires, and it is deliberately *unlike* Exercise I, in which the presence of a mount is itself the entire finding.
  
 Understanding this vulnerability requires three mechanisms that have not yet been introduced in full: the architecture of control groups and their filesystem interface (Section 8.3.1), the kernel's usermode-helper facility (Section 8.3.2), and the namespace-relativity of privilege (Section 8.3.3). Each is developed below before the defect itself is analysed in Section 8.4. None of the three is a defect in isolation, and the vulnerability is a property of their composition rather than of any one of them; the figure below therefore maps them together before they are treated separately.
@@ -905,11 +900,6 @@ hierarchy may be mounted and owned; a file in that hierarchy,
 binary with full root privilege in the host's initial namespaces.</figcaption>
 </figure>
 
-Control groups were introduced in Section 2.4 as the mechanism governing
-*resource consumption*, in contrast to the namespaces that govern *visibility*.
-That characterisation is sufficient for the isolation model but insufficient to
-understand the present vulnerability, which turns on the details of how control
-groups are configured rather than on what they limit.
 
 <div class="page_break"></div>
 
@@ -928,25 +918,25 @@ organisational tree. Such a hierarchy is fully functional with respect to the
 interface described below, despite governing no resource.
  
 **The filesystem as the control plane.** Control groups expose no dedicated
-system call. Their entire configuration interface is a pseudo-filesystem —
-`cgroupfs` — in which each cgroup is a directory and each tunable is a file.
+system call. Their entire configuration interface is a pseudo-filesystem,
+`cgroupfs`, in which each cgroup is a directory and each tunable is a file.
 A cgroup is created by creating a directory; a process is moved into it by
 writing that process's identifier into the cgroup's `cgroup.procs` file; a limit
 is applied by writing a value into the corresponding controller file. Access
 control over these operations is therefore, by construction, ordinary
 *filesystem* access control: the kernel's protection of a cgroup tunable is the
-permission bits and ownership of the file representing it. This design decision —
-control by file I/O, protected by file permissions — is the structural precondition
-of the vulnerability, and Section 8.4 returns to it.
+permission bits and ownership of the file representing it. This design decision,
+in which control is exercised by file I/O and protected by file permissions, is
+the structural precondition of the vulnerability, and Section 8.4 returns to it.
  
 **The `notify_on_release` and `release_agent` pair.** Among the files present in
 a cgroup v1 hierarchy are two that implement a cleanup-notification facility.
 Each cgroup carries a boolean `notify_on_release` flag, and each *hierarchy*
 carries, at its root, a `release_agent` file containing a filesystem path. When
-the last process leaves a cgroup whose `notify_on_release` flag is set — that is,
-when the cgroup becomes empty — the kernel executes the binary named by that
-hierarchy's `release_agent`, passing the path of the newly emptied cgroup as an
-argument [@man7-linux].
+a cgroup whose `notify_on_release` flag is set loses its last process, and so
+becomes empty, the kernel executes the binary named by that hierarchy's
+`release_agent`, passing the path of the newly emptied cgroup as an argument
+[@man7-linux].
  
 The facility exists for legitimate housekeeping: it allows a userspace manager to
 be informed that a cgroup is no longer in use and may be torn down, without
@@ -966,7 +956,7 @@ that execution are decisive here:
   own credentials, not with those of any process that requested the action.
 - **It runs in the initial namespaces.** Because the helper is forked from a
   kernel thread, it inherits the initial PID, mount, network, and user
-  namespaces — that is, the *host's* namespaces, not those of any container.
+  namespaces: the *host's* namespaces, not those of any container.
 - **Its path is resolved in the initial mount namespace.** The path stored in
   `release_agent` is interpreted against the host's root filesystem when the
   callback fires, not against the filesystem of whichever process wrote it.
@@ -1013,14 +1003,14 @@ containment mechanism. Where it is omitted, the user namespace becomes an
 *amplifier*: it converts an unprivileged process into one holding `CAP_SYS_ADMIN`,
 and any code path that accepts that capability without qualifying which namespace
 it was granted in will treat the process as genuinely privileged. This is the
-concrete form of the caveat raised in Section 2.10 — that user namespaces are an
-attack surface as well as a defence — and it is the mechanism by which the present
+concrete form of the caveat raised in Section 2.10, that user namespaces are an
+attack surface as well as a defence, and it is the mechanism by which the present
 defect is reached.
  
 A second, related point concerns mounting. Since kernel version 4.6, `cgroupfs`
 is among the filesystem types that may be mounted inside a user namespace by a
 process holding `CAP_SYS_ADMIN` in that namespace. A process in a new user
-namespace may therefore mount a fresh cgroup v1 hierarchy of its own — one it
+namespace may therefore mount a fresh cgroup v1 hierarchy of its own, one it
 owns, and over whose files it holds root ownership [@man7-linux].
 
 <div class="page_break"></div>
@@ -1037,7 +1027,7 @@ to restrict the operation to a privileged administrator.
 That reliance is sound only where file ownership implies host privilege. It is
 not sound where a user namespace is available. A process that creates a user
 namespace holds `CAP_SYS_ADMIN` within it, may mount its own cgroup v1 hierarchy,
-and is the owner of every file in the hierarchy it has just mounted — including
+and is the owner of every file in the hierarchy it has just mounted, including
 `release_agent`. The filesystem permission check therefore succeeds, not because
 the process is privileged on the host, but because the notion of "root" against
 which the check is evaluated is the namespace-local one.
@@ -1061,7 +1051,7 @@ re-aligns the frame of reference of the guard with that of the effect.
  
 **Position in the taxonomy.** Section 3.5.3 places this technique at the boundary
 between the runtime and kernel categories, and the analysis above explains why.
-The defect is unambiguously in the kernel — no configuration of the container and
+The defect is unambiguously in the kernel: no configuration of the container and
 no version of the runtime introduces it. Yet it is reached entirely through
 primitives the container is legitimately entitled to use: an unprivileged process
 creates a user namespace, mounts a filesystem it is permitted to mount, and writes
@@ -1141,7 +1131,7 @@ any operation whose effects reach beyond the namespace. This route succeeds *onl
 because the vulnerable kernel performed no capability check on the write at all,
 as established in Section 8.4. This is the route taken by the original public
 analysis of the vulnerability [@unit42-cve-2022-0492]. It is CVE-2022-0492 proper, and on a patched kernel
-it fails at exactly one instruction — the write — while every preceding step
+it fails at exactly one instruction, the write, while every preceding step
 continues to succeed unchanged.
 
 The laboratory target is configured along the first route, granting
@@ -1149,7 +1139,7 @@ The laboratory target is configured along the first route, granting
 deterministically and its behaviour separated from the question of who was
 permitted to invoke it. Prefixing the same script with the `unshare` invocation
 above, against a container from which the capability has been withdrawn, converts
-the demonstration into a reproduction of the CVE — and running that variant before
+the demonstration into a reproduction of the CVE. Running that variant before
 and after `restore-kernel.sh patch` isolates the missing capability check as the
 single variable responsible, which is the remediation-validation discipline
 required by Section 4.6. The mechanism examined in the remainder of this section
@@ -1157,7 +1147,7 @@ is common to both; only the authority under which the write is accepted differs.
 
 <div class="page_break"></div>
 
-### Movement 1 — a hierarchy whose `release_agent` may be written
+### Movement 1: a hierarchy whose `release_agent` may be written
 
 The container's own `/sys/fs/cgroup` is of no use, for two independent reasons.
 It is a `tmpfs` that merely holds the per-controller mount points; it is not a
@@ -1195,7 +1185,7 @@ cgroup v1 tree with no subsystem attached, governing no resource whatsoever
   Requesting *no* controller sidesteps the constraint entirely: an arbitrary
   number of named hierarchies may coexist.
 
-The mount point itself is immaterial — the laboratory script places it under
+The mount point itself is immaterial. The laboratory script places it under
 `/sys/fs/cgroup` for tidiness, but any writable directory serves, and `/tmp` is
 the more robust choice because some runtime configurations remount the cgroup
 `tmpfs` read-only. What matters is only that the hierarchy exists and that its
@@ -1209,7 +1199,7 @@ mkdir "${CGROUP_PATH}"                      # ${MOUNT_POINT}/escape_$$
 
 <div class="page_break"></div>
 
-### Movement 2 — staging the payload where the host will find it
+### Movement 2: staging the payload where the host will find it
 
 The path written into `release_agent` is resolved in the **initial mount
 namespace** when the callback fires (Section 8.3.2). It is therefore not a path in
@@ -1249,7 +1239,7 @@ echo "[*] (this container cannot verify that path exists on the host)"
 
 <div class="page_break"></div>
 
-### Movement 3 — arming the callback
+### Movement 3: arming the callback
 
 Two writes arm the mechanism, and they address two different levels of the
 hierarchy:
@@ -1272,7 +1262,7 @@ after it is the ordinary operation of a documented mechanism. This single line i
 where a namespace-relative authorisation is exchanged for a namespace-absolute
 effect, and it is the line the upstream fix guards.
 
-### Movement 4 — emptying the cgroup
+### Movement 4: emptying the cgroup
 
 A process joins a cgroup by writing its process identifier into `cgroup.procs`.
 The trigger condition is that the cgroup subsequently becomes *empty*:
@@ -1312,7 +1302,7 @@ to the identifier of the invoking shell and retains that value inside a subshell
 where the subshell's own identifier is `$BASHPID`. The process written into
 `cgroup.procs` is therefore the exploit shell itself rather than the short-lived
 subshell, and the cgroup consequently empties when the *script* terminates rather
-than when the subshell returns — with the result that the marker file appears
+than when the subshell returns, with the result that the marker file appears
 immediately after the script's own summary reports having found nothing. The
 observation is worth making because it isolates the condition precisely: what
 matters is not that some process exits, but that the *last* member of the cgroup
@@ -1323,7 +1313,7 @@ does.
 ### The payload, and the return path across the boundary
 
 `malicious_release_agent.sh` executes on the host, as root, in the host's mount
-namespace. Reading the objective is trivial in that position — the marker file is
+namespace. Reading the objective is trivial in that position: the marker file is
 owned by `root` with mode `600`, and the helper's credentials are the kernel's:
 
 ```bash
@@ -1352,7 +1342,7 @@ executable where the host will resolve it allows a host-side payload to deliver
 output where the container will read it: the direction of travel differs, the
 asymmetry exploited is identical. The directory is resolved at runtime rather than
 hard-coded because overlay identifiers are assigned per container instance and
-change on every recreation — a detail that matters operationally, since a
+change on every recreation, a detail that matters operationally, since a
 hard-coded path is the difference between an exploit that works once and one that
 works repeatedly.
 
@@ -1360,11 +1350,11 @@ The payload additionally writes to `/dev/kmsg`, so that the host's kernel ring
 buffer records the invocation:
 
 ```bash
-echo "[*] release_agent fired — output written to: ${OUTPUT}" > /dev/kmsg 2>/dev/null || true
+echo "[*] release_agent fired; output written to: ${OUTPUT}" > /dev/kmsg 2>/dev/null || true
 ```
 
-This is exercise instrumentation rather than attacker tradecraft — a real intrusion
-would avoid the kernel log rather than write to it — and it exists to separate the
+This is exercise instrumentation rather than attacker tradecraft; a real intrusion
+would avoid the kernel log rather than write to it. It exists to separate the
 two failure modes that a first attempt cannot otherwise distinguish: *the callback
 never fired*, and *the callback fired but its output went somewhere unobservable*.
 A `dmesg` line settles the question immediately, and the distinction between those
@@ -1374,7 +1364,7 @@ intended to make routine.
 In a genuine intrusion the payload would be a reverse shell, a copy of `/bin/sh`
 made set-user-ID on the host filesystem, or the installation of persistence; the
 laboratory confines itself to reading a marker file, which is sufficient to
-demonstrate the property under study — arbitrary code execution as host root — while
+demonstrate the property under study, arbitrary code execution as host root, while
 leaving the environment restorable.
 
 ### Confirmation and interpretation
@@ -1390,13 +1380,13 @@ As in Exercise III, no namespace is broken at any point. The container's mount,
 PID, and network namespaces hold throughout, and no process inside the container
 ever opens a file it was denied: the marker is read by a process the *kernel*
 created, and its contents merely appear inside the container afterwards. Nor does
-the container obtain any authority over the host that it did not already possess —
+the container obtain any authority over the host that it did not already possess:
 by the CVE route it obtains none at all, holding `CAP_SYS_ADMIN` over nothing but
 a namespace of its own making. What occurs instead is that a kernel interface
 accepted an instruction from within the boundary and carried it out on the other
 side. The taxonomy (Section 3.4)
 accordingly records the defeated layer not as a namespace but as the kernel's own
-enforcement of the boundary between namespaces — which is why, uniquely among the
+enforcement of the boundary between namespaces, which is why, uniquely among the
 case studies so far, no configuration of the container can be described as the
 fault, and why the mitigations enumerated below divide so sharply into one that
 corrects the defect and several that merely place it out of reach.
@@ -1435,8 +1425,8 @@ of this thesis, every one of these mitigations operates by denying the attacker
 *access to the vulnerable code path* rather than by correcting the defect. On an
 unpatched kernel the flaw remains present; what the container's configuration
 determines is only whether it can be reached. This is the same defensive posture
-that Chapter 2 identified in the discussion of seccomp — the shrinking of attack
-surface as a substitute for correctness — and it recurs, in a more acute form, in
+that Chapter 2 identified in the discussion of seccomp, the shrinking of attack
+surface as a substitute for correctness, and it recurs, in a more acute form, in
 the capstone of Chapter 9.
 <div class="page_break"></div>
 
@@ -1448,8 +1438,8 @@ the capstone of Chapter 9.
   primary and definitive control.
 - **Withhold `CAP_SYS_ADMIN`.** The patch closes the route by which the capability
   is *manufactured*; it does nothing about the route by which it is *granted*. A
-  container holding `CAP_SYS_ADMIN` in the initial user namespace — whether through
-  `--privileged` or through a narrowly targeted `--cap-add` — retains the ability
+  container holding `CAP_SYS_ADMIN` in the initial user namespace, whether through
+  `--privileged` or through a narrowly targeted `--cap-add`, retains the ability
   to mount a controllerless cgroup v1 hierarchy and write its `release_agent` on a
   fully patched kernel, and the resulting escape is indistinguishable in effect
   from the one analysed here. Of the controls in this list, only migration to
@@ -1493,7 +1483,7 @@ attacker at all.
   thread, with no container process at any depth, so a detection strategy founded
   on process lineage has nothing to match against.
 - Treat `call_usermodehelper()` as the choke point it is. Every invocation of this
-  class — `release_agent`, module autoloading, the core-dump helper — passes
+  class (`release_agent`, module autoloading, the core-dump helper) passes
   through that single kernel function, so instrumenting it yields a narrow and
   complete view of userspace execution initiated by the kernel. The exercise's
   operational guidance gives an `ftrace` recipe for exactly this, which is useful
@@ -1507,10 +1497,10 @@ attacker at all.
 ## Objective
 
 From a container that has been hardened according to every control established by
-Exercises I to IV — unprivileged, all capabilities dropped, `no-new-privileges`
+Exercises I to IV (unprivileged, all capabilities dropped, `no-new-privileges`
 set, the default seccomp and AppArmor profiles applied, a read-only root
 filesystem, a non-root user, a `pids` limit, and no host mount, socket or device
-of any kind — obtain a controlled write into the memory of files the container
+of any kind), obtain a controlled write into the memory of files the container
 does not own, and use it to reach execution as root outside the container.
 
 ## Threat Scenario and Environment Setup
@@ -1527,9 +1517,9 @@ absent, defective or misconfigured, and the corresponding remediation consists i
 restoring it.
 
 This exercise is the terminal case of that progression, and it is included
-precisely because it has no such condition. CVE-2026-31431 — disclosed on 29
-April 2026 by Juno Im of Theori's Xint Code team, and added to CISA's Known
-Exploited Vulnerabilities catalogue two days later — is a logic defect in the
+precisely because it has no such condition. CVE-2026-31431, disclosed on 29
+April 2026 by Juno Im of Theori's Xint Code team and added to CISA's Known
+Exploited Vulnerabilities catalogue two days later, is a logic defect in the
 Linux kernel's `algif_aead` module, the component that exposes the kernel's
 authenticated-encryption implementations to userspace through the `AF_ALG`
 socket family [@cve-2026-31431; @xint-copyfail; @cisa-kev]. Its consequence is a
@@ -1557,7 +1547,7 @@ cryptographic implementations, and it therefore performs no capability check at
 all [@man7-af-alg].
 
 **It is not mediated by any container-specific state.** Exercise IV reached the
-kernel through a mechanism — the user namespace — that is itself part of the
+kernel through a mechanism, the user namespace, that is itself part of the
 container abstraction, which is why removing that mechanism removes the
 technique. Here there is no container-specific intermediary. The same syscall
 sequence, issued from a container, from a virtual-machine guest's userland, from
@@ -1588,8 +1578,8 @@ study [@docker-copyfail-mitigation].
 The container itself is defined by `exercises/05-capstone-cve-2026-31431/`, and
 it is configured in a manner exactly opposite to that of Exercise IV. Nothing is
 weakened to enable the technique. The workload is the hardened target of the
-capstone rubric — the configuration a reader who has absorbed Exercises I to IV
-would write — and the point of the exercise is what that hardening does and does
+capstone rubric, the configuration a reader who has absorbed Exercises I to IV
+would write, and the point of the exercise is what that hardening does and does
 not achieve:
 
 | Control applied | Established in | Effect on this technique |
@@ -1614,19 +1604,24 @@ against a deliberately weakened one would demonstrate nothing that Exercises I
 and II have not already demonstrated.
 <div class="page_break"></div>
 **The laboratory artefacts.** The exercise directory follows the layout described
-in Section 4.4.3 and comprises four components. The `Dockerfile` builds the
-foothold image from a stock Ubuntu base and installs ordinary development and
-inspection tooling — a C toolchain, Python 3, `strace` and `file` — so that the
-reader may write their own probes; the setuid-root `su` binary that the base
-image ships is deliberately left in place, since it is the canonical
-page-cache-corruption target discussed in the vendor advisories (Section 9.5),
-and no exploit material of any kind is included in the image. The
-`docker-compose.yml` file defines the target as a single long-running container
-carrying the security options tabulated above, together with one bind mount of
+in Section 4.4.3. The `Dockerfile` builds a single image from a stock Ubuntu base
+and installs ordinary development and inspection tooling (a C toolchain, Python
+3, `strace`, `xxd` and `file`) so that the reader may write their own probes; the
+setuid-root `su` binary that the base image ships is deliberately left in place,
+since it is the canonical page-cache-corruption target discussed in the vendor
+advisories (Section 9.5), and no exploit material of any kind is included in the
+image. The same image also carries two small shell scripts belonging to the
+co-tenant workload described below, and the `docker-compose.yml` file instantiates
+it *twice*: as `ex05-foothold`, the hardened target tabulated above, and as
+`ex05-neighbour`, a co-tenant configured identically but running a workload of its
+own and taking no part in the technique. The foothold carries one bind mount of
 the exercise's `shared/` directory, which exists so that probes and notes may be
 moved between the virtual machine and the foothold without repeated `docker cp`
 invocations; as in Exercise IV, it is an ordinary bind mount conferring no
-privilege the technique requires.
+privilege the technique requires. The neighbour carries no mount at all, and
+neither container is given a network, since both run `network_mode: none`, so
+that the only channel remaining between the two is the one no configuration
+option creates and none can withdraw. Section 9.5 explains what that arrangement is for.
 
 **Preconditions and the integrity reference.** `setup.sh` differs from its
 counterparts in the earlier exercises in that it refuses to proceed unless five
@@ -1642,13 +1637,22 @@ range, a patched kernel producing a confusing null result rather than a lesson;
 and that the `AF_ALG` interface and the `algif_aead` module are present on the
 host, without which the chain has no entry point. It then plants the objective
 marker at `/root/flag.txt` on the virtual machine, readable only by root, and
-records the SHA-256 digests of the candidate setuid binaries.
+records the SHA-256 digests of the three candidate targets: the setuid binaries in
+the image, the operator's script on the host, and the shared image-layer file the
+co-tenant re-reads.
 
-That last step is the exercise's principal instrument rather than its
-housekeeping. `teardown.sh` stops the container, flushes the page cache with
-`sync` followed by a write to `/proc/sys/vm/drop_caches` — which discards the
-corrupted pages and forces the next access to re-read the unmodified bytes from
-disk — and then re-verifies the recorded digests. A *match* after a successful
+Those digests are the exercise's principal instrument rather than its
+housekeeping, and a second instrument joins them. `observe.sh` reads the same
+bytes of the same file through four independent routes: from inside each
+container, from the underlying inode on the host, and from the block device with
+`O_DIRECT`, which bypasses the page cache for that request alone. It reports
+them side by side; because it never drops the cache, it may be run as often as
+required without destroying the evidence it measures (Section 9.5.2).
+`teardown.sh` performs the destructive counterpart, once and last: it records the
+co-tenant's final output, re-verifies the recorded digests, stops both containers,
+and flushes the page cache with `sync` followed by a write to
+`/proc/sys/vm/drop_caches`, which discards the corrupted pages and forces the next
+access to re-read the unmodified bytes from disk. A *match* after a successful
 escalation is the expected outcome, and it is the empirical demonstration of the
 defining property of this vulnerability: the file on disk was never written, only
 the kernel's cached image of it. A mismatch would indicate that something other
@@ -1669,8 +1673,8 @@ their composition, and Section 9.4 analyses that composition once the five are
 in place. It is worth stating in advance why this is not a memory-safety bug of the
 familiar kind: every write the kernel performs lies inside a validly allocated,
 correctly mapped page whose bounds are never exceeded. What is violated is not a
-length but an *ownership* invariant — a page that the kernel holds on behalf of a
-read-only mapping ends up on the writable side of a cryptographic operation — and
+length but an *ownership* invariant: a page that the kernel holds on behalf of a
+read-only mapping ends up on the writable side of a cryptographic operation, and
 sanitisers that check extents and lifetimes have nothing to report
 [@retr0-copyfail].
 
@@ -1681,7 +1685,7 @@ sanitisers that check extents and lifetimes have nothing to report
 ### The Kernel Crypto API and the `AF_ALG` Socket Family
 
 The Linux kernel implements a large body of cryptographic transformations for
-its own use — `dm-crypt` for disk encryption, IPsec for network encryption,
+its own use: `dm-crypt` for disk encryption, IPsec for network encryption,
 `fscrypt`, module signature verification, and others. Since kernel 2.6.38 this
 implementation is also exposed to userspace through a dedicated socket family,
 `AF_ALG` (address family 38), so that applications may reuse the kernel's
@@ -1704,7 +1708,7 @@ bind(fd, (struct sockaddr *)&sa, sizeof(sa));
 ```
 
 The bound socket is a *template* socket: it holds the algorithm and its
-long-lived parameters, which are set with `setsockopt(2)` — `ALG_SET_KEY` for the
+long-lived parameters, which are set with `setsockopt(2)`: `ALG_SET_KEY` for the
 key and, for authenticated encryption, `ALG_SET_AEAD_AUTHSIZE` for the length of
 the authentication tag. Individual cryptographic operations are then performed on
 *operation* sockets obtained by calling `accept(2)` on the template. Each
@@ -1724,10 +1728,9 @@ Second, binding an algorithm name triggers the kernel's module autoloader, so th
 attacking process need not find it already resident, and on distribution kernels
 the module is invariably available. The interface is, in short, a piece of kernel
 attack surface that is reachable by default, from any uid, from inside any
-container whose seccomp policy does not specifically exclude it — and, before this
+container whose seccomp policy does not specifically exclude it, and, before this
 CVE, no mainstream container runtime excluded it.
 
-<div class="page_break"></div>
 
 ### Scatterlists and Their Chaining
 
@@ -1753,8 +1756,8 @@ struct scatterlist {
 
 A `struct page` pointer is always at least four-byte aligned, so the two low bits
 of `page_link` are free, and the kernel spends them on flags rather than on a
-further field. Three fields therefore describe the data — which page, where in
-it, and how much of it — and nothing whatever in the descriptor records the
+further field. Three fields therefore describe the data: which page, where in
+it, and how much of it. Nothing whatever in the descriptor records the
 page's provenance. Every transformation request carries two such arrays: a source
 scatterlist (`req->src`), from which input is read, and a destination scatterlist
 (`req->dst`), into which output is written.
@@ -1773,11 +1776,11 @@ static inline void sg_chain(struct scatterlist *prv, unsigned int prv_nents,
 }
 ```
 
-A walk that reaches such an entry — `sg_next()` tests the `SG_CHAIN` bit —
-continues transparently into the second array, and halts only at the entry
-bearing `SG_END`. Chaining is a routine mechanism for composing a request out of
-buffers that were allocated separately, and it carries no notion of who owns the
-pages being joined.
+A walk that reaches such an entry, which `sg_next()` detects by testing the
+`SG_CHAIN` bit, continues transparently into the second array, and halts only at
+the entry bearing `SG_END`. Chaining is a routine mechanism for composing a
+request out of buffers that were allocated separately, and it carries no notion
+of who owns the pages being joined.
 
 <figure>
 <img src="./Images/ex05_scatterlist_chaining.svg" />
@@ -1836,7 +1839,7 @@ struct aead_request {
 described in Section 9.3.2, and <i>may therefore, through `sg_chain()`, run on into
 further arrays whose pages were obtained from somewhere else entirely</i>. The
 request does not describe those pages; it only says how many bytes to read and
-where the divisions fall — the first `assoclen` bytes are the associated data,
+where the divisions fall: the first `assoclen` bytes are the associated data,
 the `cryptlen` bytes after them the payload.
 
 Nothing obliges `src` and `dst` to differ. When both name
@@ -1848,8 +1851,6 @@ caller supplied to receive output; it then chains onto the end of that output
 list the scatterlist entry describing the *tag*, which still refers to the pages
 the caller sent; and it submits the combined list as both `req->src` and
 `req->dst` [@linux-algif-aead-inplace]. 
-
-<div class="page_break"></div>
 
 
 #### The `authencesn` template and the ESN problem.
@@ -1900,6 +1901,7 @@ plain `authenc`) writes outside the legitimate output area [@retr0-copyfail].
 `authencesn` is thus the only algorithm whose destination buffer is used for
 something other than output, and it is the only one the technique can use.
 
+<div class="page_break"></div>
 
 ### `splice(2)`, Pipes, and References to Cached Pages
 
@@ -1917,7 +1919,7 @@ onward.
 
 Consequently, when a process splices a file into an `AF_ALG` operation socket,
 the socket's transmit scatterlist does not describe a private copy of the file's
-bytes. It describes, directly, the kernel's cached pages of that file — pages
+bytes. It describes, directly, the kernel's cached pages of that file: pages
 that belong to the page cache, that may simultaneously be mapped into the address
 space of any number of other processes, and that the splicing process holds no
 write permission over whatsoever. This is entirely legitimate: the pages are
@@ -1968,9 +1970,9 @@ exercise.
   Pages live in the `address_space` of an inode on a host filesystem, and a
   namespace virtualises only the *names* by which kernel objects are reached. A
   process in one container, a process in a neighbouring container and a process
-  on the host that open the same file — by different paths, through different
+  on the host that open the same file (by different paths, through different
   bind mounts, through different mount namespaces, through an overlay filesystem's
-  lower layer — all arrive at one inode and therefore at one set of pages.
+  lower layer) all arrive at one inode and therefore at one set of pages.
   Writing into those pages from inside a container is writing into the copy that
   everybody else is reading.
 - **The cached copy is authoritative, and disk is not consulted again.** Once a
@@ -1990,8 +1992,8 @@ exercise.
   node derived from that layer, without any escape from the originating container
   having occurred at all [@xint-copyfail-pod-to-host].
 - **A file bind-mounted from the host is the host's own inode.** Where a host
-  file is mounted into a container — a configuration file, a helper binary, a CA
-  bundle — the container holds an open descriptor onto the host's inode, and the
+  file is mounted into a container (a configuration file, a helper binary, a CA
+  bundle) the container holds an open descriptor onto the host's inode, and the
   pages behind it are the host's page cache for that file. Read access suffices:
   a primitive that writes into the page cache of a merely *readable* file reaches,
   from inside the container, the memory image of a file that host processes
@@ -2066,7 +2068,7 @@ The substance of the change is one argument. Before,
 the request named two lists; after, it names one twice:
 
 ```diff
-@@ crypto/algif_aead.c — _aead_recvmsg(), abridged @@
+@@ crypto/algif_aead.c: _aead_recvmsg(), abridged @@
 +    /* Use the RX SGL as source (and destination) for crypto op. */
 +    src = areq->first_rsgl.sgl.sg;
  
@@ -2083,7 +2085,7 @@ The two arguments following the request are the source and the destination.
 Before the commit they were `areq->tsgl` and `areq->first_rsgl.sgl.sg`: the
 per-request TX list and the RX list, two different arrays over two different sets
 of pages. After it they are `src` and `areq->first_rsgl.sgl.sg`, and the added
-line above assigns `src` the RX list itself — so both arguments now name the same
+line above assigns `src` the RX list itself, so both arguments now name the same
 array. From this commit onward, `req->src` and `req->dst` denote one scatterlist,
 on the encryption and the decryption path alike.
 
@@ -2094,21 +2096,45 @@ room. Decryption is the opposite case, and it is the one the commit had to
 engineer around. The input is `AAD ‖ CT ‖ Tag`; the output is only `AAD ‖ PT`,
 which is shorter by `authsize` bytes, because the tag is consumed rather than
 produced. An in-place operation therefore has nowhere within the caller's buffer
-to put the tag — and the tag must still be *readable*, since verification needs
-it. The commit resolves this by leaving the tag where it is and attaching it. Its
-own comment, still present in the source, draws the arrangement
+to put the tag, and the tag must still be *readable*, since verification needs
+it. The commit resolves this by leaving the tag where it is and attaching it. Its own comment, still present in the source, draws the arrangement
 [@linux-algif-aead-source]:
 
+```c
+/* crypto/algif_aead.c: _aead_recvmsg() */
+
+/*
+ * Encryption operation - The in-place cipher operation is
+ * achieved by the following operation:
+ *
+ * TX SGL: AAD || PT
+ *          |      |
+ *          | copy |
+ *          v      v
+ * RX SGL: AAD || PT || Tag
+ */
+
+/*
+ * Decryption operation - To achieve an in-place cipher
+ * operation, the following  SGL structure is used:
+ *
+ * TX SGL: AAD || CT || Tag
+ *          |      |     ^
+ *          | copy |     | Create SGL link.
+ *          v      v     |
+ * RX SGL: AAD || CT ----+
+ */
+```
 
 <div class="page_break"></div>
 #### How `_aead_recvmsg()` builds it.
-The function computes three lengths beforetouching any memory. `used` is the total number of TX bytes the caller has supplied; `outlen`, on the decryption path, is `used - as`, where `as` is theauthentication-tag size established by `ALG_SET_AEAD_AUTHSIZE`; and `processed` is the number of TX bytes the request will consume. It then performs the foursteps of Figure 9.5 [@linux-algif-aead-source]. The identifiers below are those ofthe 5.4 source on the laboratory target rather than of the 2017 tree: when `72548b093ee3` landed the helpers were still private to `algif_aead.c`, and they were hoisted into the shared `af_alg` core later in the same release cycle, a consolidation that renamed them without altering the sequence described here. The names are given as the reader will find them in the kernel the exercise attacks.
+The function computes three lengths before touching any memory. `used` is the total number of TX bytes the caller has supplied; `outlen`, on the decryption path, is `used - as`, where `as` is the authentication-tag size established by `ALG_SET_AEAD_AUTHSIZE`; and `processed` is the number of TX bytes the request will consume. It then performs the four steps of Figure 9.5 [@linux-algif-aead-source]. The identifiers below are those of the 5.4 source on the laboratory target rather than of the 2017 tree: when `72548b093ee3` landed the helpers were still private to `algif_aead.c`, and they were hoisted into the shared `af_alg` core later in the same release cycle, a consolidation that renamed them without altering the sequence described here. The names are given as the reader will find them in the kernel the exercise attacks.
 
 1. `af_alg_get_rsgl()` converts the caller's `recvmsg(2)` iovecs into the RX SGL.
    This is not a kernel allocation: `af_alg_make_sg()` pins the caller's own
    userspace pages with `iov_iter_get_pages()` and describes them directly. The
-   table is deliberately built one entry longer than the page count — the source
-   comments the spare slot as *"Add one extra for linking"* — so that a chain
+   table is deliberately built one entry longer than the page count, the source
+   commenting the spare slot as *"Add one extra for linking"*, so that a chain
    entry may later be appended without reallocating.
 2. `crypto_aead_copy_sgl(null_tfm, tsgl_src, areq->first_rsgl.sgl.sg, outlen)`
    copies the first `outlen` bytes of the TX stream, namely `AAD ‖ CT`, into the
@@ -2117,8 +2143,8 @@ The function computes three lengths beforetouching any memory. `used` is the tot
    a cipher, which allows the copy to be driven by the existing scatterlist walk
    machinery rather than by open-coded loops.
 3. `af_alg_pull_tsgl(sk, processed, areq->tsgl, processed - as)` releases the TX
-   entries that have now been copied and *reassigns* the remainder — the entries
-   covering the byte range `[processed - as, processed)`, that is, the tag — into
+   entries that have now been copied and *reassigns* the remainder, the entries
+   covering the byte range `[processed - as, processed)`, that is, the tag, into
    a small per-request array, `areq->tsgl`. The pages are not copied and not
    re-obtained; the same `struct page` pointers, with their offsets and lengths
    adjusted, are moved into the new array.
@@ -2148,8 +2174,8 @@ own receive pages and reserves one spare scatterlist entry; step 2 copies
 tag entries out of the shared TX list into a per-request array, carrying the page
 pointers rather than the pages they name; step 4 chains that array onto the end of
 the RX list, and the combined list is submitted as both <code>req-&gt;src</code>
-and <code>req-&gt;dst</code>. Offset <code>outlen</code> is the seam — the same
-byte the template addresses as <code>assoclen&nbsp;+&nbsp;cryptlen</code> — beyond
+and <code>req-&gt;dst</code>. Offset <code>outlen</code> is the seam, the same
+byte the template addresses as <code>assoclen&nbsp;+&nbsp;cryptlen</code>, beyond
 which the destination is memory the caller supplied only as input.</figcaption>
 </figure>
 
@@ -2171,9 +2197,9 @@ byte the commit copies. The AAD and the ciphertext are read out of those pages
 and written into the caller's own; the page-cache pages are touched only as
 input. What the commit changes is the status of the bytes it does *not* copy. The
 tag entries are moved verbatim onto the end of a list that the crypto API is
-told is the destination. A page whose provenance is the page cache — a page the
-calling process holds no write permission over, and which is shared with the host
-and with every other container reading the same file — is now addressed by
+told is the destination. A page whose provenance is the page cache, a page the
+calling process holds no write permission over and one that is shared with the
+host and with every other container reading the same file, is now addressed by
 `req->dst`.
 
 Two properties of the descriptors make this invisible to everything downstream.
@@ -2214,15 +2240,15 @@ plain `authenc(hmac(sha256),cbc(aes))`:
   the destination; the digest it produces is written into a per-request kernel
   buffer reached through `areq_ctx->tail`, never back into the scatterlist.
 - **Tag verification reads.** The supplied tag is fetched with
-  `scatterwalk_map_and_copy(ihash, req->src, assoclen + cryptlen, authsize, 0)` —
-  the trailing `0` selects a read — into a small context buffer, and compared with
-  the computed digest by `crypto_memneq()`. The comparison is a comparison; the
+  `scatterwalk_map_and_copy(ihash, req->src, assoclen + cryptlen, authsize, 0)`,
+  whose trailing `0` selects a read, into a small context buffer, and compared
+  with the computed digest by `crypto_memneq()`. The comparison is a comparison; the
   tag region of the destination is never written.
 - **The cipher stage writes, but only inside the payload.** The skcipher is
   positioned by `scatterwalk_ffwd(areq_ctx->dst, dst, assoclen)`, which advances
   past the associated data, and is given a length of `cryptlen` after `authsize`
   has been subtracted from it. Its writes are therefore confined to
-  `[assoclen, assoclen + cryptlen)` — precisely the region the caller supplied to
+  `[assoclen, assoclen + cryptlen)`, precisely the region the caller supplied to
   receive plaintext, and precisely the region the in-place copy filled with the
   caller's own RX pages.
 
@@ -2248,7 +2274,7 @@ out-flag, `1` denoting a write into the scatterlist and `0` a read from it
 [@linux-authencesn]:
 
 ```c
-/* crypto/authencesn.c — crypto_authenc_esn_decrypt() */
+/* crypto/authencesn.c: crypto_authenc_esn_decrypt() */
 cryptlen -= authsize;                    /* ciphertext, tag excluded */
 
 if (req->src != dst) {                   /* NOT TAKEN: algif_aead made them equal */
@@ -2256,14 +2282,14 @@ if (req->src != dst) {                   /* NOT TAKEN: algif_aead made them equa
 	if (err)
 		return err;
 }
-/* read  — the supplied tag        */
+/* read:   the supplied tag        */
 scatterwalk_map_and_copy(ihash, req->src, assoclen + cryptlen, authsize, 0);   
 
 /* Move high-order bits of sequence number to the end. */
-scatterwalk_map_and_copy(tmp, dst, 0, 8, 0);   /* read  — SPI ‖ seq_hi       */
-scatterwalk_map_and_copy(tmp, dst, 4, 4, 1);   /* write — SPI over offset 4  */
+scatterwalk_map_and_copy(tmp, dst, 0, 8, 0);   /* read:   SPI ‖ seq_hi       */
+scatterwalk_map_and_copy(tmp, dst, 4, 4, 1);   /* write:  SPI over offset 4  */
 scatterwalk_map_and_copy(tmp + 1, dst,
-				 assoclen + cryptlen, 4, 1);   /* write — seq_hi at the seam */
+				 assoclen + cryptlen, 4, 1);   /* write:  seq_hi at the seam */
 ```
 
 Four observations complete the analysis.
@@ -2274,7 +2300,7 @@ request copies the associated data and ciphertext into the destination before
 rearranging it. Under IPsec, the caller for which the template was written, the
 guard is likewise skipped, because `esp4.c` sets up an in-place request over
 socket-buffer pages the kernel owns. The 2017 commit made `algif_aead` look, to
-this guard, exactly like the IPsec stack — while supplying pages of an entirely
+this guard, exactly like the IPsec stack, while supplying pages of an entirely
 different kind.
 
 **The offset is the seam.** After `cryptlen -= authsize`, the expression
@@ -2283,7 +2309,7 @@ different kind.
 one byte past the last byte the caller's RX pages cover, and the first byte of
 the chained tag entry. This is not an arithmetic slip that lands there by
 accident. It is where the ESN construction *requires* the high half of the
-sequence number to go — immediately after the authenticated payload — and under
+sequence number to go, immediately after the authenticated payload, and under
 the intended in-IPsec usage that location is inside a buffer the kernel owns
 outright.
 
@@ -2299,7 +2325,7 @@ anything the kernel computes.
 `crypto_authenc_esn_decrypt_tail()` reverses the rearrangement, but only in part:
 
 ```c
-/* crypto/authencesn.c — crypto_authenc_esn_decrypt_tail() */
+/* crypto/authencesn.c: crypto_authenc_esn_decrypt_tail() */
 	/* Move high-order bits of sequence number back. */
 	scatterwalk_map_and_copy(tmp, dst, 4, 4, 0);                       /* read      */
 	scatterwalk_map_and_copy(tmp + 1, dst, assoclen + cryptlen, 4, 0); /* read      */
@@ -2311,8 +2337,8 @@ anything the kernel computes.
 
 The restore reads the scratch value back and uses it to reconstitute bytes 0 to 7
 of the destination; it writes nothing at `assoclen + cryptlen`. The four bytes
-stay. And because the write is performed before the digest is even computed —
-several statements before the `crypto_memneq()` that decides the request's fate —
+stay. And because the write is performed before the digest is even computed,
+several statements before the `crypto_memneq()` that decides the request's fate,
 it lands whether or not the tag is correct. The attacker requires no valid key,
 no valid tag and no knowledge of the plaintext. The system call returns
 `-EBADMSG`, reporting that the decryption failed and, by implication, that nothing
@@ -2336,8 +2362,8 @@ algorithm test manager exercises every registered transformation under
 deliberately awkward scatterlist geometries, the in-place arrangement among them:
 `struct testvec_config` carries an in-place flag, and one shipped configuration is
 named *"misaligned splits crossing pages, inplace"* [@linux-testmgr]. syzkaller
-has carried `AF_ALG` descriptors since 2017 — `socket$alg`, `bind$alg`,
-`ALG_SET_KEY`, `ALG_SET_AEAD_AUTHSIZE`, `accept$alg`, `sendmsg$alg` — and lists
+has carried `AF_ALG` descriptors since 2017 (`socket$alg`, `bind$alg`,
+`ALG_SET_KEY`, `ALG_SET_AEAD_AUTHSIZE`, `accept$alg`, `sendmsg$alg`) and lists
 `authencesn` among the templates it binds [@syzkaller-alg]. The algorithm, the
 interface and the in-place geometry are therefore all under continuous automated
 test. Five things are nonetheless true of this write that are not true of an
@@ -2371,8 +2397,8 @@ out-of-bounds write.
    two, and that relation is established at run time by a chained pointer neither
    file contains.<div class="page_break"></div>
 
-5. **The invariant is not representable.** The property violated — *this page may
-   be read by the transformation but must not be written* — has nowhere to live.
+5. **The invariant is not representable.** The property violated, *this page may
+   be read by the transformation but must not be written*, has nowhere to live.
    `struct scatterlist` has three fields and two spare bits, all spent (Section
    9.3.2); `struct aead_request` records lengths and two list pointers, and
    nothing about permission (Section 9.3.3). At the point of the write there is
@@ -2404,198 +2430,457 @@ the defect has been used.
 
 The primitive established in Section 9.4 is not, by itself, an escape. It writes
 four bytes into the cached image of a file, and a file is a route across a
-security boundary only if some more privileged principal subsequently reads or
-executes it. The technique therefore has two halves that are worth keeping
-separate: the *acquisition* of the primitive, which is a matter of the crypto API
-and is identical wherever it is exercised, and the *choice of target*, which is a
-matter of what the surrounding system happens to do with its files and is settled
-before a line of code is written. This section takes them in that order, target
-first, because the target is what determines the exercise's arrangement — two
-containers and one root-owned script, where every preceding exercise needed only
-a single foothold.
+security boundary only if some other principal, more privileged or merely
+different, subsequently reads or executes it. The technique therefore has two
+halves that are worth keeping separate: the *acquisition* of the primitive, which
+is a matter of the crypto API and is identical wherever it is exercised, and the
+*choice of target*, which is a matter of what the surrounding system happens to do
+with its files and is settled before a line of code is written.
 
-### Two containers, and what the second one is for
+This section takes them in that order, target first, because the targets are what
+determine the exercise's arrangement, two containers and one root-owned host
+script where every preceding exercise needed only a single foothold, and
+because they determine what the exercise is able to *prove*. The demonstration is
+staged in three, so that each stage isolates one claim: that the write crosses the
+container boundary at all; that crossing it suffices to make an entirely
+uninvolved workload act on the attacker's behalf; and that the same primitive,
+aimed elsewhere, reaches root on the host. The first of the three is the one no
+earlier case study in this thesis could produce, and it is the reason the exercise
+is arranged as it is.
+
+### The arrangement: two containers, one image, one channel
+
+<figure>
+<img src="./Images/ex05_blast_radius.svg" />
+<figcaption><span class="lbl">Figure.9.6</span>The arrangement this exercise measures: one kernel VM, two independently
+hardened containers built from the same image, sharing no mount, volume, namespace, network or
+cgroup by configuration (the red divider), yet both reading the image's unmodified lower-layer
+files through one host inode and therefore one set of page-cache pages, the single channel
+the rest of this section exploits.</figcaption>
+</figure>
 
 The foothold is the container tabulated in Section 9.2: unprivileged, all
 capabilities dropped, `no-new-privileges` set, the default seccomp and AppArmor
-profiles applied, a read-only root filesystem, a non-root user and no host
-mount beyond the documented convenience share. It is the only container the
-attacker occupies, and nothing in its configuration is weakened at any point in
-the walkthrough.
+profiles applied, a read-only root filesystem, a non-root user and no host mount
+beyond the documented convenience share. It is the only container the attacker
+occupies, and nothing in its configuration is weakened at any point in the
+walkthrough.
 
-Beside it runs a second container, `ex05-neighbour`, built from the *same image*.
-It is not a participant. It holds no mount the foothold holds, executes nothing
-the attacker supplies, and is never entered by the attacking process; its
-`depends_on` relation exists to order the two starts and confers nothing else. It
-has its own mount, PID, network and IPC namespaces, its own writable `tmpfs`, its
-own cgroup and its own resource limits, and it carries the same hardening as the
-foothold. By every mechanism catalogued in Chapter 2, the two containers are
-isolated from one another.
+Beside it runs a second container, `ex05-neighbour`, built from the *same image*
+and carrying the same hardening. It is not a participant. It holds no mount the
+foothold holds, executes nothing the attacker supplies, and is never entered,
+addressed or referenced by the attacking process; its `depends_on` relation exists
+to order the two starts and confers nothing else. It has its own mount, PID,
+network, IPC and UTS namespaces, its own writable `tmpfs`, its own cgroup and its
+own resource limits.
 
-What they do share is not a mechanism at all. Because both are built from one
-image, every file in that image's lower layers is, on the host, a single inode,
-and overlayfs serves reads of a lower layer from that underlying inode's pages
-rather than caching a copy per container (Section 9.3.5). The two containers
-therefore read `/usr/bin/su`, `/bin/sh` and every other unmodified image file
-*through the same set of page-cache pages*, and no configuration option
-expresses this, because no configuration option created it.
+The neighbour simply runs a workload: its entry point `/opt/tenant/agent.sh` stages a
+credential of its own in its private `tmpfs` at `/tmp/tenant-b/api.key`, mode
+`0600`, unreadable from the foothold by any means the foothold possesses. It
+then loops, executing `/opt/tenant/heartbeat.sh` every five seconds and reporting
+the result on standard output, where the container runtime collects it on the
+host. Basically doing what a co-tenant workload does: nothing of interest
+to anybody, on a timer.
+
+Two properties of that loop carry the whole demonstration, and neither is an
+artifice of the laboratory; both are consequences of the mechanism described in
+Section 9.3.5. The first is that each tick is a *fresh process*: the kernel
+resolves the script's interpreter line, `/bin/sh` opens `heartbeat.sh`, and its
+text is read from the page cache on every iteration, so a change to those cached
+pages takes effect on the very next tick, with no restart, no reload and nothing
+re-deployed. The second is the contrast with `agent.sh` itself. Its trailing
+`while` loop is a single compound command, which the shell must parse in full
+before it can begin executing it; the file has therefore been read to its end
+before the first tick, and is never read again. Corrupting *its* pages after the
+container has started achieves precisely nothing. The distinction is not
+incidental, it is why the periodic job is a separate file from the process that
+runs it, and it tells a defender which files on a node are actually exposed to
+this primitive: not those a workload loaded at start-up, but those it re-reads
+while it runs.
+
+What the two containers share is not a mechanism at all. Because both are built
+from one image, every file in that image's lower layers is, on the host, a single
+inode, and overlayfs serves reads of a lower layer from that underlying inode's
+pages rather than caching a copy per container (Section 9.3.5). The two containers
+therefore read `/opt/tenant/heartbeat.sh`, `/bin/sh`, `/usr/bin/su` and every
+other unmodified image file *through the same set of page-cache pages*, and no
+configuration option expresses this, because no configuration option created it.
+
+The exercise then goes one step beyond the default in order to remove the last
+alternative explanation an observed effect might have: neither container is given
+a network. Both run with `network_mode: none`, so there is not even a shared
+bridge between them to which anything could be attributed, and the neighbour
+holds no volume, no bind mount, no namespace and no cgroup in common with the
+foothold. Exactly one channel remains, and `docker-compose.yml` neither creates
+it nor can withdraw it.
 
 The neighbour is consequently an instrument rather than a target: it converts the
 claim of Section 9.3.5 into a measurement. A change made to a shared page from
 inside the foothold and then observed from inside the neighbour cannot be
-attributed to a shared path, a shared mount, a shared namespace or a shared
-volume, because there are none; the only channel connecting the two is the page
-cache, so the page cache is what the observation isolates. This is also the point
-at which the exercise departs most sharply from its predecessors. In Exercises I
-to IV the attacker's actions cross the boundary and the host is affected because
-the attacker reached it. Here a second, wholly uninvolved container's behaviour
+attributed to a shared path, a shared mount, a shared namespace, a shared volume
+or a shared network, because there are none. This is also the point at which the
+exercise departs most sharply from its predecessors. In Exercises I to IV the
+attacker's actions cross the boundary and the host is affected because the
+attacker reached it. Here a second, wholly uninvolved container's behaviour
 changes while the attacker never touches it, never addresses it and does not need
 to know that it exists.
 
-### The operator's script as attack surface
+### The primitive, as the exercise's own code issues it
+
+All three stages below reduce, at the code level, to one call: `splice4(target_fd,
+offset, value)`, in the exercise's `shared/payload.py`. Stage one calls it once;
+Stages two and three each call it in a loop, against two different files.
+Reading it once, here, is enough to read all three stages as its repetition
+rather than as three separate techniques.
+
+`alg_socket_fd()` opens the *template* socket that Section 9.3.2 describes:
+`socket(AF_ALG, SOCK_SEQPACKET, 0)`, then `bind(2)` to the name pair
+`("aead", "authencesn(hmac(sha256),cbc(aes))")`, the exact algorithm instance
+whose ESN accounting Section 9.3.4.1 examines. `ALG_SET_KEY` supplies a fixed
+HMAC-SHA256 authentication key and AES-128 encryption key, framed as the
+`crypto_authenc_key_param` `rtattr` the `authenc(...)` family expects. A second,
+four-argument `setsockopt(2)` sets `ALG_SET_AEAD_AUTHSIZE` to **four** bytes
+rather than the ESP-conventional sixteen: the decrypt path's output length is
+`inlen − authsize`, and the exercise wants that output to cover exactly
+`AAD ‖ offset` bytes, which only holds for `authsize = 4`. `accept(2)` then
+yields the *request* socket that actually carries data, and the template socket
+is discarded, its configuration already inherited.
+
+`splice4()` issues one request against that socket. It builds an eight-byte
+AAD, `b"AAAA" + value`, satisfying the template's eight-byte minimum (Section
+9.3.4) while placing the four bytes to be written in its second half.
+`sendmsg_afalg([aad], op=ALG_OP_DECRYPT, iv=IV, assoclen=8, flags=MSG_MORE)`
+announces the request and its associated data without closing it: `MSG_MORE`
+tells the kernel that source data for the same operation is still coming. The
+operation is **decrypt**, not encrypt, deliberately: Section 9.3.3 establishes
+that only the decrypt path builds the combined, in-place scatterlist that
+commit `72548b093ee3` introduced; an encrypt request keeps source and
+destination apart and yields nothing.
+
+The source data is never read into the process at all. A pipe is opened, and
+`os.splice(target_fd, pipe_w, offset + 4, offset_src=0)` moves that many bytes
+out of the *target's own page cache*, by page reference, exactly as Section
+9.3.5 describes: `target_fd` is open `O_RDONLY`, and this call is a read, not
+a write. `os.splice(pipe_r, sock_fd, offset + 4)` then hands those same page
+references to the crypto socket as the remainder of the source stream, so the
+pages that end up in the kernel's combined scatterlist are the target file's
+own cached pages, never a copy. Finally, `recv(2)` reads the destination back.
+The call almost always raises `EBADMSG`: the AAD write-back that Section 9.3.4
+traces lands on the destination (here, the spliced page) *before* the
+authentication tag is checked, so the tag check fails on data the request never
+legitimately supplied. `splice4()` treats `EBADMSG` as success and re-raises
+any other errno, because any other outcome means the request was rejected
+before the copy, and nothing was written.
+
+Stage one calls `splice4()` exactly once, at the offset `find_offset()` locates
+by reading, never writing, the target. Stages two and three cannot: a
+page-cache write cannot extend a file, since `i_size` lives in the inode
+rather than in any page, so `fill_slot()` first locates the padded `SLOT` with
+`find_slot()`, pads the requested command with spaces to the slot's width,
+rounds up to a four-byte multiple while preserving whatever lies beyond the
+padded span, and then calls `splice4()` once per four-byte chunk across that
+span. What Section 9.2 calls "composing enough four-byte writes to fill the
+slot" is, at the code level, nothing more than this loop, run against
+`/opt/tenant/heartbeat.sh` for Stage two and against `/shared/hostdiag.sh` for
+Stage three: `fill_slot()` and `splice4()` do not know, or need to know,
+which of the two they are aimed at.
+
+`find_slot()` itself is anchored on the literal `# SLOT` marker at the *end*
+of the slot, not on the pristine `:` at its head: it finds the marker, then
+walks back to the start of its line to recover the slot's offset and width.
+This is deliberate rather than incidental. A pattern anchored on the leading
+`:` would stop matching the moment a first command has been written, since the
+colon is gone, overwritten by whatever was composed into the slot, so a
+second call, with a different command, would fail to relocate a slot it had
+already filled. The marker survives every write `fill_slot()` issues, because
+it is never included in the span being overwritten, which is what makes the
+function idempotent: `stage2()` and `stage3()` can each be invoked repeatedly,
+with different commands, against a target that is already corrupted.
+<div class="page_break"></div>
+
+### Stage one: one write, and a container that did nothing
+
+The first stage costs a single application of the primitive, and it is the whole
+of Section 2.8 in one measurement.
+
+`heartbeat.sh` is root-owned, mode `0755`, and lives in the image's lower layer.
+Both containers may read and execute it; neither may write it, since both run as
+uid 65534 on a read-only root filesystem, and an attempt to open it for writing
+fails with `EACCES`. Near the top of the script is an assignment whose value is
+four bytes wide, exactly the width of one write, and whose current value the
+neighbour prints on every tick:
+
+```sh
+STATE=GOOD
+```
+
+`setup.sh` reports the file offset of those four bytes when it arms the exercise,
+and `observe.sh` reports it again on every run. Publishing the offset gives away
+nothing: the primitive takes a file offset as its argument, so this is the
+objective expressed in the primitive's own units: where to aim, not how to fire.
+
+Run from inside the foothold as `python3 payload.py stage1`, this stage is
+`stage1()` in `shared/payload.py`: it locates the four bytes `GOOD` with
+`find_offset()`, a plain read of a file the container was always entitled to
+read, and issues the single `splice4()` call described above against that
+offset. No loop, no retry, and no write-mode file descriptor anywhere in the
+call chain.
+
+A single write lands, and the *next* heartbeat the neighbour emits reports the new
+value. Nothing in that container was restarted, redeployed, reconfigured or
+touched:
+
+```
+[heartbeat] 14:22:31 tenant-b state=GOOD
+[heartbeat] 14:22:36 tenant-b state=GOOD
+[heartbeat] 14:22:41 tenant-b state=PWND      <- four bytes, written from the foothold
+```
+
+That transition is the finding, but on its own it is only testimony. The exercise
+therefore ships `observe.sh`, which reads the *same four bytes of the same file*
+through four independent routes and prints them together:
+
+| Route | What it reads | What it establishes |
+|---|---|---|
+| `[F]` | inside `ex05-foothold`, via the image's lower layer | the attacker's own view |
+| `[N]` | inside `ex05-neighbour`, via the same lower layer | a bystander sharing no mount, volume, namespace or network with `[F]` |
+| `[H]` | the underlying inode on the host, no container involved | that the corruption is the host's, not an overlayfs artefact |
+| `[D]` | the block device, with `O_DIRECT` | what is actually **on disk** |
+
+Before the write all four agree. After it, `[F]`, `[N]` and `[H]` agree with one
+another and disagree with `[D]`, and the instrument names that pattern:
+
+```
+    [F]        PWND       ex05-foothold:  the attacker, via the image layer
+    [N]        PWND       ex05-neighbour: UNINVOLVED co-tenant; shares no mount,
+                                          volume, namespace or network with [F]
+    [H]        PWND       host: the underlying inode, no container involved
+    [D]        GOOD       block device: O_DIRECT bypasses the page cache, so DISK
+    verdict  : PAGE CACHE CORRUPTED, DISK INTACT. The CVE-2026-31431 signature
+```
+
+The choice of `O_DIRECT` for row `[D]` rather than `/proc/sys/vm/drop_caches`
+matters more than it appears to. Dropping the cache answers the same question of
+what the disk says, but it does so by destroying the only place the corruption
+has ever existed, and can therefore be done once, at the end. An `O_DIRECT` read
+bypasses the page cache for that request alone and leaves the corrupted pages
+resident, so the measurement may be repeated as often as the reader likes while
+the evidence survives. For a defect whose defining property is that it leaves no
+trace in the object it corrupts, a non-destructive assay is not a convenience.
+
+Three principals are reading one shared cached object. One of them corrupted it;
+one of them has nothing to do with anything; the third is the host. The disk
+records none of it.
+
+### Stage two: the bystander as an executor
+
+Stage one changes a value. Stage two changes *behaviour*, and it does so inside a
+container the attacker cannot enter, using credentials the attacker does not hold.
+
+A page-cache write cannot change a file's length: `i_size` lives in the inode, and
+the inode is not what is being corrupted. Anything substituted into a target must
+therefore fit within bytes that are already present, which is why a script
+carrying a generous comment block is a more tractable target than a terse one, and
+why `heartbeat.sh` carries a line that is a shell no-op padded with spaces:
+
+```sh
+:                                                                        # SLOT
+```
+
+Nothing limits how many times the primitive may be applied, and nothing about it
+is probabilistic, so the slot is filled four bytes at a time until it holds a
+command. Run as `python3 payload.py stage2 /opt/tenant/heartbeat.sh "cat
+/tmp/tenant-b/api.key"`, this is `stage2()` calling `fill_slot()`, which pads the
+command to the slot's width and drives `splice4()` once per four-byte chunk
+until the whole span is overwritten, the loop described above, aimed at the
+`SLOT` line rather than at `STATE`. On its next tick the neighbour executes that
+command *as itself*: in its own mount and PID namespaces, under its own uid,
+within its own cgroup, and with access to its own `tmpfs`, including
+`/tmp/tenant-b/api.key`, which the foothold cannot read and now does not need
+to.
+
+The confused-deputy structure here is worth naming precisely, because it differs
+from the one in Stage three. No deputy was persuaded to act across a privilege
+boundary; a workload was persuaded to act *against itself*, having been given no
+instruction by anybody, through a file it merely re-reads. The neighbour's
+configuration is not defective, its credentials were not stolen, its namespaces
+hold throughout, and the file it executed is byte-identical on disk to the one its
+operator deployed.
+
+### Stage three: the operator's script as attack surface
 
 The route to execution as root is a script the laboratory installs on the host:
 `hostdiag.sh`, placed by `setup.sh` into the exercise's `shared/` directory as
 `root:root`, mode `0755`, and visible to the foothold at `/shared/hostdiag.sh`
 through the bind mount. It models the most ordinary furniture of an operated
-platform — a diagnostics collector that walks a host directory, copies what it
+platform: a diagnostics collector that walks a host directory, copies what it
 finds into a support bundle and leaves the bundle in the workload's share so the
-workload can retrieve it without host access of its own. It runs on the *host*,
-as root, from an operator's console or a nightly `cron` entry.
+workload can retrieve it without host access of its own. It runs on the *host*, as
+root, from an operator's console or a nightly `cron` entry, and it carries the
+same two features as `heartbeat.sh`: a four-byte token and a padded slot, the
+latter executing with root's authority on the host rather than the tenant's inside
+a container.
+
+Nothing about the primitive changes to reach it. `stage2()` and `fill_slot()` in
+`shared/payload.py` are already parametrised by target file and command, so
+Stage three calls the identical functions Stage two did, pointed at a different
+path: `python3 payload.py stage2 /shared/hostdiag.sh "cat /root/flag.txt >
+/shared/flag.txt"` fills `hostdiag.sh`'s own padded `SLOT`, matched by the same
+`: *# SLOT` pattern `find_slot()` uses in `heartbeat.sh`, with a command that
+copies the host's flag into the one directory the foothold can already read,
+through the bind mount `setup.sh` provisioned for an unrelated convenience.
+Between Stage two and Stage three, no code changes, no socket configuration
+changes, and no new primitive is required: only the path handed to a function
+that never inspected which container, or which principal, it was aimed at.
 
 Two properties make it the natural attack surface, and neither is a
 misconfiguration. The first is that the container must be able to read it: the
 script is mounted into the workload precisely so the workload can see where its
-bundle will appear, and a helper the workload cannot read is a helper the
-workload cannot use. The second is that the container must *not* be able to write
-it, and does not: the file is owned by root and the container runs as uid 65534,
-so an attempt to modify it through the filesystem fails with `EACCES` at
-`open(2)`. The configuration is exactly what a careful operator would deploy, and
-it is defensible under every assumption the operator is entitled to make.
+bundle will appear, and a helper the workload cannot read is a helper the workload
+cannot use. The second is that the container must *not* be able to write it, and
+does not: the file is owned by root and the container runs as uid 65534, so an
+attempt to modify it through the filesystem fails with `EACCES` at `open(2)`. The
+configuration is exactly what a careful operator would deploy, and it is
+defensible under every assumption the operator is entitled to make.
 
 The primitive dissolves the distinction those two properties rest on. Write
-permission is checked once, at the system-call boundary, against the path by
-which a file is opened; a `struct page` carries no record of who may write it and
-a kernel subsystem handed a bare page pointer performs no check of its own
-(Section 9.3.5). The attacking process therefore never opens the script for
-writing and never fails a permission check, because it never reaches one: it
-opens the file `O_RDONLY`, as it is entitled to, and the write arrives at the
-page from the far side, through the crypto request. The file's mode bits remain
-accurate, are never contradicted by any operation the kernel records, and are
-irrelevant.
+permission is checked once, at the system-call boundary, against the path by which
+a file is opened; a `struct page` carries no record of who may write it and a
+kernel subsystem handed a bare page pointer performs no check of its own (Section
+9.3.5). The attacking process therefore never opens the script for writing and
+never fails a permission check, because it never reaches one: it opens the file
+`O_RDONLY`, as it is entitled to, and the write arrives at the page from the far
+side, through the crypto request. The file's mode bits remain accurate, are never
+contradicted by any operation the kernel records, and are irrelevant.
 
-What follows from that is a confused-deputy arrangement of a familiar shape and
-an unfamiliar depth. Nothing belonging to the attacker crosses the boundary; the
+What follows is a confused-deputy arrangement of a familiar shape and an
+unfamiliar depth. Nothing belonging to the attacker crosses the boundary; the
 operator carries the payload across on the attacker's behalf, by doing the one
-thing the script exists to have done to it. The parallel with Exercise IV is
-exact in structure and instructive in its difference: there the kernel executed
-the attacker's file as root because a callback had been armed to do so, and the
-arming was itself the anomaly to be detected; here the host executes its *own*
-file, unmodified on disk, at its scheduled time, and there is no arming step at
-all.
+thing the script exists to have done to it. The parallel with Exercise IV is exact
+in structure and instructive in its difference: there the kernel executed the
+attacker's file as root because a callback had been armed to do so, and the arming
+was itself the anomaly to be detected; here the host executes its *own* file,
+unmodified on disk, at its scheduled time, and there is no arming step at all.
 
-Three practical properties of this target follow from the mechanism and shape the
-payload rather than the analysis. A page-cache write cannot change a file's
-length, since `i_size` lives in the inode and is not what is being corrupted; the
-substituted content must therefore fit within the bytes the script already
-occupies, which is why a collector carrying a generous comment block is a more
-tractable target than a terse one. Shell scripts are read rather than mapped, so
-`/bin/sh` obtains the script's text from the page cache on each invocation and a
-corrupted cache takes effect on the very next run with no reload, no restart and
-no re-execution of anything. And the corruption survives exactly as long as the
+Two further properties of a page-cache target shape the payload rather than the
+analysis. Shell scripts are read rather than mapped, so `/bin/sh` obtains the
+script's text from the page cache on each invocation and a corrupted cache takes
+effect on the very next run. And the corruption survives exactly as long as the
 pages do: until reclaim, an unmount or an explicit `drop_caches`, after which the
 file reverts, silently and completely, to the bytes on disk.
 
-### Why the canonical setuid route is not the one taken
+At the code level Stage three is `stage3()` in `shared/payload.py`, and it is
+Stage two's `stage2()` with the target and the payload swapped: run as `python3
+payload.py stage3`, it calls `fill_slot()` against `/shared/hostdiag.sh`
+(`TARGET_HOSTDIAG`) with the default command `cat /root/flag.txt`
+(`DEFAULT_STAGE3_CMD`), exactly as Stage two calls it against
+`/opt/tenant/heartbeat.sh` with `cat /tmp/tenant-b/api.key`. Nothing in
+`fill_slot()` or `splice4()` changes between the two calls; only the path and
+the string do, which is the point made in the previous subsection. Where the
+two stages diverge is what receives the output. `hostdiag.sh`'s `SLOT` sits
+*inside* the block whose stdout is already redirected to `$OUT`
+(`/shared/diag.txt`), so the command's output is not a side channel the
+attacker has to construct: it is captured by the same redirection the
+operator's script was always going to perform, alongside the ordinary
+diagnostic lines the collector emits from `/boot`. The flag therefore surfaces
+in a file the foothold can already read through its bind mount, without any
+exfiltration mechanism beyond the one the operator built for an unrelated
+reason.
 
-The vendor advisories present the setuid-root binary as the canonical target, and
-the foothold image ships `/usr/bin/su` and `/bin/su` setuid-root deliberately for
-that reason: four bytes placed correctly in the cached image of `su` change what
-`su` does when it is executed, while the binary on disk stays byte-identical
-[@xint-copyfail; @unit42-copyfail]. That route is nevertheless closed *inside the
-foothold*, and closed on purpose. `no-new-privileges` sets `PR_SET_NO_NEW_PRIVS`,
-which makes the kernel ignore setuid bits at `execve(2)`; the corrupted `su` may
-be executed in the foothold, but it cannot acquire uid 0 there whatever its
-cached text says.
 
-This is the one control in Section 9.2's table that touches the attacker at all,
-and the exercise keeps it set so that the exact extent of what it buys can be
-seen. It constrains a *consequence* and not the primitive. The pages of `su` are
-corrupted host-wide the moment the write lands: the neighbour container sees the
-altered binary, and so does the host, whose own processes are subject to no
-`no_new_privs` flag set inside a container. What the control achieves is the
-denial of one convenient escalation path to one process; what it leaves
-untouched is the write, its scope, and every other principal's exposure to it.
+### A captured run against the kernel VM
 
-The exercise therefore separates the two claims it needs and assigns a target to
-each. The corrupted setuid binary, corrupted from the foothold and observed from
-the neighbour, demonstrates that the write is host-wide and unmediated by any
-isolation mechanism. The operator's script, corrupted from the foothold and
-executed by root on the host, demonstrates that the write is sufficient for
-execution outside the container. Neither demonstration requires the container's
-configuration to be weakened, and neither requires the attacker to defeat a
-control: the first is invisible to the controls and the second routes around the
-only one that engages.
+The two listings earlier in this section, the heartbeat loop's three ticks
+and the `[F]`/`[N]`/`[H]`/`[D]` row under "Stage one", are report forms,
+shown to establish what each instrument's output means before any of it had
+actually run. What follows is not that: it is the scoreboard `./observe.sh`
+itself printed, excerpted from a full run captured on the kernel VM after all
+three stages had been fired in sequence: `stage1()`, `stage2()` and
+`stage3()` from `payload.py`, followed by the operator invoking `hostdiag.sh`
+by hand, exactly as Section 9.5 describes each step. 
 
-<!-- ============================================================
-     TODO — exploitation mechanics, to be written once the working
-     exploit is complete. Planned sub-sections, following the four
-     "Movement" pattern of Section 8.5:
+<div style="font-family:monospace;font-size:0.65em;line-height:1;white-space:pre;overflow-x:auto;">
+===================================================================<br>
+&nbsp;CVE-2026-31431: page-cache blast radius      2026-09-26T13:23:13Z<br>
+&nbsp;kernel 5.4.0-90-generic&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;foothold: up&nbsp;&nbsp;&nbsp;neighbour: up<br>
+===================================================================<br>
+&nbsp;<br>
+<strong>STAGE PROGRESS</strong>&nbsp;&nbsp;<span style="color:#6e7781">(what has been observed, not what has been attempted)</span><br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#1a7f37;font-weight:bold">[x]</span> STAGE 1&nbsp;&nbsp;blast radius&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cache='PWND' disk='GOOD', and the UNINVOLVED [N] reads 'PWND'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#1a7f37;font-weight:bold">[x]</span> STAGE 2&nbsp;&nbsp;bystander executes&nbsp;&nbsp;&nbsp;&nbsp;the bystander disclosed its OWN secret: 'TENANT-B-API-KEY-7c1f0d9e4a2b5083'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#1a7f37;font-weight:bold">[x]</span> STAGE 3&nbsp;&nbsp;root on the host&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;marker recovered as root, via the operator's own bundle: .../shared/diag.txt<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<strong><span style="color:#1a7f37;">All three demonstrations are complete.</span></strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6e7781">next:</span>&nbsp;&nbsp;capture the evidence BEFORE teardown:&nbsp;&nbsp;./observe.sh &gt; evidence.txt<br>
+</div>
 
-       ### Movement 1 — opening the interface (socket/bind/setsockopt/accept)
-       ### Movement 2 — putting the target's pages on the source side (splice)
-       ### Movement 3 — the four-byte write (AAD echo-through, -EBADMSG)
-       ### Movement 4 — composing writes into a payload, and waiting for cron
-       ### Confirmation and interpretation (with terminal transcript figure)
+Two details are worth pointing out precisely because a captured run, unlike a
+report form, cannot be tidied to omit them. `disk='GOOD'` in Stage one's own
+line is the block device read with `O_DIRECT`, not a paraphrase: the
+disk-versus-cache split this thesis argues for is what the instrument
+actually measured, not a simplification made for exposition. And the path
+Stage three names, `/vagrant/exercises/05-capstone-cve-2026-31431/shared/diag.txt`,
+is the host's own filesystem, reached from a container that was never given a
+capability, a relaxed profile, or a mount pointing anywhere near `/root`.
 
-     A figure of the dual-container / shared-page arrangement (candidate:
-     Images/ex05_blast_radius.svg, would be Figure 9.6) belongs at the head
-     of "Two containers, and what the second one is for".
-     ============================================================ -->
 <div class="page_break"></div>
 
 ### What a successful run has to demonstrate
 
 Because the corruption leaves no trace in the object it corrupts, the exercise's
 evidence has to be produced deliberately rather than collected afterwards, and
-`setup.sh` and `teardown.sh` exist to produce it. Three observations are
-required, and each is instrumented before the technique is attempted.
+`setup.sh`, `observe.sh` and `teardown.sh` exist to produce it. Four observations
+are required, and each is instrumented before the technique is attempted.
 
-**That the write reached outside the container.** The neighbour is examined for
-the altered behaviour of a file neither container modified through its
-filesystem. An affirmative result here is the whole of Section 2.8 in a single
-measurement: two correctly configured, fully isolated containers, and a change
-made in one that is legible in the other.
+**That the write reached outside the container.** The neighbour reports an altered
+value in a file neither container modified through its filesystem, and
+`observe.sh` shows the foothold, the neighbour and the host reading that altered
+value while the block device reads the original. An affirmative result here is the
+whole of Section 2.8 in a single measurement: two correctly configured, fully
+isolated containers, and a change made in one that is legible in the other.
 
-**That the disk was never written.** `setup.sh` records the SHA-256 digests of
-the candidate setuid binaries and of the operator's script before the exercise
-begins. `teardown.sh` issues `sync`, writes to `/proc/sys/vm/drop_caches` —
-discarding the corrupted pages and forcing the next access to re-read from the
-block device — and re-verifies those digests. A *match* is the expected outcome
-and is the empirical statement of the defining property of this vulnerability: no
-file was modified, only the kernel's cached image of one. A mismatch would mean
-something other than page-cache corruption had occurred, and the virtual machine
-would have to be treated as compromised by an unknown mechanism rather than by
-this one.
+**That a bystander's integrity, and not merely its reading, was lost.** The
+neighbour executes a command it was never given, as itself, and discloses a
+credential the attacking container cannot read. The distinction from the previous
+observation is the distinction between a channel and an impact, and a
+multi-tenancy argument needs both.
 
-**That the boundary was crossed.** The objective marker at `/root/flag.txt` on
-the virtual machine is mode `0600` and owned by root, so recovering its contents
+**That the disk was never written.** `setup.sh` records the SHA-256 digests of the
+candidate setuid binaries, of the operator's script and of the shared image-layer
+target before the exercise begins. Throughout the run, `observe.sh` compares the
+cached bytes against the block device with `O_DIRECT`, which is non-destructive.
+At the end, `teardown.sh` re-verifies the recorded digests, issues `sync`, and
+writes to `/proc/sys/vm/drop_caches`, discarding the corrupted pages and forcing
+the next access to re-read from the block device. A *match* is the expected
+outcome and is the empirical statement of the defining property of this
+vulnerability: no file was modified, only the kernel's cached image of one. A
+mismatch would mean something other than page-cache corruption had occurred, and
+the virtual machine would have to be treated as compromised by an unknown
+mechanism rather than by this one.
+
+**That the boundary was crossed.** The objective marker at `/root/flag.txt` on the
+virtual machine is mode `0600` and owned by root, so recovering its contents
 requires execution as root on the host and cannot be achieved by any degree of
 privilege inside the container. Its value,
 `FLAG{page_cache_is_shared_across_the_host}`, names the property that made the
 recovery possible.
 
-Because flushing the cache cannot undo whatever was done with root privilege in
-the interval, `teardown.sh` is explicitly a soft reset; the authoritative reset
-remains restoration of the clean-baseline snapshot from the host, which is why
-`setup.sh` refuses to run without one (Section 9.2).
+One consequence of the first three deserves to be stated before Section 9.8
+returns to it. The evidence for this attack is perishable in a way the evidence
+for Exercises I to IV is not: it exists only while the corrupted pages remain
+resident, and any reclaim, unmount, reboot or cache flush destroys it completely
+and silently. An investigator arriving afterwards finds a node whose files all
+verify, whose package manager reports nothing amiss, and whose file-integrity
+monitor has been quiet throughout, because every one of those tools re-reads from
+the block device, and the block device was never wrong.
 
 <div class="page_break"></div>
 
 ## Preconditions and Applicability
 
 The preconditions of this technique are worth tabulating for the same reason as
-those of Exercise IV — each corresponds to a mitigation — and worth reading
+those of Exercise IV, since each corresponds to a mitigation, and worth reading
 afterwards for a different reason, which is what the list does not contain.
 
 | Precondition | Rationale |
@@ -2625,17 +2910,19 @@ observation is not that it works there but that its blast radius is the *node*:
 because image layers are shared inodes, one corrupted page is visible to every
 co-tenant derived from the same layer, with no escape from the originating
 container needing to have occurred [@xint-copyfail-pod-to-host].
+<div class="page_break"></div>
 
 **Where it does not apply.** Three classes of deployment are outside the
 technique's reach, and the reasons differ in kind. A patched kernel is immune
 because the defect is gone. A workload whose runtime denies `socket(AF_ALG, …)`,
 or a host on which the interface has been removed altogether, is unaffected
 because the entry point is closed while the defect remains. And a workload that
-does not share the host kernel at all — a microVM runtime such as Kata or
-Firecracker, or gVisor, whose sentry implements the syscall surface in userspace
-and exposes no `AF_ALG` family — is unaffected because the shared object the
-defect corrupts is not shared with it. Only the first and third are structural;
-the second is reachability management, and Section 9.7 takes up the distinction.
+does not share the host kernel at all is unaffected, because the shared object
+the defect corrupts is not shared with it. That covers a microVM runtime such as
+Kata or Firecracker, and it covers gVisor, whose sentry implements the syscall
+surface in userspace and exposes no `AF_ALG` family. Only the first and third
+are structural; the second is reachability management, and Section 9.7 takes up
+the distinction.
 
 **A note on the disclosure window.** Between disclosure on 29 April 2026 and the
 availability of patched kernels through distribution channels, no deployed Linux
@@ -2675,7 +2962,7 @@ path to it.
   irrespective of kernel patch state; the exercise ships one as
   `seccomp-block-afalg.json`. This is necessary rather than redundant under
   Kubernetes, where `RuntimeDefault` was found not to deny the family and a
-  `Localhost` profile carrying an explicit deny rule was required — a `restricted`
+  `Localhost` profile carrying an explicit deny rule was required, a `restricted`
   Pod Security Standard, all capabilities dropped and a non-root user
   notwithstanding [@juliet-copyfail-k8s].
 - **Remove the interface where it is unused.** Blacklisting `algif_aead`, or on
@@ -2685,11 +2972,7 @@ path to it.
   IPsec, SSH and default OpenSSL and GnuTLS builds do not route through
   `AF_ALG`, and the affected consumers are applications that opt into it
   explicitly, such as OpenSSL's `afalg` engine [@man7-af-alg].
-- **Set `no-new-privileges`.** It defeats the in-container setuid escalation and
-  nothing else: the write still lands, the pages are still corrupted host-wide,
-  and a privileged principal outside the container is unaffected by a flag set
-  inside it (Section 9.5). It is worth setting — it is nearly free — provided it
-  is not mistaken for a control on the vulnerability.
+- **Set `no-new-privileges`.** It defeats the in-container setuid escalation and   nothing else: the write still lands, the pages are still corrupted host-wide, and a privileged principal outside the container is unaffected by a flag set inside it (Section 9.5). It is worth setting, being nearly free, provided it is not mistaken for a control on the vulnerability.<div class="page_break"></div>
 - **Do not share the kernel with genuinely untrusted tenants.** A microVM runtime
   or gVisor gives a hostile workload a different kernel to attack, and is the only
   entry in this list other than the patch that answers a shared-kernel defect
@@ -2698,9 +2981,9 @@ path to it.
   and start-up latency is bought back at those prices.
 
 **Validating the remediation.** The exercise's `verify-mitigation.sh` follows the
-discipline required by Section 4.6 and runs a non-weaponised reachability probe —
-it opens and immediately closes an `AF_ALG` socket, binding no algorithm and
-performing no cryptography — under three configurations on the same unpatched
+discipline required by Section 4.6 and runs a non-weaponised reachability probe,
+which opens and immediately closes an `AF_ALG` socket, binding no algorithm and
+performing no cryptography, under three configurations on the same unpatched
 kernel: unconfined, the blocking profile, and the engine's current default.
 Because the kernel, the image and the probe are constant across the three, the
 difference in outcome is attributable to the seccomp rule and to nothing else.
@@ -2714,8 +2997,8 @@ as the seccomp discussion of Chapter 2 anticipated and as Exercise IV's
 remediation already observed in a milder form. The capstone is where the posture
 is seen at its limit, because here the compensating controls are the only ones
 available for as long as the kernel is unpatched, they are administered by a
-party other than the workload's owner, and their failure mode — a default profile
-that permitted the family for a decade — is silent.
+party other than the workload's owner, and their failure mode, a default profile
+that permitted the family for a decade, is silent.
 
 <div class="page_break"></div>
 
@@ -2725,8 +3008,8 @@ that permitted the family for a decade — is silent.
   processes.** This is the chain's mandatory first step and the narrowest signal
   available; Sysdig published a Falco rule for exactly it during the disclosure
   window [@sysdig-copyfail; @falco-rules]. The rule is only as useful as the
-  baseline behind it, so the legitimate users of the interface on a given estate
-  — in practice, applications built against OpenSSL's `afalg` engine — should be
+  baseline behind it, so the legitimate users of the interface on a given estate,
+  in practice applications built against OpenSSL's `afalg` engine, should be
   enumerated first and excepted by binary, not by container or by user.
 - **Treat the pairing of `splice(2)` with an `AF_ALG` socket as the signature,
   not either syscall alone.** Ordinary use of the kernel crypto API submits data
@@ -2761,6 +3044,133 @@ that permitted the family for a decade — is silent.
   corrupted pages belong to shared image layers and to bind-mounted host files, a
   container that shows no anomalous activity may nevertheless be executing
   corrupted code, and the originating container may be neither the one exhibiting
-  the symptom nor the one an operator examines first. Containment that stops at
-  the container which appears affected will miss both the source and the rest of
-  the blast radius.
+  the symptom nor the one an operator examines first. The exercise stages exactly
+  that case: the co-tenant whose output changes issued no `AF_ALG` call, opened no
+  socket and shares nothing with the attacker that any inventory would record
+  (Section 9.5.2). Containment that stops at the container which appears affected
+  will miss both the source and the rest of the blast radius.
+
+<div class="page_break"></div>
+
+# Conclusions
+
+Chapter 1 posed two questions and deferred their answers to the case studies. Finally, five reproductions later, both questions have empirical answers, and this chapter states them plainly.
+
+## RQ1: Mechanism and Severity Across the Categories
+
+RQ1 asked how escape techniques differ in mechanism and severity across
+misconfiguration, runtime-level defects and kernel-level defects. Table 3.1
+already gives the mechanism half of the answer, and Section 3.5 discussed it by
+category. The severity half deserves a more careful reading because measured by final privilege obtained, the five case studies are
+indistinguishable. An exposed Docker socket, a `--privileged` flag, two `runc` defects and a kernel logic flaw all terminate in the same place. If severity is read as a mere *outcome*, RQ1's categories predict nothing.
+
+However, if severity is read as *what it costs a defender to prevent, and for how long the prevention holds*  the two misconfiguration techniques of Chapters 5 and 6 are closed permanently and without residual risk by a configuration change that costs nothing at runtime (do not mount the socket, do not set the flag). Neither requires a patch, a version
+pin, or any ongoing maintenance, and Section 5.6 and 6.6 record no compensating control for either, because none is needed. The two runtime-level defects of Chapter 7 and of CVE-2024-21626 [@cve-2024-21626] are closed by upgrading a single userspace component, `runc`, and the closure is durable once the upgrade is applied and re-verified in the CI or provisioning pipeline the reader's organisation already runs. The cost is a version pin and a patch cadence, not a redesign. The two kernel-level techniques of Chapters 8 and 9 are the only ones where a defensible closure requires either patching a component with a slower release cadence than most userspace tooling (the kernel itself) or accepting a compensating control, seccomp or LSM policy denying the specific syscall sequence. That manages a symptom rather than providing a cure: the defect is still fully capable of producing through some other syscall sequence the policy does not yet name.
+
+We can answer RQ1 by stating that severity does not increase category by category, because every category studied here can already reach host root. What increases is the *distance between the defender's control and the actual point of failure*, and correspondingly the *fragility of the
+remediation*. A misconfiguration is closed by the same party who introduced it, immediately, with no dependency on a third party's release schedule. A
+kernel-level defect is closed, if at all, by a vendor's kernel maintainers,
+propagated through a distribution's package manager, on a timeline the container operator does not control, and until that timeline completes the operator's only recourse is a mere temporary compensation.
+
+## RQ2: Where Layered Isolation Breaks Down
+
+RQ2 asked to what extent the five isolation layers of Chapter 2 contain an escape
+once it has begun, and at what point that containment structurally fails. The
+"contained by user namespace?" column of Table 3.1 already answers this
+empirically rather than theoretically: containment is present, partially, in
+exactly one of the five case studies, rootless `runc` reduces the severity of
+CVE-2019-5736 because the runtime itself then executes without host privilege
+(Section 7.7), and absent in the remaining four, for four different reasons. The
+Docker-socket and `--privileged` techniques are not contained because no
+isolation layer is engaged in either attack to begin with; the layers are simply
+not asked a question they could answer. CVE-2022-0492 is not contained because
+the attack's first move is to acquire the very capability, `CAP_SYS_ADMIN`,
+inside the very namespace that would otherwise constrain it, and it uses that
+capability to leave. CVE-2026-31431 is not contained for the most structural
+reason available: the defect is in the kernel code that *implements* every layer
+being asked to contain it, so there is no configuration of those layers left to
+consult.
+
+The ordering established in Section 3.6, misconfiguration requires the stack
+intact, a runtime defect requires the kernel primitives intact, a kernel defect
+requires nothing of the stack at all, is therefore not only a classification
+convenience but the direct answer to RQ2. Containment weakens monotonically
+across that ordering, and the capstone exercise was chosen specifically because
+it is the point at which it reaches zero: Section 9.5's stage one measures a
+write that crosses a container boundary no isolation-layer configuration
+narrowed, widened, or was even consulted about, and Section 9.5.2's stage two
+shows that the write is sufficient to compromise a second container that was
+never entered, addressed, or referenced by the attacking process. A defender who
+has correctly configured every layer described in Chapter 2 is, against this
+category of defect, in exactly the same position as one who has configured none
+of them, and that equivalence, not any single exploit chain, is RQ2's answer.
+
+The honest caveat is that this answer rests on one kernel-level case study
+reached through one interface, `AF_ALG`. Section 9.7 already registers that the
+technique's applicability is bounded by whether a workload shares a kernel at
+all, gVisor and microVM runtimes are structurally outside its reach because the
+syscall surface they expose is not the vulnerable one. What Chapter 9
+demonstrates is therefore not that layered isolation is worthless in general,
+Chapters 5 through 8 show four cases where it is exactly what stands between an
+attacker and the host, but that its guarantee is conditional on the integrity of
+a component, the shared kernel, that the model itself does not defend.
+
+
+<div class="center-page">
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>Technique</th>
+        <th>Closing control</th>
+        <th>Nature of the closure</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Exposed Docker socket</td>
+        <td>Never bind-mount the daemon socket into a container; where API access is genuinely required, proxy it through an access-controlled intermediary [@docker-socket-proxy]</td>
+        <td>Permanent</td>
+      </tr>
+      <tr>
+        <td><code>--privileged</code> container</td>
+        <td>Do not set the flag; grant the specific capability or device access the workload needs and nothing else</td>
+        <td>Permanent</td>
+      </tr>
+      <tr>
+        <td>CVE-2019-5736 / CVE-2024-21626 (<code>runc</code>)</td>
+        <td>Pin and patch the runtime promptly; prefer rootless operation where the workload permits it</td>
+        <td>Permanent once patched; the rootless posture is a durable severity reduction independent of the patch cycle</td>
+      </tr>
+      <tr>
+        <td>CVE-2022-0492 (cgroup v1)</td>
+        <td>Migrate to cgroup v2, which removed the vulnerable <code>release_agent</code> interface by redesign; where v1 must remain, deny <code>CAP_SYS_ADMIN</code> inside user namespaces</td>
+        <td>Permanent under cgroup v2; compensating under v1</td>
+      </tr>
+      <tr>
+        <td>CVE-2026-31431 ("Copy Fail")</td>
+        <td>Patch the kernel; where patching lags, an explicit seccomp denial of the specific syscall family</td>
+        <td>Permanent once patched; compensating otherwise, and silent in its failure mode (Section 9.7)</td>
+      </tr>
+    </tbody>
+  </table>
+  <figcaption class="label"><span class="lbl">Table.10.1</span>The closing control for each technique studied, and whether that closure is permanent or compensating.</figcaption>
+</figure>
+</div>
+
+
+## Closing Remark
+
+The subtitle chosen for this thesis, containers as host processes wearing a hat,
+is meant literally rather than as a figure of speech. Five case studies, spanning
+a bind-mounted socket to a four-byte kernel write, have shown the hat coming off
+by five different routes, and in every one of them the process underneath was,
+throughout, an ordinary process on an ordinary host kernel. The isolation
+described in Chapter 2 is real, and Chapters 5 through 8 show it doing genuine
+work: closing a socket, dropping a flag, patching a runtime, and moving off
+cgroup v1 each measurably remove a route to the host. What the capstone adds is
+not a refutation of that work but its boundary condition, stated as precisely as
+the reproduction allows: the hat stays on for exactly as long as the kernel
+wearing it stays intact, and not one layer further.
+
+<div><img src="./Images/tux_coming_out_of_a_box.jpeg" alt="" style="position: absolute; bottom: 0; right: 0; width: 4cm;"></div>

@@ -92,8 +92,8 @@
 
 /* ------------------------------------------------------------------ base -- */
 html { font-family: var(--text); font-size: 10.5pt; color: var(--ink); }
-body { margin: 0; line-height: 1.5; text-align: justify; hyphens: auto; }
-p { margin: 0 0 0.62em; text-wrap: pretty; }
+body { margin: 0; line-height: 1.5; text-align: justify; hyphens: auto; orphans: 3; widows: 3; }
+p { margin: 0 0 0.62em; text-wrap: pretty; orphans: 3; widows: 3; }
 a { color: var(--blue); text-decoration: none; }
 a:hover { color: var(--navy); }
 strong { font-weight: 600; }
@@ -260,6 +260,22 @@ pre code { background: none; padding: 0; font-size: inherit; }
 .codehilite { margin: 12pt 0; }
 .codehilite pre { margin: 0; }
 
+/* -------------------------------------------------------------- filetree -- */
+.filetree {
+  font-family: var(--mono); font-size: 7.6pt; line-height: 1.75;
+  background: var(--tint); border-left: 2.4pt solid var(--blue);
+  padding: 10pt 14pt; margin: 12pt 0; break-inside: avoid;
+}
+.filetree ul {
+  list-style: none; margin: 0; padding-left: 1.35em;
+  border-left: 0.75pt dotted var(--rule);
+}
+.filetree > ul { padding-left: 0; border-left: none; }
+.filetree li { margin: 0; padding-left: 0.4em; }
+.filetree .dir { color: var(--navy); font-weight: 700; }
+.filetree .file { color: var(--ink); }
+.filetree .comment { color: var(--muted); font-style: italic; margin-left: 1.2em; }
+
 /* ------------------------------------------------------------ diff blocks -- */
 /* GitHub-style colouring for ```diff fences. These selectors carry an extra
    element (pre) so they outrank the Pygments "friendly" defaults, which the
@@ -316,6 +332,18 @@ a.cite { color: var(--blue); font-variant-numeric: tabular-nums; }
   page: plain; height: 22cm; display: flex; align-items: center; justify-content: flex-end;
   font-style: italic; color: var(--navy); text-align: right; break-after: page;
 }
+
+/* Vertically centres a single block (typically a wide table) on a page of
+   its own, keeping the normal running header/footer of the body page.
+   23.8cm matches the body page's content-box height (29.7cm A4 minus the
+   3.0cm/2.8cm top/bottom margins in the base @page rule, less a hairline
+   for rounding) so the flex box spans the full page and nothing is left
+   over outside it to bias the centring toward the top. */
+.center-page {
+  height: 23.8cm; display: flex; align-items: center; justify-content: center;
+  break-before: page; break-after: page;
+}
+.center-page > * { margin-top: 0; margin-bottom: 0; width: 100%; }
 
 /* -------------------------------------------------------- toc / lof / lot - */
 .contents a {
